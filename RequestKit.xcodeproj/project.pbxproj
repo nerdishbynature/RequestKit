@@ -12,6 +12,7 @@
 		234F4C371BDDF6BF00A58EF7 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C361BDDF6BF00A58EF7 /* Router.swift */; };
 		234F4C391BDE0B6600A58EF7 /* String+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C381BDE0B6600A58EF7 /* String+Additions.swift */; };
 		234F4C3B1BDE0B9200A58EF7 /* StringAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C3A1BDE0B9200A58EF7 /* StringAdditionsTests.swift */; };
+		234F4C3D1BDE0D1000A58EF7 /* JSONPostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C3C1BDE0D1000A58EF7 /* JSONPostRouter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +34,7 @@
 		234F4C361BDDF6BF00A58EF7 /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		234F4C381BDE0B6600A58EF7 /* String+Additions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Additions.swift"; sourceTree = "<group>"; };
 		234F4C3A1BDE0B9200A58EF7 /* StringAdditionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringAdditionsTests.swift; sourceTree = "<group>"; };
+		234F4C3C1BDE0D1000A58EF7 /* JSONPostRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONPostRouter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				234F4C1F1BDDF64300A58EF7 /* RequestKit.h */,
 				234F4C361BDDF6BF00A58EF7 /* Router.swift */,
 				234F4C381BDE0B6600A58EF7 /* String+Additions.swift */,
+				234F4C3C1BDE0D1000A58EF7 /* JSONPostRouter.swift */,
 				234F4C211BDDF64300A58EF7 /* Info.plist */,
 			);
 			path = RequestKit;
@@ -201,6 +204,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				234F4C391BDE0B6600A58EF7 /* String+Additions.swift in Sources */,
+				234F4C3D1BDE0D1000A58EF7 /* JSONPostRouter.swift in Sources */,
 				234F4C371BDDF6BF00A58EF7 /* Router.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
