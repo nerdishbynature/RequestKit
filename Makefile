@@ -1,4 +1,5 @@
 install:
+	brew install python
 	sudo pip install codecov
 
 test:
