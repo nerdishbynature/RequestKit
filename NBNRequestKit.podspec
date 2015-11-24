@@ -7,6 +7,7 @@ Pod::Spec.new do |s|
   s.author           = { "Piet Brauer" => "piet@nerdishbynature.com" }
   s.source           = { :git => "https://github.com/nerdishbynature/RequestKit.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/pietbrauer'
+  s.license          = { :type => "MIT", :file => "LICENSE" }
   s.module_name     = "RequestKit"
   s.platform     = :ios, '8.0'
   s.requires_arc = true
