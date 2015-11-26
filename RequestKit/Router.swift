@@ -47,7 +47,8 @@ public extension Router {
         var components: [(String, String)] = []
         for key in parameters.keys.sort(<) {
             if let value = parameters[key] {
-                components.append(key, value)
+                let encodedValue = value.urlEncodedString()
+                components.append(key, encodedValue!)
             }
         }
 
@@ -59,7 +60,7 @@ public extension Router {
         switch encoding {
         case .URL, .JSON:
             if parameters.keys.count > 0 {
-                URLString = [URLString, urlQuery(parameters).urlEncodedString() ?? ""].joinWithSeparator("?")
+                URLString = [URLString, urlQuery(parameters) ?? ""].joinWithSeparator("?")
             }
             if let URL = NSURL(string: URLString) {
                 let mutableURLRequest = NSMutableURLRequest(URL: URL)

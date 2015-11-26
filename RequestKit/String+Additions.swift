@@ -5,6 +5,10 @@ public extension String {
     }
 
     func urlEncodedString() -> String? {
-        return self.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())
+        let generalDelimitersToEncode = ":#[]@" // does not include "?" or "/" due to RFC 3986 - Section 3.4
+        let subDelimitersToEncode = "!$&'()*+,;="
+        let characterSet = NSCharacterSet.URLQueryAllowedCharacterSet().mutableCopy() as! NSMutableCharacterSet
+        characterSet.removeCharactersInString(generalDelimitersToEncode + subDelimitersToEncode)
+        return stringByAddingPercentEncodingWithAllowedCharacters(characterSet)
     }
 }
