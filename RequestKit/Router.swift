@@ -18,6 +18,13 @@ public enum HTTPEncoding: Int {
 public protocol Configuration {
     var apiEndpoint: String { get }
     var accessToken: String? { get }
+    var accessTokenFieldName: String { get }
+}
+
+public extension Configuration {
+    var accessTokenFieldName: String {
+        return "access_token"
+    }
 }
 
 public protocol Router {
@@ -38,7 +45,7 @@ public extension Router {
         let URLString = configuration.apiEndpoint.stringByAppendingURLPath(path)
         var parameters = encoding == .JSON ? [:] : params
         if let accessToken = configuration.accessToken {
-            parameters["access_token"] = accessToken
+            parameters[configuration.accessTokenFieldName] = accessToken
         }
         return request(URLString, parameters: parameters)
     }
