@@ -18,6 +18,13 @@ public enum HTTPEncoding: Int {
 public protocol Configuration {
     var apiEndpoint: String { get }
     var accessToken: String? { get }
+    var accessTokenFieldName: String { get }
+}
+
+public extension Configuration {
+    var accessTokenFieldName: String {
+        return "access_token"
+    }
 }
 
 public protocol Router {
@@ -38,7 +45,7 @@ public extension Router {
         let URLString = configuration.apiEndpoint.stringByAppendingURLPath(path)
         var parameters = encoding == .JSON ? [:] : params
         if let accessToken = configuration.accessToken {
-            parameters["access_token"] = accessToken
+            parameters[configuration.accessTokenFieldName] = accessToken
         }
         return request(URLString, parameters: parameters)
     }
@@ -85,7 +92,7 @@ public extension Router {
         if let request = request() {
             let task = NSURLSession.sharedSession().dataTaskWithRequest(request) { data, response, err in
                 if let response = response as? NSHTTPURLResponse {
-                    if response.statusCode != 200 {
+                    if response.statusCode <= 199 && response.statusCode > 299 {
                         let error = NSError(domain: errorDomain, code: response.statusCode, userInfo: nil)
                         completion(json: nil, error: error)
                         return
