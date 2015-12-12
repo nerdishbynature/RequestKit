@@ -92,7 +92,7 @@ public extension Router {
         if let request = request() {
             let task = NSURLSession.sharedSession().dataTaskWithRequest(request) { data, response, err in
                 if let response = response as? NSHTTPURLResponse {
-                    if response.statusCode <= 199 && response.statusCode > 299 {
+                    if response.statusCode <= 199 || response.statusCode > 299 {
                         let error = NSError(domain: errorDomain, code: response.statusCode, userInfo: nil)
                         completion(json: nil, error: error)
                         return
