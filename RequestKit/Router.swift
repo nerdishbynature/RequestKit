@@ -88,11 +88,11 @@ public extension Router {
         return nil
     }
 
-    func loadJSON<T>(expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) {
+    public func loadJSON<T>(expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) {
         if let request = request() {
             let task = NSURLSession.sharedSession().dataTaskWithRequest(request) { data, response, err in
                 if let response = response as? NSHTTPURLResponse {
-                    if response.statusCode <= 199 && response.statusCode > 299 {
+                    if response.wasSuccessful == false {
                         let error = NSError(domain: errorDomain, code: response.statusCode, userInfo: nil)
                         completion(json: nil, error: error)
                         return
@@ -114,5 +114,12 @@ public extension Router {
             }
             task.resume()
         }
+    }
+}
+
+public extension NSHTTPURLResponse {
+    public var wasSuccessful: Bool {
+        let successRange = 200..<300
+        return successRange.contains(statusCode)
     }
 }
