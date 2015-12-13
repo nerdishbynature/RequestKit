@@ -22,9 +22,9 @@ class RouterTests: XCTestCase {
         XCTAssertTrue(response201.wasSuccessful)
         let response400 = NSHTTPURLResponse(URL: url, statusCode: 400, HTTPVersion: "HTTP/1.1", headerFields: [:])!
         XCTAssertFalse(response400.wasSuccessful)
-        let response300 = NSHTTPURLResponse(URL: url, statusCode: 400, HTTPVersion: "HTTP/1.1", headerFields: [:])!
+        let response300 = NSHTTPURLResponse(URL: url, statusCode: 300, HTTPVersion: "HTTP/1.1", headerFields: [:])!
         XCTAssertFalse(response300.wasSuccessful)
-        let response301 = NSHTTPURLResponse(URL: url, statusCode: 400, HTTPVersion: "HTTP/1.1", headerFields: [:])!
+        let response301 = NSHTTPURLResponse(URL: url, statusCode: 301, HTTPVersion: "HTTP/1.1", headerFields: [:])!
         XCTAssertFalse(response301.wasSuccessful)
     }
 }
