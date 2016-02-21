@@ -1,6 +1,5 @@
 install:
-	brew install python
-	sudo pip install codecov
+
 
 test:
 	pod lib lint --quick
@@ -11,5 +10,7 @@ test:
 
 post_coverage:
 	bundle exec slather coverage --input-format profdata -x --ignore "../**/*/Xcode*" --ignore "Carthage/**" --output-directory slather-report --scheme RequestKit RequestKit.xcodeproj
-	codecov -f slather-report/cobertura.xml
+	SHA=$(git rev-parse HEAD)
+	BRANCH=$(git name-rev --name-only HEAD)
+	curl -X POST -d @slather-report/cobertura.xml "https://codecov.io/upload/v2?token="$(CODECOV_TOKEN)"&commit="$(SHA)"&branch="$(BRANCH)"&job="$(TRAVIS_BUILD_NUMBER)
 
