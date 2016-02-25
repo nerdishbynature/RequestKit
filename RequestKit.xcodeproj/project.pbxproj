@@ -857,6 +857,7 @@
 				233743061C7981A800013492 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		233743121C7981D700013492 /* Build configuration list for PBXNativeTarget "RequestKit watchOS" */ = {
 			isa = XCConfigurationList;
@@ -865,6 +866,7 @@
 				233743141C7981D700013492 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2337431F1C7981E700013492 /* Build configuration list for PBXNativeTarget "RequestKit Mac" */ = {
 			isa = XCConfigurationList;
@@ -873,6 +875,7 @@
 				233743211C7981E700013492 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		233743461C79832700013492 /* Build configuration list for PBXNativeTarget "RequestKit MacTests" */ = {
 			isa = XCConfigurationList;
@@ -881,6 +884,7 @@
 				233743481C79832700013492 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		233743551C79833A00013492 /* Build configuration list for PBXNativeTarget "RequestKit tvTests" */ = {
 			isa = XCConfigurationList;
@@ -889,6 +893,7 @@
 				233743571C79833A00013492 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		234F4C161BDDF64300A58EF7 /* Build configuration list for PBXProject "RequestKit" */ = {
 			isa = XCConfigurationList;
