@@ -31,7 +31,7 @@ public protocol Router {
     var method: HTTPMethod { get }
     var path: String { get }
     var encoding: HTTPEncoding { get }
-    var params: [String: String] { get }
+    var params: [String: AnyObject] { get }
     var configuration: Configuration { get }
 
     func urlQuery(parameters: [String: String]) -> String
@@ -43,7 +43,12 @@ public protocol Router {
 public extension Router {
     public func request() -> NSURLRequest? {
         let URLString = configuration.apiEndpoint.stringByAppendingURLPath(path)
-        var parameters = encoding == .JSON ? [:] : params
+        var parameters: [String: String] = [:]
+        if encoding != .JSON {
+            for (k, v) in params {
+                parameters[k] = "\(v)"
+            }
+        }
         if let accessToken = configuration.accessToken {
             parameters[configuration.accessTokenFieldName] = accessToken
         }
