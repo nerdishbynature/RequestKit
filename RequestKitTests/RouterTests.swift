@@ -59,7 +59,7 @@ enum TestRouter: Router {
         }
     }
 
-    var params: [String: String] {
+    var params: [String: AnyObject] {
         switch self {
         case .TestRoute(_):
             return ["key1": "value1", "key2": "value2"]
