@@ -5,9 +5,13 @@ public protocol JSONPostRouter: Router {
 }
 
 public extension JSONPostRouter {
+    internal func paramsData() throws -> NSData {
+        return try NSJSONSerialization.dataWithJSONObject(params, options: [])
+    }
+    
     public func postJSON<T>(expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) {
         do {
-            let data = try NSJSONSerialization.dataWithJSONObject(params, options: NSJSONWritingOptions())
+            let data = try paramsData()
             if let request = request() {
                 let task = NSURLSession.sharedSession().uploadTaskWithRequest(request, fromData: data) { data, response, error in
                     if let response = response as? NSHTTPURLResponse {
