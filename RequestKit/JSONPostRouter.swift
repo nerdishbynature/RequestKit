@@ -1,11 +1,12 @@
 import Foundation
 
 public protocol JSONPostRouter: Router {
+    func paramsData() throws -> NSData
     func postJSON<T>(expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void)
 }
 
 public extension JSONPostRouter {
-    internal func paramsData() throws -> NSData {
+    public func paramsData() throws -> NSData {
         return try NSJSONSerialization.dataWithJSONObject(params, options: [])
     }
     

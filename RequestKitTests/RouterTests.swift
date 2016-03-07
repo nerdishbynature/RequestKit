@@ -1,5 +1,5 @@
 import XCTest
-@testable import RequestKit
+import RequestKit
 
 class RouterTests: XCTestCase {
     lazy var router: TestRouter = {
