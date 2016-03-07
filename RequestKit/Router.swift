@@ -45,8 +45,8 @@ public extension Router {
         let URLString = configuration.apiEndpoint.stringByAppendingURLPath(path)
         var parameters: [String: String] = [:]
         if encoding != .JSON {
-            for (k, v) in params {
-                parameters[k] = "\(v)"
+            for (key, value) in params {
+                parameters[key] = "\(value)"
             }
         }
         if let accessToken = configuration.accessToken {
