@@ -7,45 +7,11 @@ class RouterTests: XCTestCase {
         let router = TestRouter.TestRoute(config)
         return router
     }()
-    
-    lazy var postRouter: TestRouter = {
-        let config = TestConfiguration("1234", url: "https://example.com/api/v1")
-        let router = TestRouter.TestPostRoute(config, [
-            "string": "one",
-            "int": 1,
-            "float": 1.0,
-            "bool": true,
-            "array": [1, "one"],
-            "dictionary": ["one": 1]
-        ])
-        return router
-    }()
 
     func testRequest() {
         let subject = router.request()
         XCTAssertEqual(subject?.URL?.absoluteString, "https://example.com/api/v1/some_route?access_token=1234&key1=value1&key2=value2")
         XCTAssertEqual(subject?.HTTPMethod, "GET")
-    }
-    
-    func testPostRequest() {
-        let subject = postRouter.request()
-        XCTAssertEqual(subject?.URL?.absoluteString, "https://example.com/api/v1/post_route?access_token=1234")
-        XCTAssertEqual(subject?.HTTPMethod, "POST")
-        
-        let params: AnyObject
-        do {
-            params = try NSJSONSerialization.JSONObjectWithData(try postRouter.paramsData(), options: [])
-        } catch {
-            params = []
-            XCTFail("Error JSON-encoding or -decoding parameters")
-        }
-        
-        XCTAssertEqual(params["string"], "one")
-        XCTAssertEqual(params["int"], 1)
-        XCTAssertEqual(params["float"], 1.0)
-        XCTAssertEqual(params["bool"], true)
-        XCTAssertEqual(params["array"], [1, "one"])
-        XCTAssertEqual(params["dictionary"], ["one": 1])
     }
 
     func testWasSuccessful() {
@@ -101,10 +67,19 @@ enum TestRouter: JSONPostRouter {
         }
     }
 
-    var params: [String: AnyObject] {
+    var params: [String: String] {
         switch self {
         case .TestRoute:
             return ["key1": "value1", "key2": "value2"]
+        case .TestPostRoute(_, _):
+            return [:]
+        }
+    }
+    
+    var jsonParams: [String: AnyObject]? {
+        switch self {
+        case .TestRoute:
+            return nil
         case .TestPostRoute(_, let params):
             return params
         }

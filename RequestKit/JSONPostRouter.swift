@@ -1,18 +1,14 @@
 import Foundation
 
 public protocol JSONPostRouter: Router {
-    func paramsData() throws -> NSData
+    var jsonParams: [String: AnyObject]? { get }
     func postJSON<T>(expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void)
 }
 
 public extension JSONPostRouter {
-    public func paramsData() throws -> NSData {
-        return try NSJSONSerialization.dataWithJSONObject(params, options: [])
-    }
-    
     public func postJSON<T>(expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) {
         do {
-            let data = try paramsData()
+            let data = try NSJSONSerialization.dataWithJSONObject(jsonParams ?? params, options: [])
             if let request = request() {
                 let task = NSURLSession.sharedSession().uploadTaskWithRequest(request, fromData: data) { data, response, error in
                     if let response = response as? NSHTTPURLResponse {
