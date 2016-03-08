@@ -29,12 +29,14 @@ class RouterTests: XCTestCase {
     }
 }
 
-enum TestRouter: Router {
+enum TestRouter: JSONPostRouter {
     case TestRoute(Configuration)
+    case TestPostRoute(Configuration, [String: AnyObject])
 
     var configuration: Configuration {
         switch self {
         case .TestRoute(let config): return config
+        case .TestPostRoute(let config, _): return config
         }
     }
 
@@ -42,6 +44,8 @@ enum TestRouter: Router {
         switch self {
         case .TestRoute:
             return .GET
+        case .TestPostRoute:
+            return .POST
         }
     }
 
@@ -49,6 +53,8 @@ enum TestRouter: Router {
         switch self {
         case .TestRoute:
             return .URL
+        case .TestPostRoute:
+            return .JSON
         }
     }
 
@@ -56,19 +62,32 @@ enum TestRouter: Router {
         switch self {
         case .TestRoute:
             return "some_route"
+        case .TestPostRoute:
+            return "post_route"
         }
     }
 
     var params: [String: String] {
         switch self {
-        case .TestRoute(_):
+        case .TestRoute:
             return ["key1": "value1", "key2": "value2"]
+        case .TestPostRoute(_, _):
+            return [:]
+        }
+    }
+    
+    var jsonParams: [String: AnyObject]? {
+        switch self {
+        case .TestRoute:
+            return nil
+        case .TestPostRoute(_, let params):
+            return params
         }
     }
 
     var URLRequest: NSURLRequest? {
         switch self {
-        case .TestRoute(_):
+        case .TestRoute, .TestPostRoute:
             return request()
         }
     }
