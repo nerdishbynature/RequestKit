@@ -36,7 +36,7 @@ public protocol Router {
 
     func urlQuery(parameters: [String: String]) -> String
     func request(urlString: String, parameters: [String: String]) -> NSURLRequest?
-    func loadJSON<T>(session: RequestKitURLSession, expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void)
+    func loadJSON<T>(session: RequestKitURLSession, expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) -> URLSessionDataTaskProtocol?
     func request() -> NSURLRequest?
 }
 
@@ -88,32 +88,35 @@ public extension Router {
         return nil
     }
 
-    public func loadJSON<T>(session: RequestKitURLSession = NSURLSession.sharedSession(), expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) {
-        if let request = request() {
-            let task = session.dataTaskWithRequest(request) { data, response, err in
-                if let response = response as? NSHTTPURLResponse {
-                    if response.wasSuccessful == false {
-                        let error = NSError(domain: errorDomain, code: response.statusCode, userInfo: nil)
-                        completion(json: nil, error: error)
-                        return
-                    }
-                }
+    public func loadJSON<T>(session: RequestKitURLSession = NSURLSession.sharedSession(), expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) -> URLSessionDataTaskProtocol? {
+        guard let request = request() else {
+            return nil
+        }
 
-                if let err = err {
-                    completion(json: nil, error: err)
-                } else {
-                    if let data = data {
-                        do {
-                            let JSON = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers) as? T
-                            completion(json: JSON, error: nil)
-                        } catch {
-                            completion(json: nil, error: error)
-                        }
+        let task = session.dataTaskWithRequest(request) { data, response, err in
+            if let response = response as? NSHTTPURLResponse {
+                if response.wasSuccessful == false {
+                    let error = NSError(domain: errorDomain, code: response.statusCode, userInfo: nil)
+                    completion(json: nil, error: error)
+                    return
+                }
+            }
+
+            if let err = err {
+                completion(json: nil, error: err)
+            } else {
+                if let data = data {
+                    do {
+                        let JSON = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers) as? T
+                        completion(json: JSON, error: nil)
+                    } catch {
+                        completion(json: nil, error: error)
                     }
                 }
             }
-            task.resume()
         }
+        task.resume()
+        return task
     }
 }
 
