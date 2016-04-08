@@ -35,6 +35,10 @@
 		234F4C391BDE0B6600A58EF7 /* String+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C381BDE0B6600A58EF7 /* String+Additions.swift */; };
 		234F4C3B1BDE0B9200A58EF7 /* StringAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C3A1BDE0B9200A58EF7 /* StringAdditionsTests.swift */; };
 		234F4C3D1BDE0D1000A58EF7 /* JSONPostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C3C1BDE0D1000A58EF7 /* JSONPostRouter.swift */; };
+		23A0521A1CA9166D0068BFF7 /* RequestKitSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A052191CA9166D0068BFF7 /* RequestKitSession.swift */; };
+		23A0521B1CA9166D0068BFF7 /* RequestKitSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A052191CA9166D0068BFF7 /* RequestKitSession.swift */; };
+		23A0521C1CA9166D0068BFF7 /* RequestKitSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A052191CA9166D0068BFF7 /* RequestKitSession.swift */; };
+		23A0521D1CA9166D0068BFF7 /* RequestKitSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A052191CA9166D0068BFF7 /* RequestKitSession.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +82,7 @@
 		234F4C381BDE0B6600A58EF7 /* String+Additions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Additions.swift"; sourceTree = "<group>"; };
 		234F4C3A1BDE0B9200A58EF7 /* StringAdditionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringAdditionsTests.swift; sourceTree = "<group>"; };
 		234F4C3C1BDE0D1000A58EF7 /* JSONPostRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONPostRouter.swift; sourceTree = "<group>"; };
+		23A052191CA9166D0068BFF7 /* RequestKitSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestKitSession.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +171,7 @@
 				234F4C361BDDF6BF00A58EF7 /* Router.swift */,
 				234F4C381BDE0B6600A58EF7 /* String+Additions.swift */,
 				234F4C3C1BDE0D1000A58EF7 /* JSONPostRouter.swift */,
+				23A052191CA9166D0068BFF7 /* RequestKitSession.swift */,
 				234F4C211BDDF64300A58EF7 /* Info.plist */,
 			);
 			path = RequestKit;
@@ -462,6 +468,7 @@
 				233743251C7981F600013492 /* String+Additions.swift in Sources */,
 				233743281C7981FA00013492 /* JSONPostRouter.swift in Sources */,
 				233743221C7981F200013492 /* Router.swift in Sources */,
+				23A0521B1CA9166D0068BFF7 /* RequestKitSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,6 +479,7 @@
 				233743261C7981F700013492 /* String+Additions.swift in Sources */,
 				233743291C7981FB00013492 /* JSONPostRouter.swift in Sources */,
 				233743231C7981F300013492 /* Router.swift in Sources */,
+				23A0521C1CA9166D0068BFF7 /* RequestKitSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,6 +490,7 @@
 				233743271C7981F800013492 /* String+Additions.swift in Sources */,
 				2337432A1C7981FB00013492 /* JSONPostRouter.swift in Sources */,
 				233743241C7981F300013492 /* Router.swift in Sources */,
+				23A0521D1CA9166D0068BFF7 /* RequestKitSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -512,6 +521,7 @@
 				234F4C391BDE0B6600A58EF7 /* String+Additions.swift in Sources */,
 				234F4C3D1BDE0D1000A58EF7 /* JSONPostRouter.swift in Sources */,
 				234F4C371BDDF6BF00A58EF7 /* Router.swift in Sources */,
+				23A0521A1CA9166D0068BFF7 /* RequestKitSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
