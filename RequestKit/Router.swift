@@ -36,7 +36,7 @@ public protocol Router {
 
     func urlQuery(parameters: [String: String]) -> String
     func request(urlString: String, parameters: [String: String]) -> NSURLRequest?
-    func loadJSON<T>(expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void)
+    func loadJSON<T>(session: RequestKitURLSession, expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void)
     func request() -> NSURLRequest?
 }
 
@@ -88,9 +88,9 @@ public extension Router {
         return nil
     }
 
-    public func loadJSON<T>(expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) {
+    public func loadJSON<T>(session: RequestKitURLSession = NSURLSession.sharedSession(), expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) {
         if let request = request() {
-            let task = NSURLSession.sharedSession().dataTaskWithRequest(request) { data, response, err in
+            let task = session.dataTaskWithRequest(request) { data, response, err in
                 if let response = response as? NSHTTPURLResponse {
                     if response.wasSuccessful == false {
                         let error = NSError(domain: errorDomain, code: response.statusCode, userInfo: nil)
