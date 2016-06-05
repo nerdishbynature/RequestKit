@@ -27,6 +27,15 @@ class RouterTests: XCTestCase {
         let response301 = NSHTTPURLResponse(URL: url, statusCode: 301, HTTPVersion: "HTTP/1.1", headerFields: [:])!
         XCTAssertFalse(response301.wasSuccessful)
     }
+
+    func testURLComponents() {
+        let test1 = ["key1": "value1", "key2": "value2"]
+        XCTAssertEqual(router.urlQuery(test1), "key1=value1&key2=value2")
+        let test2 = ["key1": ["value1", "value2"]]
+        XCTAssertEqual(router.urlQuery(test2), "key1[0]=value1&key1[1]=value2")
+        let test3 = ["key1": ["key2": "value1", "key3": "value2"]]
+        XCTAssertEqual(router.urlQuery(test3), "key1[key2]=value1&key1[key3]=value2")
+    }
 }
 
 enum TestRouter: Router {
@@ -59,7 +68,7 @@ enum TestRouter: Router {
         }
     }
 
-    var params: [String: String] {
+    var params: [String: AnyObject] {
         switch self {
         case .TestRoute(_):
             return ["key1": "value1", "key2": "value2"]
