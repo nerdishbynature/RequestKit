@@ -1,7 +1,5 @@
 import Foundation
 
-let errorDomain = "com.octokit.swift"
-
 public enum Response<T> {
     case Success(T)
     case Failure(ErrorType)
@@ -19,11 +17,16 @@ public protocol Configuration {
     var apiEndpoint: String { get }
     var accessToken: String? { get }
     var accessTokenFieldName: String { get }
+    var errorDomain: String { get }
 }
 
 public extension Configuration {
     var accessTokenFieldName: String {
         return "access_token"
+    }
+
+    var errorDomain: String {
+        return "com.nerdishbynature.RequestKit"
     }
 }
 
@@ -96,7 +99,7 @@ public extension Router {
         let task = session.dataTaskWithRequest(request) { data, response, err in
             if let response = response as? NSHTTPURLResponse {
                 if response.wasSuccessful == false {
-                    let error = NSError(domain: errorDomain, code: response.statusCode, userInfo: nil)
+                    let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: nil)
                     completion(json: nil, error: error)
                     return
                 }
