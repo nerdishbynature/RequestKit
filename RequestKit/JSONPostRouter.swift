@@ -20,7 +20,7 @@ public extension JSONPostRouter {
 
         let task = session.uploadTaskWithRequest(request, fromData: data) { data, response, error in
             if let response = response as? NSHTTPURLResponse {
-                if response.statusCode != 201 {
+                if !response.wasSuccessful {
                     let error = NSError(domain: errorDomain, code: response.statusCode, userInfo: nil)
                     completion(json: nil, error: error)
                     return
