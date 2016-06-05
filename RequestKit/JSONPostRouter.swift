@@ -4,7 +4,7 @@ public protocol JSONPostRouter: Router {
     func postJSON<T>(session: RequestKitURLSession, expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) -> URLSessionDataTaskProtocol?
 }
 
-public let RequestKitErrorJSONKey = "RequestKitErrorJSONKey"
+public let RequestKitErrorResponseKey = "RequestKitErrorResponseKey"
 
 public extension JSONPostRouter {
     public func postJSON<T>(session: RequestKitURLSession = NSURLSession.sharedSession(), expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) -> URLSessionDataTaskProtocol? {
@@ -25,7 +25,9 @@ public extension JSONPostRouter {
                 if !response.wasSuccessful {
                     var userInfo = [String: AnyObject]()
                     if let data = data, json = try? NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers) as? [String: AnyObject] {
-                        userInfo[RequestKitErrorJSONKey] = json
+                        userInfo[RequestKitErrorResponseKey] = json
+                    } else if let data = data, string = String(data: data, encoding: NSUTF8StringEncoding) {
+                        userInfo[RequestKitErrorResponseKey] = string
                     }
                     let error = NSError(domain: errorDomain, code: response.statusCode, userInfo: userInfo)
                     completion(json: nil, error: error)
