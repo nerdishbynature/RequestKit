@@ -29,7 +29,7 @@ public extension JSONPostRouter {
                     } else if let data = data, string = String(data: data, encoding: NSUTF8StringEncoding) {
                         userInfo[RequestKitErrorResponseKey] = string
                     }
-                    let error = NSError(domain: errorDomain, code: response.statusCode, userInfo: userInfo)
+                    let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
                     completion(json: nil, error: error)
                     return
                 }
