@@ -31,11 +31,11 @@ public protocol Router {
     var method: HTTPMethod { get }
     var path: String { get }
     var encoding: HTTPEncoding { get }
-    var params: [String: String] { get }
+    var params: [String: AnyObject] { get }
     var configuration: Configuration { get }
 
-    func urlQuery(parameters: [String: String]) -> String
-    func request(urlString: String, parameters: [String: String]) -> NSURLRequest?
+    func urlQuery(parameters: [String: AnyObject]) -> String
+    func request(urlString: String, parameters: [String: AnyObject]) -> NSURLRequest?
     func loadJSON<T>(session: RequestKitURLSession, expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) -> URLSessionDataTaskProtocol?
     func request() -> NSURLRequest?
 }
@@ -50,19 +50,35 @@ public extension Router {
         return request(URLString, parameters: parameters)
     }
 
-    public func urlQuery(parameters: [String: String]) -> String {
+    public func urlComponents(parameters: [String: AnyObject]) -> [(String, String)] {
         var components: [(String, String)] = []
         for key in parameters.keys.sort(<) {
-            if let value = parameters[key] {
+            guard let value = parameters[key] else { continue }
+            switch value {
+            case let value as String:
                 let encodedValue = value.urlEncodedString()
                 components.append(key, encodedValue!)
+            case let valueArray as [String]:
+                valueArray.forEach({ components.append(("\(key)[\(valueArray.indexOf($0)!)]", $0.urlEncodedString()!)) })
+            case let valueDict as [String: AnyObject]:
+                for nestedKey in valueDict.keys.sort(<) {
+                    guard let value = valueDict[nestedKey] as? String else { continue }
+                    let tuple = ("\(key)[\(nestedKey)]", value.urlEncodedString()!)
+                    components.append(tuple)
+                }
+            default:
+                print("Cannot encode object of type \(value.dynamicType)")
             }
         }
+        return components
+    }
 
+    public func urlQuery(parameters: [String: AnyObject]) -> String {
+        let components = urlComponents(parameters)
         return components.map{"\($0)=\($1)"}.joinWithSeparator("&")
     }
 
-    public func request(urlString: String, parameters: [String: String]) -> NSURLRequest? {
+    public func request(urlString: String, parameters: [String: AnyObject]) -> NSURLRequest? {
         var URLString = urlString
         switch encoding {
         case .URL, .JSON:
