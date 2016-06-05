@@ -65,12 +65,5 @@ enum TestRouter: Router {
             return ["key1": "value1", "key2": "value2"]
         }
     }
-
-    var URLRequest: NSURLRequest? {
-        switch self {
-        case .TestRoute(_):
-            return request()
-        }
-    }
 }
 
