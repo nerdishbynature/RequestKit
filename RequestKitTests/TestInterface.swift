@@ -1,8 +1,18 @@
 import RequestKit
 
+class TestInterfaceConfiguration: Configuration {
+    var apiEndpoint: String
+    var errorDomain = "com.nerdishbynature.RequestKitTests"
+    var accessToken: String? = nil
+
+    init(url: String) {
+        apiEndpoint = url
+    }
+}
+
 class TestInterface {
     var configuration: Configuration {
-        return TestConfiguration("1234", url: "https://example.com")
+        return TestInterfaceConfiguration(url: "https://example.com")
     }
 
     func postJSON(session: RequestKitURLSession = NSURLSession.sharedSession(), completion: (response: Response<[String: AnyObject]>) -> Void) {
