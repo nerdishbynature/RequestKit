@@ -3,7 +3,7 @@ import RequestKit
 
 class RouterTests: XCTestCase {
     lazy var router: TestRouter = {
-        let config = TestConfiguration("1234", url: "https://example.com/api/v1")
+        let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
         let router = TestRouter.TestRoute(config)
         return router
     }()
@@ -38,11 +38,11 @@ class RouterTests: XCTestCase {
     }
 
     func testFormEncodedRouteRequest() {
-        let config = TestConfiguration("1234", url: "https://example.com/api/v1")
+        let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
         let router = TestRouter.FormEncodedRoute(config)
         let subject = router.request()
         XCTAssertEqual(subject?.URL?.absoluteString, "https://example.com/api/v1/route")
-        XCTAssertEqual(String(data: subject!.HTTPBody!, encoding: NSUTF8StringEncoding), "access_token=1234&key1=value1&key2=value2")
+        XCTAssertEqual(String(data: subject?.HTTPBody ?? NSData(), encoding: NSUTF8StringEncoding), "access_token=1234&key1=value1&key2=value2")
         XCTAssertEqual(subject?.HTTPMethod, "POST")
     }
 }
