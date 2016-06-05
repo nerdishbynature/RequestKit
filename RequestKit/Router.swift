@@ -42,11 +42,12 @@ public protocol Router {
 
 public extension Router {
     public func request() -> NSURLRequest? {
-        let components = NSURLComponents(string: configuration.apiEndpoint.stringByAppendingURLPath(path))
+        let url = NSURL(string: path, relativeToURL: NSURL(string: configuration.apiEndpoint))
         var parameters = encoding == .JSON ? [:] : params
         if let accessToken = configuration.accessToken {
             parameters[configuration.accessTokenFieldName] = accessToken
         }
+        let components = NSURLComponents(URL: url!, resolvingAgainstBaseURL: true)
         return request(components!, parameters: parameters)
     }
 
