@@ -61,9 +61,9 @@ public extension Router {
                     components.append(NSURLQueryItem(name: key, value: escapedValue))
                 }
             case let valueArray as [String]:
-                valueArray.forEach { item in
+                for (index, item) in valueArray.enumerate() {
                     if let escapedValue = item.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) {
-                        components.append(NSURLQueryItem(name: "\(key)[\(valueArray.indexOf(item)!)]", value: escapedValue))
+                        components.append(NSURLQueryItem(name: "\(key)[\(index)]", value: escapedValue))
                     }
                 }
             case let valueDict as [String: AnyObject]:
