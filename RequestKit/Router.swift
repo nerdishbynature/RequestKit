@@ -34,7 +34,7 @@ public protocol Router {
     var params: [String: AnyObject] { get }
     var configuration: Configuration { get }
 
-    func urlQuery(parameters: [String: AnyObject]) -> [NSURLQueryItem]
+    func urlQuery(parameters: [String: AnyObject]) -> [NSURLQueryItem]?
     func request(urlComponents: NSURLComponents, parameters: [String: AnyObject]) -> NSURLRequest?
     func loadJSON<T>(session: RequestKitURLSession, expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) -> URLSessionDataTaskProtocol?
     func request() -> NSURLRequest?
@@ -51,7 +51,8 @@ public extension Router {
         return request(components!, parameters: parameters)
     }
 
-    public func urlQuery(parameters: [String: AnyObject]) -> [NSURLQueryItem] {
+    public func urlQuery(parameters: [String: AnyObject]) -> [NSURLQueryItem]? {
+        guard parameters.count > 0 else { return nil }
         var components: [NSURLQueryItem] = []
         for key in parameters.keys.sort(<) {
             guard let value = parameters[key] else { continue }
