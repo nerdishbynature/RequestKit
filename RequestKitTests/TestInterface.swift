@@ -59,7 +59,7 @@ enum JSONTestRouter: JSONPostRouter {
         }
     }
 
-    var params: [String: String] {
+    var params: [String: AnyObject] {
         switch self {
         case .TestRoute:
             return [:]

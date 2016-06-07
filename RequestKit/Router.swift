@@ -34,61 +34,74 @@ public protocol Router {
     var method: HTTPMethod { get }
     var path: String { get }
     var encoding: HTTPEncoding { get }
-    var params: [String: String] { get }
+    var params: [String: AnyObject] { get }
     var configuration: Configuration { get }
 
-    func urlQuery(parameters: [String: String]) -> String
-    func request(urlString: String, parameters: [String: String]) -> NSURLRequest?
+    func urlQuery(parameters: [String: AnyObject]) -> [NSURLQueryItem]?
+    func request(urlComponents: NSURLComponents, parameters: [String: AnyObject]) -> NSURLRequest?
     func loadJSON<T>(session: RequestKitURLSession, expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) -> URLSessionDataTaskProtocol?
     func request() -> NSURLRequest?
 }
 
 public extension Router {
     public func request() -> NSURLRequest? {
-        let URLString = configuration.apiEndpoint.stringByAppendingURLPath(path)
+        let url = NSURL(string: path, relativeToURL: NSURL(string: configuration.apiEndpoint))
         var parameters = encoding == .JSON ? [:] : params
         if let accessToken = configuration.accessToken {
             parameters[configuration.accessTokenFieldName] = accessToken
         }
-        return request(URLString, parameters: parameters)
+        let components = NSURLComponents(URL: url!, resolvingAgainstBaseURL: true)
+        return request(components!, parameters: parameters)
     }
 
-    public func urlQuery(parameters: [String: String]) -> String {
-        var components: [(String, String)] = []
+    public func urlQuery(parameters: [String: AnyObject]) -> [NSURLQueryItem]? {
+        guard parameters.count > 0 else { return nil }
+        var components: [NSURLQueryItem] = []
         for key in parameters.keys.sort(<) {
-            if let value = parameters[key] {
-                let encodedValue = value.urlEncodedString()
-                components.append(key, encodedValue!)
+            guard let value = parameters[key] else { continue }
+            switch value {
+            case let value as String:
+                if let escapedValue = value.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) {
+                    components.append(NSURLQueryItem(name: key, value: escapedValue))
+                }
+            case let valueArray as [String]:
+                for (index, item) in valueArray.enumerate() {
+                    if let escapedValue = item.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) {
+                        components.append(NSURLQueryItem(name: "\(key)[\(index)]", value: escapedValue))
+                    }
+                }
+            case let valueDict as [String: AnyObject]:
+                for nestedKey in valueDict.keys.sort(<) {
+                    guard let value = valueDict[nestedKey] as? String else { continue }
+                    if let escapedValue = value.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) {
+                        components.append(NSURLQueryItem(name: "\(key)[\(nestedKey)]", value: escapedValue))
+                    }
+                }
+            default:
+                print("Cannot encode object of type \(value.dynamicType)")
             }
         }
-
-        return components.map{"\($0)=\($1)"}.joinWithSeparator("&")
+        return components
     }
 
-    public func request(urlString: String, parameters: [String: String]) -> NSURLRequest? {
-        var URLString = urlString
+    public func request(urlComponents: NSURLComponents, parameters: [String: AnyObject]) -> NSURLRequest? {
+        urlComponents.queryItems = urlQuery(parameters)
+        guard let url = urlComponents.URL else { return nil }
         switch encoding {
         case .URL, .JSON:
-            if parameters.keys.count > 0 {
-                URLString = [URLString, urlQuery(parameters) ?? ""].joinWithSeparator("?")
-            }
-            if let URL = NSURL(string: URLString) {
-                let mutableURLRequest = NSMutableURLRequest(URL: URL)
-                mutableURLRequest.HTTPMethod = method.rawValue
-                return mutableURLRequest
-            }
+            let mutableURLRequest = NSMutableURLRequest(URL: url)
+            mutableURLRequest.HTTPMethod = method.rawValue
+            return mutableURLRequest
         case .FORM:
-            let queryData = urlQuery(parameters).dataUsingEncoding(NSUTF8StringEncoding)
-            if let URL = NSURL(string: URLString) {
-                let mutableURLRequest = NSMutableURLRequest(URL: URL)
-                mutableURLRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "content-type")
-                mutableURLRequest.HTTPBody = queryData
-                mutableURLRequest.HTTPMethod = method.rawValue
-                return mutableURLRequest
-            }
+            urlComponents.queryItems = urlQuery(parameters)
+            let queryData = urlComponents.percentEncodedQuery?.dataUsingEncoding(NSUTF8StringEncoding)
+            urlComponents.queryItems = nil // clear the query items as they go into the body
+            let mutableURLRequest = NSMutableURLRequest(URL: urlComponents.URL!)
+            mutableURLRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "content-type")
+            mutableURLRequest.HTTPBody = queryData
+            mutableURLRequest.HTTPMethod = method.rawValue
+            return mutableURLRequest
         }
-
-        return nil
     }
 
     public func loadJSON<T>(session: RequestKitURLSession = NSURLSession.sharedSession(), expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) -> URLSessionDataTaskProtocol? {

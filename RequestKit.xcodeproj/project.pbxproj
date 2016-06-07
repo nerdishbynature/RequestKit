@@ -12,9 +12,6 @@
 		233743221C7981F200013492 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C361BDDF6BF00A58EF7 /* Router.swift */; };
 		233743231C7981F300013492 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C361BDDF6BF00A58EF7 /* Router.swift */; };
 		233743241C7981F300013492 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C361BDDF6BF00A58EF7 /* Router.swift */; };
-		233743251C7981F600013492 /* String+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C381BDE0B6600A58EF7 /* String+Additions.swift */; };
-		233743261C7981F700013492 /* String+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C381BDE0B6600A58EF7 /* String+Additions.swift */; };
-		233743271C7981F800013492 /* String+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C381BDE0B6600A58EF7 /* String+Additions.swift */; };
 		233743281C7981FA00013492 /* JSONPostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C3C1BDE0D1000A58EF7 /* JSONPostRouter.swift */; };
 		233743291C7981FB00013492 /* JSONPostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C3C1BDE0D1000A58EF7 /* JSONPostRouter.swift */; };
 		2337432A1C7981FB00013492 /* JSONPostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C3C1BDE0D1000A58EF7 /* JSONPostRouter.swift */; };
@@ -22,8 +19,6 @@
 		233743521C79833A00013492 /* RequestKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 233743001C7981A800013492 /* RequestKit.framework */; };
 		233743581C79836500013492 /* ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2301BEE11C1BEA3E001F3E54 /* ConfigurationTests.swift */; };
 		233743591C79836600013492 /* ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2301BEE11C1BEA3E001F3E54 /* ConfigurationTests.swift */; };
-		2337435A1C79836900013492 /* StringAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C3A1BDE0B9200A58EF7 /* StringAdditionsTests.swift */; };
-		2337435B1C79836A00013492 /* StringAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C3A1BDE0B9200A58EF7 /* StringAdditionsTests.swift */; };
 		2337435C1C79836E00013492 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2301BEE31C1BF95E001F3E54 /* RouterTests.swift */; };
 		2337435D1C79836E00013492 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2301BEE31C1BF95E001F3E54 /* RouterTests.swift */; };
 		2337435E1C79852500013492 /* RequestKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 234F4C1F1BDDF64300A58EF7 /* RequestKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -32,8 +27,6 @@
 		234F4C201BDDF64300A58EF7 /* RequestKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 234F4C1F1BDDF64300A58EF7 /* RequestKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234F4C271BDDF64300A58EF7 /* RequestKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234F4C1C1BDDF64300A58EF7 /* RequestKit.framework */; };
 		234F4C371BDDF6BF00A58EF7 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C361BDDF6BF00A58EF7 /* Router.swift */; };
-		234F4C391BDE0B6600A58EF7 /* String+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C381BDE0B6600A58EF7 /* String+Additions.swift */; };
-		234F4C3B1BDE0B9200A58EF7 /* StringAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C3A1BDE0B9200A58EF7 /* StringAdditionsTests.swift */; };
 		234F4C3D1BDE0D1000A58EF7 /* JSONPostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234F4C3C1BDE0D1000A58EF7 /* JSONPostRouter.swift */; };
 		235290691D03B65D004FD7FB /* RequestKitURLTestSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235290681D03B65D004FD7FB /* RequestKitURLTestSession.swift */; };
 		2352906A1D03B65D004FD7FB /* RequestKitURLTestSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235290681D03B65D004FD7FB /* RequestKitURLTestSession.swift */; };
@@ -91,8 +84,6 @@
 		234F4C261BDDF64300A58EF7 /* RequestKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RequestKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		234F4C2D1BDDF64300A58EF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		234F4C361BDDF6BF00A58EF7 /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
-		234F4C381BDE0B6600A58EF7 /* String+Additions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Additions.swift"; sourceTree = "<group>"; };
-		234F4C3A1BDE0B9200A58EF7 /* StringAdditionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringAdditionsTests.swift; sourceTree = "<group>"; };
 		234F4C3C1BDE0D1000A58EF7 /* JSONPostRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONPostRouter.swift; sourceTree = "<group>"; };
 		235290681D03B65D004FD7FB /* RequestKitURLTestSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestKitURLTestSession.swift; sourceTree = "<group>"; };
 		2352906C1D03B68A004FD7FB /* JSONPostRouterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONPostRouterTests.swift; sourceTree = "<group>"; };
@@ -185,7 +176,6 @@
 			children = (
 				234F4C1F1BDDF64300A58EF7 /* RequestKit.h */,
 				234F4C361BDDF6BF00A58EF7 /* Router.swift */,
-				234F4C381BDE0B6600A58EF7 /* String+Additions.swift */,
 				234F4C3C1BDE0D1000A58EF7 /* JSONPostRouter.swift */,
 				23A052191CA9166D0068BFF7 /* RequestKitSession.swift */,
 				234F4C211BDDF64300A58EF7 /* Info.plist */,
@@ -197,7 +187,6 @@
 			isa = PBXGroup;
 			children = (
 				234F4C2D1BDDF64300A58EF7 /* Info.plist */,
-				234F4C3A1BDE0B9200A58EF7 /* StringAdditionsTests.swift */,
 				2301BEE11C1BEA3E001F3E54 /* ConfigurationTests.swift */,
 				2301BEE31C1BF95E001F3E54 /* RouterTests.swift */,
 				2352906C1D03B68A004FD7FB /* JSONPostRouterTests.swift */,
@@ -485,7 +474,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				233743251C7981F600013492 /* String+Additions.swift in Sources */,
 				233743281C7981FA00013492 /* JSONPostRouter.swift in Sources */,
 				233743221C7981F200013492 /* Router.swift in Sources */,
 				23A0521B1CA9166D0068BFF7 /* RequestKitSession.swift in Sources */,
@@ -496,7 +484,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				233743261C7981F700013492 /* String+Additions.swift in Sources */,
 				233743291C7981FB00013492 /* JSONPostRouter.swift in Sources */,
 				233743231C7981F300013492 /* Router.swift in Sources */,
 				23A0521C1CA9166D0068BFF7 /* RequestKitSession.swift in Sources */,
@@ -507,7 +494,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				233743271C7981F800013492 /* String+Additions.swift in Sources */,
 				2337432A1C7981FB00013492 /* JSONPostRouter.swift in Sources */,
 				233743241C7981F300013492 /* Router.swift in Sources */,
 				23A0521D1CA9166D0068BFF7 /* RequestKitSession.swift in Sources */,
@@ -520,7 +506,6 @@
 			files = (
 				2337435D1C79836E00013492 /* RouterTests.swift in Sources */,
 				233743591C79836600013492 /* ConfigurationTests.swift in Sources */,
-				2337435B1C79836A00013492 /* StringAdditionsTests.swift in Sources */,
 				235290771D03B9FE004FD7FB /* TestInterface.swift in Sources */,
 				235290731D03B71E004FD7FB /* TestHelper.swift in Sources */,
 				2352906B1D03B65D004FD7FB /* RequestKitURLTestSession.swift in Sources */,
@@ -534,7 +519,6 @@
 			files = (
 				2337435C1C79836E00013492 /* RouterTests.swift in Sources */,
 				233743581C79836500013492 /* ConfigurationTests.swift in Sources */,
-				2337435A1C79836900013492 /* StringAdditionsTests.swift in Sources */,
 				235290761D03B9FE004FD7FB /* TestInterface.swift in Sources */,
 				235290721D03B71E004FD7FB /* TestHelper.swift in Sources */,
 				2352906A1D03B65D004FD7FB /* RequestKitURLTestSession.swift in Sources */,
@@ -546,7 +530,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				234F4C391BDE0B6600A58EF7 /* String+Additions.swift in Sources */,
 				234F4C3D1BDE0D1000A58EF7 /* JSONPostRouter.swift in Sources */,
 				234F4C371BDDF6BF00A58EF7 /* Router.swift in Sources */,
 				23A0521A1CA9166D0068BFF7 /* RequestKitSession.swift in Sources */,
@@ -559,7 +542,6 @@
 			files = (
 				2301BEE21C1BEA3E001F3E54 /* ConfigurationTests.swift in Sources */,
 				2301BEE41C1BF95E001F3E54 /* RouterTests.swift in Sources */,
-				234F4C3B1BDE0B9200A58EF7 /* StringAdditionsTests.swift in Sources */,
 				235290751D03B9FE004FD7FB /* TestInterface.swift in Sources */,
 				235290711D03B71E004FD7FB /* TestHelper.swift in Sources */,
 				235290691D03B65D004FD7FB /* RequestKitURLTestSession.swift in Sources */,

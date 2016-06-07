@@ -3,7 +3,7 @@ import RequestKit
 
 class RouterTests: XCTestCase {
     lazy var router: TestRouter = {
-        let config = TestConfiguration("1234", url: "https://example.com/api/v1")
+        let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
         let router = TestRouter.TestRoute(config)
         return router
     }()
@@ -27,14 +27,34 @@ class RouterTests: XCTestCase {
         let response301 = NSHTTPURLResponse(URL: url, statusCode: 301, HTTPVersion: "HTTP/1.1", headerFields: [:])!
         XCTAssertFalse(response301.wasSuccessful)
     }
+
+    func testURLComponents() {
+        let test1 = ["key1": "value1", "key2": "value2"]
+        XCTAssertEqual(router.urlQuery(test1)!, [NSURLQueryItem(name: "key1", value: "value1"), NSURLQueryItem(name: "key2", value: "value2")])
+        let test2 = ["key1": ["value1", "value2"]]
+        XCTAssertEqual(router.urlQuery(test2)!, [NSURLQueryItem(name: "key1[0]", value: "value1"), NSURLQueryItem(name: "key1[1]", value: "value2")])
+        let test3 = ["key1": ["key2": "value1", "key3": "value2"]]
+        XCTAssertEqual(router.urlQuery(test3)!, [NSURLQueryItem(name: "key1[key2]", value: "value1"), NSURLQueryItem(name: "key1[key3]", value: "value2")])
+    }
+
+    func testFormEncodedRouteRequest() {
+        let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
+        let router = TestRouter.FormEncodedRoute(config)
+        let subject = router.request()
+        XCTAssertEqual(subject?.URL?.absoluteString, "https://example.com/api/v1/route")
+        XCTAssertEqual(String(data: subject?.HTTPBody ?? NSData(), encoding: NSUTF8StringEncoding), "access_token=1234&key1=value1&key2=value2")
+        XCTAssertEqual(subject?.HTTPMethod, "POST")
+    }
 }
 
 enum TestRouter: Router {
     case TestRoute(Configuration)
+    case FormEncodedRoute(Configuration)
 
     var configuration: Configuration {
         switch self {
         case .TestRoute(let config): return config
+        case .FormEncodedRoute(let config): return config
         }
     }
 
@@ -42,6 +62,8 @@ enum TestRouter: Router {
         switch self {
         case .TestRoute:
             return .GET
+        case .FormEncodedRoute:
+            return .POST
         }
     }
 
@@ -49,6 +71,8 @@ enum TestRouter: Router {
         switch self {
         case .TestRoute:
             return .URL
+        case .FormEncodedRoute:
+            return .FORM
         }
     }
 
@@ -56,12 +80,16 @@ enum TestRouter: Router {
         switch self {
         case .TestRoute:
             return "some_route"
+        case .FormEncodedRoute:
+            return "route"
         }
     }
 
-    var params: [String: String] {
+    var params: [String: AnyObject] {
         switch self {
         case .TestRoute(_):
+            return ["key1": "value1", "key2": "value2"]
+        case .FormEncodedRoute:
             return ["key1": "value1", "key2": "value2"]
         }
     }
