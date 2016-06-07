@@ -30,11 +30,11 @@ class RouterTests: XCTestCase {
 
     func testURLComponents() {
         let test1 = ["key1": "value1", "key2": "value2"]
-        XCTAssertEqual(router.urlQuery(test1), [NSURLQueryItem(name: "key1", value: "value1"), NSURLQueryItem(name: "key2", value: "value2")])
+        XCTAssertEqual(router.urlQuery(test1)!, [NSURLQueryItem(name: "key1", value: "value1"), NSURLQueryItem(name: "key2", value: "value2")])
         let test2 = ["key1": ["value1", "value2"]]
-        XCTAssertEqual(router.urlQuery(test2), [NSURLQueryItem(name: "key1[0]", value: "value1"), NSURLQueryItem(name: "key1[1]", value: "value2")])
+        XCTAssertEqual(router.urlQuery(test2)!, [NSURLQueryItem(name: "key1[0]", value: "value1"), NSURLQueryItem(name: "key1[1]", value: "value2")])
         let test3 = ["key1": ["key2": "value1", "key3": "value2"]]
-        XCTAssertEqual(router.urlQuery(test3), [NSURLQueryItem(name: "key1[key2]", value: "value1"), NSURLQueryItem(name: "key1[key3]", value: "value2")])
+        XCTAssertEqual(router.urlQuery(test3)!, [NSURLQueryItem(name: "key1[key2]", value: "value1"), NSURLQueryItem(name: "key1[key3]", value: "value2")])
     }
 
     func testFormEncodedRouteRequest() {
