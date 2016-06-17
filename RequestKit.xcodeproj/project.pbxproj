@@ -373,9 +373,13 @@
 				TargetAttributes = {
 					233742FF1C7981A800013492 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 3NPZ2HXWU8;
+						DevelopmentTeamName = "Piet Brauer";
 					};
 					2337430C1C7981D700013492 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 3NPZ2HXWU8;
+						DevelopmentTeamName = "Piet Brauer";
 					};
 					233743191C7981E700013492 = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -385,12 +389,20 @@
 					};
 					2337434C1C79833A00013492 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 3NPZ2HXWU8;
+						DevelopmentTeamName = "Piet Brauer";
 					};
 					234F4C1B1BDDF64300A58EF7 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 3NPZ2HXWU8;
+						DevelopmentTeamName = "Piet Brauer";
+						LastSwiftMigration = 0800;
 					};
 					234F4C251BDDF64300A58EF7 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 3NPZ2HXWU8;
+						DevelopmentTeamName = "Piet Brauer";
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -831,6 +843,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -845,6 +858,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
@@ -857,6 +871,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nerdishbynature.RequestKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -868,6 +883,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nerdishbynature.RequestKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
