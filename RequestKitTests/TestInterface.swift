@@ -15,14 +15,14 @@ class TestInterface {
         return TestInterfaceConfiguration(url: "https://example.com")
     }
 
-    func postJSON(session: RequestKitURLSession = NSURLSession.sharedSession(), completion: (response: Response<[String: AnyObject]>) -> Void) {
-        let router = JSONTestRouter.TestRoute(configuration)
-        router.postJSON(session, expectedResultType: [String: AnyObject].self) { json, error in
+    func postJSON(_ session: RequestKitURLSession = URLSession.shared(), completion: (response: Response<[String: AnyObject]>) -> Void) -> URLSessionDataTaskProtocol? {
+        let router = JSONTestRouter.testRoute(configuration)
+        return router.postJSON(session, expectedResultType: [String: AnyObject].self) { json, error in
             if let error = error {
-                completion(response: Response.Failure(error))
+                completion(response: Response.failure(error))
             } else {
                 if let json = json {
-                    completion(response: Response.Success(json))
+                    completion(response: Response.success(json))
                 }
             }
         }
@@ -30,38 +30,38 @@ class TestInterface {
 }
 
 enum JSONTestRouter: JSONPostRouter {
-    case TestRoute(Configuration)
+    case testRoute(Configuration)
 
     var configuration: Configuration {
         switch self {
-        case .TestRoute(let config): return config
+        case .testRoute(let config): return config
         }
     }
 
     var method: HTTPMethod {
         switch self {
-        case .TestRoute:
+        case .testRoute:
             return .POST
         }
     }
 
     var encoding: HTTPEncoding {
         switch self {
-        case .TestRoute:
-            return .JSON
+        case .testRoute:
+            return .json
         }
     }
 
     var path: String {
         switch self {
-        case .TestRoute:
+        case .testRoute:
             return "some_route"
         }
     }
 
     var params: [String: AnyObject] {
         switch self {
-        case .TestRoute:
+        case .testRoute:
             return [:]
         }
     }

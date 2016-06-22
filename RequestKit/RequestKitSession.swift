@@ -1,24 +1,24 @@
 import Foundation
 
 public protocol RequestKitURLSession {
-    func dataTaskWithRequest(request: NSURLRequest, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void) -> URLSessionDataTaskProtocol
-    func uploadTaskWithRequest(request: NSURLRequest, fromData bodyData: NSData?, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void) -> URLSessionDataTaskProtocol
+    func dataTaskWithRequest(_ request: URLRequest, completionHandler: (Data?, URLResponse?, NSError?) -> Void) -> URLSessionDataTaskProtocol
+    func uploadTaskWithRequest(_ request: URLRequest, fromData bodyData: Data?, completionHandler: (Data?, URLResponse?, NSError?) -> Void) -> URLSessionDataTaskProtocol
 }
 
 public protocol URLSessionDataTaskProtocol {
     func resume()
 }
 
-extension NSURLSessionDataTask: URLSessionDataTaskProtocol { }
+extension URLSessionDataTask: URLSessionDataTaskProtocol { }
 
-extension NSURLSession: RequestKitURLSession {
-    public func dataTaskWithRequest(request: NSURLRequest, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void)
+extension URLSession: RequestKitURLSession {
+    public func dataTaskWithRequest(_ request: URLRequest, completionHandler: (Data?, URLResponse?, NSError?) -> Void)
         -> URLSessionDataTaskProtocol {
-        return (dataTaskWithRequest(request, completionHandler: completionHandler)
-            as NSURLSessionDataTask) as URLSessionDataTaskProtocol
+        return (dataTask(with: request, completionHandler: completionHandler)
+            as URLSessionDataTask) as URLSessionDataTaskProtocol
     }
 
-    public func uploadTaskWithRequest(request: NSURLRequest, fromData bodyData: NSData?, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void) -> URLSessionDataTaskProtocol {
-        return (uploadTaskWithRequest(request, fromData: bodyData, completionHandler: completionHandler) as NSURLSessionDataTask) as URLSessionDataTaskProtocol
+    public func uploadTaskWithRequest(_ request: URLRequest, fromData bodyData: Data?, completionHandler: (Data?, URLResponse?, NSError?) -> Void) -> URLSessionDataTaskProtocol {
+        return (uploadTask(with: request, from: bodyData, completionHandler: completionHandler) as URLSessionDataTask) as URLSessionDataTaskProtocol
     }
 }
