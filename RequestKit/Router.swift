@@ -105,7 +105,7 @@ public extension Router {
         }
     }
 
-    public func loadJSON<T>(_ session: RequestKitURLSession = URLSession.shared(), expectedResultType: T.Type, completion: (json: T?, error: ErrorProtocol?) -> Void) -> URLSessionDataTaskProtocol? {
+    public func loadJSON<T>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: (json: T?, error: ErrorProtocol?) -> Void) -> URLSessionDataTaskProtocol? {
         guard let request = request() else {
             return nil
         }

@@ -7,7 +7,7 @@ public protocol JSONPostRouter: Router {
 public let RequestKitErrorResponseKey = "RequestKitErrorResponseKey"
 
 public extension JSONPostRouter {
-    public func postJSON<T>(_ session: RequestKitURLSession = URLSession.shared(), expectedResultType: T.Type, completion: (json: T?, error: ErrorProtocol?) -> Void) -> URLSessionDataTaskProtocol? {
+    public func postJSON<T>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: (json: T?, error: ErrorProtocol?) -> Void) -> URLSessionDataTaskProtocol? {
         guard let request = request() else {
             return nil
         }
