@@ -15,7 +15,7 @@ class TestInterface {
         return TestInterfaceConfiguration(url: "https://example.com")
     }
 
-    func postJSON(_ session: RequestKitURLSession = URLSession.shared(), completion: (response: Response<[String: AnyObject]>) -> Void) -> URLSessionDataTaskProtocol? {
+    func postJSON(_ session: RequestKitURLSession = URLSession.shared, completion: (response: Response<[String: AnyObject]>) -> Void) -> URLSessionDataTaskProtocol? {
         let router = JSONTestRouter.testRoute(configuration)
         return router.postJSON(session, expectedResultType: [String: AnyObject].self) { json, error in
             if let error = error {
