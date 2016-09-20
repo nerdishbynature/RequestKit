@@ -1,49 +1,49 @@
 import Foundation
 
 public protocol JSONPostRouter: Router {
-    func postJSON<T>(session: RequestKitURLSession, expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) -> URLSessionDataTaskProtocol?
+    func postJSON<T>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
 }
 
 public let RequestKitErrorResponseKey = "RequestKitErrorResponseKey"
 
 public extension JSONPostRouter {
-    public func postJSON<T>(session: RequestKitURLSession = NSURLSession.sharedSession(), expectedResultType: T.Type, completion: (json: T?, error: ErrorType?) -> Void) -> URLSessionDataTaskProtocol? {
+    public func postJSON<T>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
         guard let request = request() else {
             return nil
         }
 
-        let data: NSData
+        let data: Data
         do {
-            data = try NSJSONSerialization.dataWithJSONObject(params, options: NSJSONWritingOptions())
+            data = try JSONSerialization.data(withJSONObject: params, options: JSONSerialization.WritingOptions())
         } catch {
-            completion(json: nil, error: error)
+            completion(nil, error)
             return nil
         }
 
-        let task = session.uploadTaskWithRequest(request, fromData: data) { data, response, error in
-            if let response = response as? NSHTTPURLResponse {
+        let task = session.uploadTask(with: request, fromData: data) { data, response, error in
+            if let response = response as? HTTPURLResponse {
                 if !response.wasSuccessful {
                     var userInfo = [String: AnyObject]()
-                    if let data = data, json = try? NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers) as? [String: AnyObject] {
-                        userInfo[RequestKitErrorResponseKey] = json
-                    } else if let data = data, string = String(data: data, encoding: NSUTF8StringEncoding) {
-                        userInfo[RequestKitErrorResponseKey] = string
+                    if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: AnyObject] {
+                        userInfo[RequestKitErrorResponseKey] = json as AnyObject?
+                    } else if let data = data, let string = String(data: data, encoding: String.Encoding.utf8) {
+                        userInfo[RequestKitErrorResponseKey] = string as AnyObject?
                     }
                     let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
-                    completion(json: nil, error: error)
+                    completion(nil, error)
                     return
                 }
             }
 
             if let error = error {
-                completion(json: nil, error: error)
+                completion(nil, error)
             } else {
                 if let data = data {
                     do {
-                        let JSON = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers) as? T
-                        completion(json: JSON, error: nil)
+                        let JSON = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? T
+                        completion(JSON, nil)
                     } catch {
-                        completion(json: nil, error: error)
+                        completion(nil, error)
                     }
                 }
             }

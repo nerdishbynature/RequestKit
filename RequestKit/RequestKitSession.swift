@@ -1,24 +1,22 @@
 import Foundation
 
 public protocol RequestKitURLSession {
-    func dataTaskWithRequest(request: NSURLRequest, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void) -> URLSessionDataTaskProtocol
-    func uploadTaskWithRequest(request: NSURLRequest, fromData bodyData: NSData?, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void) -> URLSessionDataTaskProtocol
+    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Swift.Void) -> URLSessionDataTaskProtocol
+    func uploadTask(with request: URLRequest, fromData bodyData: Data?, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol
 }
 
 public protocol URLSessionDataTaskProtocol {
     func resume()
 }
 
-extension NSURLSessionDataTask: URLSessionDataTaskProtocol { }
+extension URLSessionDataTask: URLSessionDataTaskProtocol { }
 
-extension NSURLSession: RequestKitURLSession {
-    public func dataTaskWithRequest(request: NSURLRequest, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void)
-        -> URLSessionDataTaskProtocol {
-        return (dataTaskWithRequest(request, completionHandler: completionHandler)
-            as NSURLSessionDataTask) as URLSessionDataTaskProtocol
+extension URLSession: RequestKitURLSession {
+    public func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Swift.Void) -> URLSessionDataTaskProtocol {
+        return (dataTask(with: request, completionHandler: completionHandler) as URLSessionDataTask)
     }
 
-    public func uploadTaskWithRequest(request: NSURLRequest, fromData bodyData: NSData?, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void) -> URLSessionDataTaskProtocol {
-        return (uploadTaskWithRequest(request, fromData: bodyData, completionHandler: completionHandler) as NSURLSessionDataTask) as URLSessionDataTaskProtocol
+    public func uploadTask(with request: URLRequest, fromData bodyData: Data?, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol {
+        return uploadTask(with: request, from: bodyData, completionHandler: completionHandler)
     }
 }
