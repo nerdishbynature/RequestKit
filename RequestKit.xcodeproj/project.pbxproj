@@ -368,14 +368,18 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = nerdishbynature;
 				TargetAttributes = {
 					233742FF1C7981A800013492 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 3NPZ2HXWU8;
+						DevelopmentTeamName = "Piet Brauer";
 					};
 					2337430C1C7981D700013492 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 3NPZ2HXWU8;
+						DevelopmentTeamName = "Piet Brauer";
 					};
 					233743191C7981E700013492 = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -385,12 +389,20 @@
 					};
 					2337434C1C79833A00013492 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 3NPZ2HXWU8;
+						DevelopmentTeamName = "Piet Brauer";
 					};
 					234F4C1B1BDDF64300A58EF7 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 3NPZ2HXWU8;
+						DevelopmentTeamName = "Piet Brauer";
+						LastSwiftMigration = 0800;
 					};
 					234F4C251BDDF64300A58EF7 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 3NPZ2HXWU8;
+						DevelopmentTeamName = "Piet Brauer";
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -581,6 +593,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -614,6 +627,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.1;
 			};
@@ -669,6 +683,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
@@ -697,6 +712,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nerdishbynature.RequestKit-MacTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
@@ -720,6 +736,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nerdishbynature.RequestKit-tvTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TVOS_DEPLOYMENT_TARGET = 9.1;
 			};
 			name = Release;
@@ -769,6 +786,7 @@
 				PRODUCT_NAME = RequestKit;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -812,6 +830,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nerdishbynature.RequestKit;
 				PRODUCT_NAME = RequestKit;
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -845,6 +864,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
@@ -857,6 +877,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nerdishbynature.RequestKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -868,6 +889,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nerdishbynature.RequestKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
