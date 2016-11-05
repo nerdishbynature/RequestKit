@@ -93,7 +93,6 @@ public extension Router {
             mutableURLRequest.HTTPMethod = method.rawValue
             return mutableURLRequest
         case .FORM:
-            urlComponents.queryItems = urlQuery(parameters)
             let queryData = urlComponents.percentEncodedQuery?.dataUsingEncoding(NSUTF8StringEncoding)
             urlComponents.queryItems = nil // clear the query items as they go into the body
             let mutableURLRequest = NSMutableURLRequest(URL: urlComponents.URL!)
