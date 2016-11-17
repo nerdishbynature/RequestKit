@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "NBNRequestKit"
-  s.version          = "1.1.1"
+  s.version          = "1.1.2"
   s.summary          = "Networking library for OctoKit.swift"
   s.homepage         = "https://github.com/nerdishbynature/RequestKit"
   s.license          = 'MIT'
