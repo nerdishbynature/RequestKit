@@ -42,7 +42,7 @@ class RouterTests: XCTestCase {
         let router = TestRouter.FormEncodedRoute(config)
         let subject = router.request()
         XCTAssertEqual(subject?.URL?.absoluteString, "https://example.com/api/v1/route")
-        XCTAssertEqual(String(data: subject?.HTTPBody ?? NSData(), encoding: NSUTF8StringEncoding), "access_token=1234&key1=value1&key2=value2")
+        XCTAssertEqual(String(data: subject?.HTTPBody ?? NSData(), encoding: NSUTF8StringEncoding), "access_token=1234&key1=value1%3A456&key2=value2")
         XCTAssertEqual(subject?.HTTPMethod, "POST")
     }
 }
@@ -86,12 +86,7 @@ enum TestRouter: Router {
     }
 
     var params: [String: AnyObject] {
-        switch self {
-        case .TestRoute(_):
-            return ["key1": "value1:456", "key2": "value2"]
-        case .FormEncodedRoute:
-            return ["key1": "value1", "key2": "value2"]
-        }
+        return ["key1": "value1:456", "key2": "value2"]
     }
 }
 
