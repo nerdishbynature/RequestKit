@@ -6,7 +6,7 @@ public enum Response<T> {
 }
 
 public enum HTTPMethod: String {
-    case GET = "GET", POST = "POST"
+    case GET, POST
 }
 
 public enum HTTPEncoding: Int {
@@ -125,6 +125,37 @@ public extension Router {
                     do {
                         let JSON = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? T
                         completion(JSON, nil)
+                    } catch {
+                        completion(nil, error)
+                    }
+                }
+            }
+        }
+        task.resume()
+        return task
+    }
+
+    public func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+        guard let request = request() else {
+            return nil
+        }
+
+        let task = session.dataTask(with: request) { data, response, err in
+            if let response = response as? HTTPURLResponse {
+                if response.wasSuccessful == false {
+                    let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: nil)
+                    completion(nil, error)
+                    return
+                }
+            }
+
+            if let err = err {
+                completion(nil, err)
+            } else {
+                if let data = data {
+                    do {
+                        let decoded = try JSONDecoder().decode(T.self, from: data)
+                        completion(decoded, nil)
                     } catch {
                         completion(nil, error)
                     }
