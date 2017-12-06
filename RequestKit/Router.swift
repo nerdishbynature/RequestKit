@@ -39,7 +39,9 @@ public protocol Router {
 
     func urlQuery(_ parameters: [String: Any]) -> [URLQueryItem]?
     func request(_ urlComponents: URLComponents, parameters: [String: Any]) -> URLRequest?
-    func loadJSON<T>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    func loadJSON<T: Codable>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    func load<T: Codable>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+
     func request() -> URLRequest?
 }
 
@@ -104,35 +106,9 @@ public extension Router {
         }
     }
 
-    public func loadJSON<T>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
-        guard let request = request() else {
-            return nil
-        }
-
-        let task = session.dataTask(with: request) { data, response, err in
-            if let response = response as? HTTPURLResponse {
-                if response.wasSuccessful == false {
-                    let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: nil)
-                    completion(nil, error)
-                    return
-                }
-            }
-
-            if let err = err {
-                completion(nil, err)
-            } else {
-                if let data = data {
-                    do {
-                        let JSON = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? T
-                        completion(JSON, nil)
-                    } catch {
-                        completion(nil, error)
-                    }
-                }
-            }
-        }
-        task.resume()
-        return task
+    @available(*, deprecated, message: "Plase use `load` method instead")
+    public func loadJSON<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+        return load(session, expectedResultType: expectedResultType, completion: completion)
     }
 
     public func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
