@@ -14,8 +14,6 @@ class JSONPostRouterTests: XCTestCase {
                 XCTAssertEqual(error.code, 401)
                 XCTAssertEqual(error.domain, "com.nerdishbynature.RequestKitTests")
                 XCTAssertEqual((error.userInfo[RequestKitErrorResponseKey] as? [String: String]) ?? [:], jsonDict)
-            case .failure:
-                XCTAssertTrue(false)
             }
         }
         XCTAssertNotNil(task)
@@ -33,8 +31,6 @@ class JSONPostRouterTests: XCTestCase {
                 XCTAssertEqual(error.code, 401)
                 XCTAssertEqual(error.domain, "com.nerdishbynature.RequestKitTests")
                 XCTAssertEqual((error.userInfo[RequestKitErrorResponseKey] as? String) ?? "", errorString)
-            case .failure:
-                XCTAssertTrue(false)
             }
         }
         XCTAssertNotNil(task)
