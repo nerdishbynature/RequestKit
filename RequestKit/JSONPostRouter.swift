@@ -5,8 +5,6 @@ public protocol JSONPostRouter: Router {
     func post<T: Codable>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
 }
 
-public let RequestKitErrorResponseKey = "RequestKitErrorResponseKey"
-
 public extension JSONPostRouter {
     public func postJSON<T>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
         guard let request = request() else {
@@ -26,9 +24,9 @@ public extension JSONPostRouter {
                 if !response.wasSuccessful {
                     var userInfo = [String: AnyObject]()
                     if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: AnyObject] {
-                        userInfo[RequestKitErrorResponseKey] = json as AnyObject?
+                        userInfo[RequestKitErrorKey] = json as AnyObject?
                     } else if let data = data, let string = String(data: data, encoding: String.Encoding.utf8) {
-                        userInfo[RequestKitErrorResponseKey] = string as AnyObject?
+                        userInfo[RequestKitErrorKey] = string as AnyObject?
                     }
                     let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
                     completion(nil, error)
@@ -71,9 +69,9 @@ public extension JSONPostRouter {
                 if !response.wasSuccessful {
                     var userInfo = [String: AnyObject]()
                     if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: AnyObject] {
-                        userInfo[RequestKitErrorResponseKey] = json as AnyObject?
+                        userInfo[RequestKitErrorKey] = json as AnyObject?
                     } else if let data = data, let string = String(data: data, encoding: String.Encoding.utf8) {
-                        userInfo[RequestKitErrorResponseKey] = string as AnyObject?
+                        userInfo[RequestKitErrorKey] = string as AnyObject?
                     }
                     let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
                     completion(nil, error)

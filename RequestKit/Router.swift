@@ -30,6 +30,8 @@ public extension Configuration {
     }
 }
 
+public let RequestKitErrorKey = "RequestKitErrorKey"
+
 public protocol Router {
     var method: HTTPMethod { get }
     var path: String { get }
@@ -121,7 +123,7 @@ public extension Router {
                 if response.wasSuccessful == false {
                     var userInfo = [String: AnyObject]()
                     if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: AnyObject] {
-                        userInfo["json"] = json as AnyObject?
+                        userInfo[RequestKitErrorKey] = json as AnyObject?
                     }
                     let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
                     completion(nil, error)
