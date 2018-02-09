@@ -45,6 +45,24 @@ class RouterTests: XCTestCase {
         XCTAssertEqual(String(data: subject?.httpBody ?? Data(), encoding: .utf8), "access_token=1234&key1=value1%3A456&key2=value2")
         XCTAssertEqual(subject?.httpMethod, "POST")
     }
+    
+    func testErrorWithJSON() {
+        let jsonDict = ["message": "Bad credentials", "documentation_url": "https://developer.github.com/v3"]
+        let jsonString = String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
+        let session = RequestKitURLTestSession(expectedURL: "https://example.com/some_route", expectedHTTPMethod: "GET", response: jsonString, statusCode: 401)
+        let task = TestInterface().getJSON(session) { response in
+            switch response {
+            case .success:
+                XCTAssert(false, "should not retrieve a succesful response")
+            case .failure(let error as NSError):
+                XCTAssertEqual(error.code, 401)
+                XCTAssertEqual(error.domain, "com.nerdishbynature.RequestKitTests")
+                XCTAssertEqual((error.userInfo[RequestKitErrorKey] as? [String: String]) ?? [:], jsonDict)
+            }
+        }
+        XCTAssertNotNil(task)
+        XCTAssertTrue(session.wasCalled)
+    }
 }
 
 enum TestRouter: Router {
