@@ -6,7 +6,7 @@ public enum Response<T> {
 }
 
 public enum HTTPMethod: String {
-    case GET, POST
+    case GET, POST, PUT, DELETE
 }
 
 public enum HTTPEncoding: Int {
