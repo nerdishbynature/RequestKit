@@ -17,7 +17,7 @@ public protocol Configuration {
     var apiEndpoint: String { get }
     var accessToken: String? { get }
     var accessTokenFieldName: String { get }
-    var shouldUseAuthorizationHeader: Bool { get }
+    var authorizationHeader: String? { get }
     var errorDomain: String { get }
 }
 
@@ -26,8 +26,8 @@ public extension Configuration {
         return "access_token"
     }
 
-    var shouldUseAuthorizationHeader: Bool {
-        return false
+    var authorizationHeader: String? {
+        return nil
     }
     
     var errorDomain: String {
@@ -57,15 +57,15 @@ public extension Router {
         let url = URL(string: path, relativeTo: URL(string: configuration.apiEndpoint)!)
         var parameters = encoding == .json ? [:] : params
 
-        if let accessToken = configuration.accessToken, !configuration.shouldUseAuthorizationHeader {
+        if let accessToken = configuration.accessToken, configuration.authorizationHeader == nil {
             parameters[configuration.accessTokenFieldName] = accessToken as AnyObject?
         }
         let components = URLComponents(url: url!, resolvingAgainstBaseURL: true)
         
         var urlRequest = request(components!, parameters: parameters)
         
-        if configuration.shouldUseAuthorizationHeader, let accessToken = configuration.accessToken {
-            urlRequest?.addValue("BEARER \(accessToken)", forHTTPHeaderField: "Authorization")
+        if let accessToken = configuration.accessToken, let tokenType = configuration.authorizationHeader {
+            urlRequest?.addValue("\(tokenType) \(accessToken)", forHTTPHeaderField: "Authorization")
         }
         
         return urlRequest
