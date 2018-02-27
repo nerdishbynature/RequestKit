@@ -17,6 +17,7 @@ public protocol Configuration {
     var apiEndpoint: String { get }
     var accessToken: String? { get }
     var accessTokenFieldName: String { get }
+    var authorizationHeader: String? { get }
     var errorDomain: String { get }
 }
 
@@ -25,6 +26,10 @@ public extension Configuration {
         return "access_token"
     }
 
+    var authorizationHeader: String? {
+        return nil
+    }
+    
     var errorDomain: String {
         return "com.nerdishbynature.RequestKit"
     }
@@ -51,11 +56,19 @@ public extension Router {
     public func request() -> URLRequest? {
         let url = URL(string: path, relativeTo: URL(string: configuration.apiEndpoint)!)
         var parameters = encoding == .json ? [:] : params
-        if let accessToken = configuration.accessToken {
+
+        if let accessToken = configuration.accessToken, configuration.authorizationHeader == nil {
             parameters[configuration.accessTokenFieldName] = accessToken as AnyObject?
         }
         let components = URLComponents(url: url!, resolvingAgainstBaseURL: true)
-        return request(components!, parameters: parameters)
+        
+        var urlRequest = request(components!, parameters: parameters)
+        
+        if let accessToken = configuration.accessToken, let tokenType = configuration.authorizationHeader {
+            urlRequest?.addValue("\(tokenType) \(accessToken)", forHTTPHeaderField: "Authorization")
+        }
+        
+        return urlRequest
     }
 
     public func urlQuery(_ parameters: [String: Any]) -> [URLQueryItem]? {
