@@ -164,6 +164,30 @@ public extension Router {
         task.resume()
         return task
     }
+    
+    public func load(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+        guard let request = request() else {
+            return nil
+        }
+        
+        let task = session.dataTask(with: request) { data, response, err in
+            if let response = response as? HTTPURLResponse {
+                if response.wasSuccessful == false {
+                    var userInfo = [String: AnyObject]()
+                    if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: AnyObject] {
+                        userInfo[RequestKitErrorKey] = json as AnyObject?
+                    }
+                    let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
+                    completion(error)
+                    return
+                }
+            }
+            
+            completion(err)
+        }
+        task.resume()
+        return task
+    }
 }
 
 fileprivate extension CharacterSet {
