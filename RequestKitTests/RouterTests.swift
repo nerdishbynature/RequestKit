@@ -12,6 +12,15 @@ class RouterTests: XCTestCase {
         let subject = router.request()
         XCTAssertEqual(subject?.url?.absoluteString, "https://example.com/api/v1/some_route?access_token=1234&key1=value1%3A456&key2=value2")
         XCTAssertEqual(subject?.httpMethod, "GET")
+    }    
+    
+    func testRequestWithAuthorizationHeader() {
+        let config = TestAuthorizationHeaderConfiguration("1234", url: "https://example.com/api/v1/")
+        let router = TestRouter.testRoute(config)
+        let subject = router.request()
+        XCTAssertEqual(subject?.url?.absoluteString, "https://example.com/api/v1/some_route?key1=value1%3A456&key2=value2")
+        XCTAssertEqual(subject?.httpMethod, "GET")
+        XCTAssertEqual(subject?.value(forHTTPHeaderField: "Authorization"), "BEARER 1234")
     }
 
     func testWasSuccessful() {
