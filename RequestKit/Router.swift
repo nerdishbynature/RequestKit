@@ -123,10 +123,20 @@ public extension Router {
 
     @available(*, deprecated, message: "Plase use `load` method instead")
     public func loadJSON<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
-        return load(session, expectedResultType: expectedResultType, completion: completion)
+        return load(session, dateDecodingStrategy:nil, expectedResultType: expectedResultType, completion: completion)
     }
 
     public func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy? = nil, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+        
+        let decoder = JSONDecoder()
+        if let dateDecodingStrategy = dateDecodingStrategy {
+            decoder.dateDecodingStrategy = dateDecodingStrategy
+        }
+        
+        return load(session, decoder:decoder, expectedResultType:expectedResultType, completion:completion)
+    }
+
+    public func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
         guard let request = request() else {
             return nil
         }
@@ -149,10 +159,6 @@ public extension Router {
             } else {
                 if let data = data {
                     do {
-                        let decoder = JSONDecoder()
-                        if let dateDecodingStrategy = dateDecodingStrategy {
-                            decoder.dateDecodingStrategy = dateDecodingStrategy
-                        }
                         let decoded = try decoder.decode(T.self, from: data)
                         completion(decoded, nil)
                     } catch {
