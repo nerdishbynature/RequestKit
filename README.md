@@ -88,6 +88,24 @@ public struct TokenConfiguration: Configuration {
 }
 ```
 
+In the above `Configuration` the `accessToken` will be passed as a URL parameter named `access_token` with each request. Alternatively you can have the `accessToken` passed in an HTTP Authorization header by setting the `authorizationHeader` property to the desired token type. As an example the following `Configuration` passes it as a Bearer token.
+
+```swift
+public struct TokenConfiguration: Configuration {
+    public let accessToken: String?
+    public let apiEndpoint = "https://my.webservice.example/api/2.0/"
+    public let authorizationHeader: String? = "Bearer"
+    public let errorDomain: String = "com.my.customErrorDomain"
+        
+    public init(_ accessToken: String? = nil) {
+        self.accessToken = accessToken
+    }
+}
+
+```
+
+
+
 ## Defining the binding object
 
 We will need something that connects the router and the configuration to make provide a convenient interface. The common way of doing this is to use a `struct` or a `class` that does it for you.
