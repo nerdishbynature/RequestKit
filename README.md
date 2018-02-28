@@ -103,7 +103,6 @@ public struct TokenConfiguration: Configuration {
 }
 ```
 
-
 ## Defining the binding object
 
 We will need something that connects the router and the configuration to make provide a convenient interface. The common way of doing this is to use a `struct` or a `class` that does it for you.
