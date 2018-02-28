@@ -95,7 +95,7 @@ public struct TokenConfiguration: Configuration {
     public let accessToken: String?
     public let apiEndpoint = "https://my.webservice.example/api/2.0/"
     public let authorizationHeader: String? = "Bearer"
-    public let errorDomain: String = "com.my.customErrorDomain"
+    public let errorDomain = "com.my.customErrorDomain"
         
     public init(_ accessToken: String? = nil) {
         self.accessToken = accessToken
