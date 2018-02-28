@@ -34,7 +34,7 @@ This is what a basic router looks like:
 ```swift
 enum MyRouter: Router {
     case getMyself(Configuration)
-    
+
     var configuration: Configuration {
         switch self {
         case .getMyself(let config): return config
@@ -47,7 +47,7 @@ enum MyRouter: Router {
             return .GET
         }
     }
-    
+
     var encoding: HTTPEncoding {
         switch self {
         case .getMyself:
@@ -78,7 +78,7 @@ As RequestKit was designed to handle OAuth requests we needed something to store
 ```swift
 public struct TokenConfiguration: Configuration {
     public let accessToken: String?
-    public let apiEndpoint = "https://my.webservice.example/api/2.0/"    
+    public let apiEndpoint = "https://my.webservice.example/api/2.0/"
     public let accessTokenFieldName = "access_token"
     public let errorDomain: String = "com.my.customErrorDomain"
     
@@ -101,9 +101,7 @@ public struct TokenConfiguration: Configuration {
         self.accessToken = accessToken
     }
 }
-
 ```
-
 
 
 ## Defining the binding object
@@ -116,11 +114,11 @@ struct User : Codable {
 
 struct MyWebservice {
     var configuration: Configuration
-    
+
     init(configuration: Configuration) {
         self.configuration = configuration
     }
-    
+
     public func getMyself(session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ response: Response<User>) -> Void) -> URLSessionDataTaskProtocol? {
         let router = MyRouter.getMyself(self.configuration)
         return router.load(session, expectedResultType: User.self) { user, error in
