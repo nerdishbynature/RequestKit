@@ -118,7 +118,7 @@ struct MyWebservice {
         self.configuration = configuration
     }
 
-    public func getMyself(session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ response: Response<User>) -> Void) -> URLSessionDataTaskProtocol? {
+    func getMyself(session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ response: Response<User>) -> Void) -> URLSessionDataTaskProtocol? {
         let router = MyRouter.getMyself(self.configuration)
         return router.load(session, expectedResultType: User.self) { user, error in
             if let error = error {
