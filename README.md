@@ -133,7 +133,7 @@ struct MyWebservice {
 
 ## Making a request
 
-All your user has to to is call your `MyWebservice`:
+All your user has to do is call your `MyWebservice`:
 
 ```swift
 let config = TokenConfiguration("123456")
