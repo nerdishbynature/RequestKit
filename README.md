@@ -40,7 +40,7 @@ enum MyRouter: Router {
         case .getMyself(let config): return config
         }
     }
-    
+
     var method: HTTPMethod {
         switch self {
         case .getMyself:
@@ -54,14 +54,14 @@ enum MyRouter: Router {
             return .url
         }
     }
-    
+
     var path: String {
         switch self {
         case .getMyself:
             return "myself"
         }
     }
-    
+
     var params: [String: Any] {
         switch self {
         case .getMyself(_):
