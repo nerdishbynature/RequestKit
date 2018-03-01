@@ -40,6 +40,17 @@ class TestInterface {
             }
         }
     }
+    
+    func loadAndIgnoreResponseBody(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ response: Response<Void>) -> Void) -> URLSessionDataTaskProtocol? {
+        let router = JSONTestRouter.testPOST(configuration)
+        return router.load(session) { error in
+            if let error = error {
+                completion(Response.failure(error))
+            } else {
+                completion(Response.success(()))
+            }
+        }
+    }
 }
 
 enum JSONTestRouter: JSONPostRouter {

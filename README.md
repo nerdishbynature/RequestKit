@@ -33,38 +33,38 @@ This is what a basic router looks like:
 
 ```swift
 enum MyRouter: Router {
-    case GetMyself(Configuration)
+    case getMyself(Configuration)
 
     var configuration: Configuration {
         switch self {
-        case .GetMyself(let config): return config
+        case .getMyself(let config): return config
         }
     }
 
     var method: HTTPMethod {
         switch self {
-        case .GetMyself:
+        case .getMyself:
             return .GET
         }
     }
 
     var encoding: HTTPEncoding {
         switch self {
-        case .GetMyself:
-            return .URL
+        case .getMyself:
+            return .url
         }
     }
 
     var path: String {
         switch self {
-        case .GetMyself:
+        case .getMyself:
             return "myself"
         }
     }
 
-    var params: [String: AnyObject] {
+    var params: [String: Any] {
         switch self {
-        case .GetMyself(_):
+        case .getMyself(_):
             return ["key1": "value1", "key2": "value2"]
         }
     }
@@ -80,8 +80,23 @@ public struct TokenConfiguration: Configuration {
     public let accessToken: String?
     public let apiEndpoint = "https://my.webservice.example/api/2.0/"
     public let accessTokenFieldName = "access_token"
-    public let errorDomain: String = "com.my.customErrorDomain"
+    public let errorDomain = "com.my.customErrorDomain"
+    
+    public init(_ accessToken: String? = nil) {
+        self.accessToken = accessToken
+    }
+}
+```
 
+In the above `Configuration` the `accessToken` will be passed as a URL parameter named `access_token` with each request. Alternatively you can have the `accessToken` passed in an HTTP Authorization header by setting the `authorizationHeader` property to the desired token type. As an example the following `Configuration` passes it as a Bearer token.
+
+```swift
+public struct TokenConfiguration: Configuration {
+    public let accessToken: String?
+    public let apiEndpoint = "https://my.webservice.example/api/2.0/"
+    public let authorizationHeader: String? = "Bearer"
+    public let errorDomain = "com.my.customErrorDomain"
+        
     public init(_ accessToken: String? = nil) {
         self.accessToken = accessToken
     }
@@ -93,6 +108,9 @@ public struct TokenConfiguration: Configuration {
 We will need something that connects the router and the configuration to make provide a convenient interface. The common way of doing this is to use a `struct` or a `class` that does it for you.
 
 ```swift
+struct User : Codable {
+}
+
 struct MyWebservice {
     var configuration: Configuration
 
@@ -100,15 +118,13 @@ struct MyWebservice {
         self.configuration = configuration
     }
 
-    func getMyself(session: RequestKitURLSession = NSURLSession.sharedSession(), completion: (response: Response<[String: AnyObject]>) -> Void) -> RequestKitURLSession {
-        let router = MyRouter.GetMyself(configuration)
-        router.loadJSON(session, expectedResultType: [String: AnyObject].self) { json, error in
+    func getMyself(session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ response: Response<User>) -> Void) -> URLSessionDataTaskProtocol? {
+        let router = MyRouter.getMyself(self.configuration)
+        return router.load(session, expectedResultType: User.self) { user, error in
             if let error = error {
-                completion(response: Response.Failure(error))
-            } else {
-                if let json = json {
-                    completion(response: Response.Success(json))
-                }
+                completion(Response.failure(error))
+            } else if let user = user {
+                completion(Response.success(user))
             }
         }
     }
@@ -117,16 +133,17 @@ struct MyWebservice {
 
 ## Making a request
 
-All your user has to to is call your `MyWebservice`:
+All your user has to do is call your `MyWebservice`:
 
 ```swift
-let config = TokenConfiguration(accessToken: "123456")
-MyWebservice(config).getMySelf { response in
+let config = TokenConfiguration("123456")
+MyWebservice(configuration:config).getMyself { response in
     switch response {
-        case .Success(let myself):
-            print(myself)
-        case .Failure(let error):
+        case .success(let user):
+            print(user)
+        case .failure(let error):
             print(error)
+        }
     }
 }
 ```
