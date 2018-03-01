@@ -72,6 +72,48 @@ class RouterTests: XCTestCase {
         XCTAssertNotNil(task)
         XCTAssertTrue(session.wasCalled)
     }
+    
+    func testLoadAndIgnoreResponseBody() {
+        let session = RequestKitURLTestSession(expectedURL: "https://example.com/some_route", expectedHTTPMethod: "POST", response: nil, statusCode: 204)
+
+        var receivedSuccessResponse = false
+        
+        let task = TestInterface().loadAndIgnoreResponseBody(session) { (response) in
+            switch response {
+            case .success:
+                receivedSuccessResponse = true
+            case .failure(_):
+                XCTAssert(false, "should not retrieve a failure response")
+            }
+        }
+        
+        XCTAssertNotNil(task)
+        XCTAssertTrue(session.wasCalled)
+        XCTAssertTrue(receivedSuccessResponse)
+    }
+    
+    func testErrorWithLoadAndIgnoreResponseBody() {
+        let jsonDict = ["message": "Bad credentials", "documentation_url": "https://developer.github.com/v3"]
+        let jsonString = String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
+        let session = RequestKitURLTestSession(expectedURL: "https://example.com/some_route", expectedHTTPMethod: "POST", response: jsonString, statusCode: 401)
+        
+        var receivedFailureResponse = false
+        
+        let task = TestInterface().loadAndIgnoreResponseBody(session) { response in
+            switch response {
+            case .success:
+                XCTAssert(false, "should not retrieve a successful response")
+            case .failure(let error as NSError):
+                receivedFailureResponse = true
+                XCTAssertEqual(error.code, 401)
+                XCTAssertEqual(error.domain, "com.nerdishbynature.RequestKitTests")
+                XCTAssertEqual((error.userInfo[RequestKitErrorKey] as? [String: String]) ?? [:], jsonDict)
+            }
+        }
+        XCTAssertNotNil(task)
+        XCTAssertTrue(session.wasCalled)
+        XCTAssertTrue(receivedFailureResponse)
+    }
 }
 
 enum TestRouter: Router {
