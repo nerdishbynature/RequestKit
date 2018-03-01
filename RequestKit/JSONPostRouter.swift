@@ -2,7 +2,7 @@ import Foundation
 
 public protocol JSONPostRouter: Router {
     func postJSON<T>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
-    func post<T: Codable>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    func post<T: Codable>(_ session: RequestKitURLSession, decoder:JSONDecoder, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
 }
 
 public extension JSONPostRouter {

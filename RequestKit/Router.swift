@@ -47,8 +47,8 @@ public protocol Router {
     func urlQuery(_ parameters: [String: Any]) -> [URLQueryItem]?
     func request(_ urlComponents: URLComponents, parameters: [String: Any]) -> URLRequest?
     func loadJSON<T: Codable>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
-    func load<T: Codable>(_ session: RequestKitURLSession, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
-
+    func load<T: Codable>(_ session: RequestKitURLSession, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    func load<T: Codable>(_ session: RequestKitURLSession, decoder: JSONDecoder, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
     func request() -> URLRequest?
 }
 
@@ -123,16 +123,12 @@ public extension Router {
 
     @available(*, deprecated, message: "Plase use `load` method instead")
     public func loadJSON<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
-        return load(session, dateDecodingStrategy:nil, expectedResultType: expectedResultType, completion: completion)
+        return load(session, expectedResultType: expectedResultType, completion: completion)
     }
 
-    public func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy? = nil, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
-        
+    public func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {        
         let decoder = JSONDecoder()
-        if let dateDecodingStrategy = dateDecodingStrategy {
-            decoder.dateDecodingStrategy = dateDecodingStrategy
-        }
-        
+        decoder.dateDecodingStrategy = dateDecodingStrategy
         return load(session, decoder:decoder, expectedResultType:expectedResultType, completion:completion)
     }
 
