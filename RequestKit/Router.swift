@@ -13,12 +13,22 @@ public enum HTTPEncoding: Int {
     case url, form, json
 }
 
+public struct HTTPHeader {
+  public var headerField: String
+  public var value: String
+  public init(headerField: String, value: String) {
+    self.headerField = headerField
+    self.value = value
+  }
+}
+
 public protocol Configuration {
     var apiEndpoint: String { get }
     var accessToken: String? { get }
     var accessTokenFieldName: String { get }
     var authorizationHeader: String? { get }
     var errorDomain: String { get }
+    var customHeaders: Array<HTTPHeader>? { get }
 }
 
 public extension Configuration {
@@ -32,6 +42,10 @@ public extension Configuration {
     
     var errorDomain: String {
         return "com.nerdishbynature.RequestKit"
+    }
+  
+    var customHeaders: Array<HTTPHeader>? {
+      return nil
     }
 }
 
@@ -66,6 +80,12 @@ public extension Router {
         
         if let accessToken = configuration.accessToken, let tokenType = configuration.authorizationHeader {
             urlRequest?.addValue("\(tokenType) \(accessToken)", forHTTPHeaderField: "Authorization")
+        }
+      
+        if let customHeaders = configuration.customHeaders {
+            customHeaders.forEach { httpHeader in
+              urlRequest?.addValue(httpHeader.value, forHTTPHeaderField: httpHeader.headerField)
+            }
         }
         
         return urlRequest
