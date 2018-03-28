@@ -8,14 +8,16 @@ class ConfigurationTests: XCTestCase {
         XCTAssertEqual(config.accessToken, "1234")
         XCTAssertEqual(config.accessTokenFieldName, "access_token")
         XCTAssertEqual(config.authorizationHeader, nil)
+        XCTAssertEqual(config.customHeaders?.count, nil)
     }
 
     func testCustomImplementation() {
-        let config = TestCustomConfiguration("1234", url: "https://github.com")
+        let config = TestCustomConfiguration("1234", url: "https://github.com", customHeader: HTTPHeader(headerField: "x-custom-header", value: "custom_value"))
         XCTAssertEqual(config.apiEndpoint, "https://github.com")
         XCTAssertEqual(config.accessToken, "1234")
         XCTAssertEqual(config.accessTokenFieldName, "custom_field")
         XCTAssertEqual(config.authorizationHeader, nil)
+        XCTAssertEqual(config.customHeaders?.count, 1)
     }
     
     func testAuthorizationHeaderConfiguration() {
@@ -30,7 +32,7 @@ class ConfigurationTests: XCTestCase {
 class TestConfiguration: Configuration {
     var apiEndpoint: String
     var accessToken: String?
-
+  
     init(_ token: String, url: String) {
         apiEndpoint = url
         accessToken = token
@@ -40,10 +42,12 @@ class TestConfiguration: Configuration {
 class TestCustomConfiguration: Configuration {
     var apiEndpoint: String
     var accessToken: String?
+    var customHeaders: Array<HTTPHeader>?
 
-    init(_ token: String, url: String) {
+    init(_ token: String, url: String, customHeader: HTTPHeader) {
         apiEndpoint = url
         accessToken = token
+        customHeaders = [customHeader]
     }
 
     var accessTokenFieldName: String {
