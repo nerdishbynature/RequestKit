@@ -32,7 +32,7 @@ class ConfigurationTests: XCTestCase {
 class TestConfiguration: Configuration {
     var apiEndpoint: String
     var accessToken: String?
-  
+
     init(_ token: String, url: String) {
         apiEndpoint = url
         accessToken = token
