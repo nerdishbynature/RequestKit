@@ -22,6 +22,13 @@ class RouterTests: XCTestCase {
         XCTAssertEqual(subject?.httpMethod, "GET")
         XCTAssertEqual(subject?.value(forHTTPHeaderField: "Authorization"), "BEARER 1234")
     }
+  
+    func testRequestWithCustomHeaders() {
+        let config = TestCustomConfiguration("1234", url: "https://github.com", customHeader: HTTPHeader(headerField: "x-custom-header", value: "custom_value"))
+        let router = TestRouter.testRoute(config)
+        let subject = router.request()
+        XCTAssertEqual(subject?.value(forHTTPHeaderField: "x-custom-header"), "custom_value")
+    }
 
     func testWasSuccessful() {
         let url = URL(string: "https://example.com/api/v1")!
