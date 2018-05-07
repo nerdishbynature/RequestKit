@@ -28,9 +28,9 @@ class TestInterface {
         }
     }
 
-    func getJSON(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ response: Response<[String: AnyObject]>) -> Void) -> URLSessionDataTaskProtocol? {
+    func getJSON(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ response: Response<[String: String]>) -> Void) -> URLSessionDataTaskProtocol? {
         let router = JSONTestRouter.testGET(configuration)
-        return router.load(session, expectedResultType: [String: AnyObject].self) { json, error in
+        return router.load(session, expectedResultType: [String: String].self) { json, error in
             if let error = error {
                 completion(Response.failure(error))
             } else {
