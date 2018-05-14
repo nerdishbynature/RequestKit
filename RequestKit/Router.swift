@@ -162,9 +162,9 @@ public extension Router {
         let task = session.dataTask(with: request) { data, response, err in
             if let response = response as? HTTPURLResponse {
                 if response.wasSuccessful == false {
-                    var userInfo = [String: AnyObject]()
-                    if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: AnyObject] {
-                        userInfo[RequestKitErrorKey] = json as AnyObject?
+                    var userInfo = [String: Any]()
+                    if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                        userInfo[RequestKitErrorKey] = json as Any?
                     }
                     let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
                     completion(nil, error)
@@ -197,9 +197,9 @@ public extension Router {
         let task = session.dataTask(with: request) { data, response, err in
             if let response = response as? HTTPURLResponse {
                 if response.wasSuccessful == false {
-                    var userInfo = [String: AnyObject]()
-                    if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: AnyObject] {
-                        userInfo[RequestKitErrorKey] = json as AnyObject?
+                    var userInfo = [String: Any]()
+                    if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                        userInfo[RequestKitErrorKey] = json as Any?
                     }
                     let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
                     completion(error)
