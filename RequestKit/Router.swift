@@ -72,7 +72,7 @@ public extension Router {
         var parameters = encoding == .json ? [:] : params
 
         if let accessToken = configuration.accessToken, configuration.authorizationHeader == nil {
-            parameters[configuration.accessTokenFieldName] = accessToken as AnyObject?
+            parameters[configuration.accessTokenFieldName] = accessToken as Any?
         }
         let components = URLComponents(url: url!, resolvingAgainstBaseURL: true)
         
