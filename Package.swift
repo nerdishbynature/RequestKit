@@ -7,7 +7,7 @@ let package = Package(
         .library(name: "RequestKit", targets: ["RequestKit"])
     ],
     targets: [
-        .target(name: "RequestKit", dependencies: [], path: "RequestKit"),
-        .testTarget(name: "RequestKitTests", dependencies: ["RequestKit"], path: "RequestKitTests")
+        .target(name: "RequestKit", dependencies: []),
+        .testTarget(name: "RequestKitTests", dependencies: ["RequestKit"])
    ]
 )
