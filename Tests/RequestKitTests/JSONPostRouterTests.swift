@@ -10,10 +10,14 @@ class JSONPostRouterTests: XCTestCase {
 
     func testLinuxTestSuiteIncludesAllTests() {
         #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
-        let thisClass = type(of: self)
-        let linuxCount = thisClass.allTests.count
-        let darwinCount = thisClass.defaultTestSuite.testCaseCount
-        XCTAssertEqual(linuxCount, darwinCount, "\(darwinCount - linuxCount) tests are missing from allTests")
+            let thisClass = type(of: self)
+            let linuxCount = thisClass.allTests.count
+            #if os(iOS)
+                let darwinCount = thisClass.defaultTestSuite.testCaseCount
+            #else
+                let darwinCount = thisClass.defaultTestSuite().tests.count
+            #endif
+            XCTAssertEqual(linuxCount, darwinCount, "\(darwinCount - linuxCount) tests are missing from allTests")
         #endif
     }
 
