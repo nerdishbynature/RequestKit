@@ -1,4 +1,4 @@
-language: objective-c
+language: generic
 osx_image: xcode9.3
 sudo: false
 env:
@@ -8,19 +8,18 @@ env:
   - FASTLANE_LANE=ci_commit
 matrix:
   include:
-    - osx_image: xcode9.3
+    - os: osx
       env: FASTLANE_LANE=code_coverage FASTLANE_ENV=default
-    - osx_image: xcode9.3
+    - os: osx
       env: FASTLANE_ENV=ios93
-    - osx_image: xcode9.3
+    - os: osx
       env: FASTLANE_ENV=tvos92
-    - osx_image: xcode9.3
+    - os: osx
       env: FASTLANE_ENV=osx
     - os: linux
       sudo: required
       dist: trusty
-      env:
-        - SWIFT_VERSION=4.1
+      env: SWIFT_VERSION=4.1
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./script/travis-install-linux; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./script/travis-install-macos; fi
