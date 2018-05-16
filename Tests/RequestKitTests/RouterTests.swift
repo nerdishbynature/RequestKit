@@ -1,5 +1,6 @@
 import XCTest
 import RequestKit
+import Foundation
 
 class RouterTests: XCTestCase {
     static var allTests = [
@@ -97,9 +98,9 @@ class RouterTests: XCTestCase {
             case .success:
                 XCTAssert(false, "should not retrieve a succesful response")
             case .failure(let error):
-                XCTAssertEqual((error as NSError).code, 401)
-                XCTAssertEqual((error as NSError).domain, "com.nerdishbynature.RequestKitTests")
-                XCTAssertEqual(((error as NSError).userInfo[RequestKitErrorKey] as? [String: String]) ?? [:], jsonDict)
+                XCTAssertEqual(Helper.getNSError(from: error)?.code, 401)
+                XCTAssertEqual(Helper.getNSError(from: error)?.domain, "com.nerdishbynature.RequestKitTests")
+                XCTAssertEqual((Helper.getNSError(from: error)?.userInfo[RequestKitErrorKey] as? [String: String]) ?? [:], jsonDict)
             }
         }
         XCTAssertNotNil(task)
@@ -138,9 +139,9 @@ class RouterTests: XCTestCase {
                 XCTAssert(false, "should not retrieve a successful response")
             case .failure(let error):
                 receivedFailureResponse = true
-                XCTAssertEqual((error as NSError).code, 401)
-                XCTAssertEqual((error as NSError).domain, "com.nerdishbynature.RequestKitTests")
-                XCTAssertEqual(((error as NSError).userInfo[RequestKitErrorKey] as? [String: String]) ?? [:], jsonDict)
+                XCTAssertEqual(Helper.getNSError(from: error)?.code, 401)
+                XCTAssertEqual(Helper.getNSError(from: error)?.domain, "com.nerdishbynature.RequestKitTests")
+                XCTAssertEqual((Helper.getNSError(from: error)?.userInfo[RequestKitErrorKey] as? [String: String]) ?? [:], jsonDict)
             }
         }
         XCTAssertNotNil(task)
