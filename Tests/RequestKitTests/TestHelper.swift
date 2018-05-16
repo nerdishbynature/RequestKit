@@ -26,4 +26,8 @@ internal class Helper {
         let data = try! Data(contentsOf: URL(fileURLWithPath: path))
         return try! JSONDecoder().decode(T.self, from: data)
     }
+
+    public static func getNSError(from error: Error?) -> NSError? {
+        return (error as? NSError)
+    }
 }
