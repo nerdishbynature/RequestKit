@@ -20,11 +20,7 @@ class RouterTests: XCTestCase {
         #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
             let thisClass = type(of: self)
             let linuxCount = thisClass.allTests.count
-            #if os(iOS)
-                let darwinCount = thisClass.defaultTestSuite.testCaseCount
-            #else
-                let darwinCount = thisClass.defaultTestSuite().tests.count
-            #endif
+            let darwinCount = thisClass.defaultTestSuite.tests.count
             XCTAssertEqual(linuxCount, darwinCount, "\(darwinCount - linuxCount) tests are missing from allTests")
         #endif
     }
