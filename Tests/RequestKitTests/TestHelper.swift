@@ -28,6 +28,10 @@ internal class Helper {
     }
 
     public static func getNSError(from error: Error?) -> NSError? {
-        return (error as? NSError)
+        #if os(Linux)
+            return (error as? NSError)
+        #else
+            return (error as NSError?)
+        #endif
     }
 }
