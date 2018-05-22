@@ -2,6 +2,22 @@ import XCTest
 import RequestKit
 
 class ConfigurationTests: XCTestCase {
+    static var allTests = [
+        ("testDefaultImplementation", testDefaultImplementation),
+        ("testCustomImplementation", testCustomImplementation),
+        ("testAuthorizationHeaderConfiguration", testAuthorizationHeaderConfiguration),
+        ("testLinuxTestSuiteIncludesAllTests", testLinuxTestSuiteIncludesAllTests)
+    ]
+
+    func testLinuxTestSuiteIncludesAllTests() {
+        #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
+            let thisClass = type(of: self)
+            let linuxCount = thisClass.allTests.count
+            let darwinCount = thisClass.defaultTestSuite.tests.count
+            XCTAssertEqual(linuxCount, darwinCount, "\(darwinCount - linuxCount) tests are missing from allTests")
+        #endif
+    }
+
     func testDefaultImplementation() {
         let config = TestConfiguration("1234", url: "https://github.com")
         XCTAssertEqual(config.apiEndpoint, "https://github.com")
