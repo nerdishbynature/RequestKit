@@ -199,6 +199,11 @@
 		7679C00320AB08290052BBDC /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				234F4C2D1BDDF64300A58EF7 /* Info.plist */,
+				2301BEE11C1BEA3E001F3E54 /* ConfigurationTests.swift */,
+				2301BEE31C1BF95E001F3E54 /* RouterTests.swift */,
+				2352906C1D03B68A004FD7FB /* JSONPostRouterTests.swift */,
+				235290741D03B9FE004FD7FB /* TestInterface.swift */,
 				7679C00420AB08290052BBDC /* LinuxMain.swift */,
 				7679C00520AB08290052BBDC /* RequestKitTests */,
 			);
@@ -414,13 +419,13 @@
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = 3NPZ2HXWU8;
 						DevelopmentTeamName = "Piet Brauer";
-						LastSwiftMigration = 0910;
+						LastSwiftMigration = "";
 					};
 					234F4C251BDDF64300A58EF7 = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = 3NPZ2HXWU8;
 						DevelopmentTeamName = "Piet Brauer";
-						LastSwiftMigration = 0910;
+						LastSwiftMigration = "";
 					};
 				};
 			};
@@ -777,7 +782,7 @@
 				PRODUCT_NAME = RequestKit;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -831,7 +836,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nerdishbynature.RequestKit;
 				PRODUCT_NAME = RequestKit;
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -882,6 +887,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nerdishbynature.RequestKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
