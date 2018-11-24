@@ -57,6 +57,7 @@ public protocol Router {
     var encoding: HTTPEncoding { get }
     var params: [String: Any] { get }
     var configuration: Configuration { get }
+    var synchronousDispatch: Bool { get }
 
     func urlQuery(_ parameters: [String: Any]) -> [URLQueryItem]?
     func request(_ urlComponents: URLComponents, parameters: [String: Any]) -> URLRequest?
@@ -67,6 +68,10 @@ public protocol Router {
 }
 
 public extension Router {
+    var synchronousDispatch: Bool {
+        return false
+    }
+    
     public func request() -> URLRequest? {
         let url = URL(string: path, relativeTo: URL(string: configuration.apiEndpoint)!)
         var parameters = encoding == .json ? [:] : params
@@ -158,40 +163,13 @@ public extension Router {
         guard let request = request() else {
             return nil
         }
-
-        let task = session.dataTask(with: request) { data, response, err in
-            if let response = response as? HTTPURLResponse {
-                if response.wasSuccessful == false {
-                    var userInfo = [String: Any]()
-                    if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                        userInfo[RequestKitErrorKey] = json as Any?
-                    }
-                    let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
-                    completion(nil, error)
-                    return
-                }
-            }
-
-            if let err = err {
-                completion(nil, err)
-            } else {
-                if let data = data {
-                    do {
-                        let decoded = try decoder.decode(T.self, from: data)
-                        completion(decoded, nil)
-                    } catch {
-                        completion(nil, error)
-                    }
-                }
-            }
-        }
-        task.resume()
-        return task
-    }
-    
-    public func load(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
-        guard let request = request() else {
-            return nil
+        
+        let dispatchGroup = dispatchGroupIfNeeded()
+        dispatchGroup?.enter()
+        
+        let dispatchGroupCompletion: (_ json: T?, _ error: Error?) -> Void = {
+            dispatchGroup?.leave()
+            completion($0, $1)
         }
         
         let task = session.dataTask(with: request) { data, response, err in
@@ -202,15 +180,65 @@ public extension Router {
                         userInfo[RequestKitErrorKey] = json as Any?
                     }
                     let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
-                    completion(error)
+                    dispatchGroupCompletion(nil, error)
+                    return
+                }
+            }
+
+            if let err = err {
+                dispatchGroupCompletion(nil, err)
+            } else {
+                if let data = data {
+                    do {
+                        let decoded = try decoder.decode(T.self, from: data)
+                        dispatchGroupCompletion(decoded, nil)
+                    } catch {
+                        dispatchGroupCompletion(nil, error)
+                    }
+                }
+            }
+        }
+        task.resume()
+        dispatchGroup?.wait()
+        
+        return task
+    }
+    
+    public func load(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+        guard let request = request() else {
+            return nil
+        }
+        
+        let dispatchGroup = dispatchGroupIfNeeded()
+        dispatchGroup?.enter()
+        
+        let dispatchGroupCompletion: (_ error: Error?) -> Void = {
+            dispatchGroup?.leave()
+            completion($0)
+        }
+        
+        let task = session.dataTask(with: request) { data, response, err in
+            if let response = response as? HTTPURLResponse {
+                if response.wasSuccessful == false {
+                    var userInfo = [String: Any]()
+                    if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                        userInfo[RequestKitErrorKey] = json as Any?
+                    }
+                    let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
+                    dispatchGroupCompletion(error)
                     return
                 }
             }
             
-            completion(err)
+            dispatchGroupCompletion(err)
         }
         task.resume()
+        dispatchGroup?.wait()
         return task
+    }
+    
+    func dispatchGroupIfNeeded() -> DispatchGroup? {
+        return synchronousDispatch ? DispatchGroup() : nil
     }
 }
 

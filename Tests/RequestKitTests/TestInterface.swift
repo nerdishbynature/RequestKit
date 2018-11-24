@@ -15,8 +15,8 @@ class TestInterface {
         return TestInterfaceConfiguration(url: "https://example.com")
     }
 
-    func postJSON(_ session: RequestKitURLSession, completion: @escaping (_ response: Response<[String: AnyObject]>) -> Void) -> URLSessionDataTaskProtocol? {
-        let router = JSONTestRouter.testPOST(configuration)
+    func postJSON(_ session: RequestKitURLSession, synchronousDispatch: Bool = false, completion: @escaping (_ response: Response<[String: AnyObject]>) -> Void) -> URLSessionDataTaskProtocol? {
+        let router = JSONTestRouter.testPOST(configuration, synchronousDispatch)
         return router.postJSON(session, expectedResultType: [String: AnyObject].self) { json, error in
             if let error = error {
                 completion(Response.failure(error))
@@ -28,8 +28,8 @@ class TestInterface {
         }
     }
 
-    func getJSON(_ session: RequestKitURLSession, completion: @escaping (_ response: Response<[String: String]>) -> Void) -> URLSessionDataTaskProtocol? {
-        let router = JSONTestRouter.testGET(configuration)
+    func getJSON(_ session: RequestKitURLSession, synchronousDispatch: Bool = false,  completion: @escaping (_ response: Response<[String: String]>) -> Void) -> URLSessionDataTaskProtocol? {
+        let router = JSONTestRouter.testGET(configuration, synchronousDispatch)
         return router.load(session, expectedResultType: [String: String].self) { json, error in
             if let error = error {
                 completion(Response.failure(error))
@@ -41,8 +41,8 @@ class TestInterface {
         }
     }
     
-    func loadAndIgnoreResponseBody(_ session: RequestKitURLSession, completion: @escaping (_ response: Response<Void>) -> Void) -> URLSessionDataTaskProtocol? {
-        let router = JSONTestRouter.testPOST(configuration)
+    func loadAndIgnoreResponseBody(_ session: RequestKitURLSession, synchronousDispatch: Bool = false, completion: @escaping (_ response: Response<Void>) -> Void) -> URLSessionDataTaskProtocol? {
+        let router = JSONTestRouter.testPOST(configuration, synchronousDispatch)
         return router.load(session) { error in
             if let error = error {
                 completion(Response.failure(error))
@@ -54,13 +54,20 @@ class TestInterface {
 }
 
 enum JSONTestRouter: JSONPostRouter {
-    case testPOST(Configuration)
-    case testGET(Configuration)
-
+    case testPOST(Configuration, Bool)
+    case testGET(Configuration, Bool)
+    
     var configuration: Configuration {
         switch self {
-        case .testPOST(let config): return config
-        case .testGET(let config): return config
+        case .testPOST(let config, _): return config
+        case .testGET(let config, _): return config
+        }
+    }
+    
+    var synchronousDispatch: Bool {
+        switch self {
+        case .testPOST(_, let synchronousDispatch): return synchronousDispatch
+        case .testGET(_, let synchronousDispatch): return synchronousDispatch
         }
     }
 
