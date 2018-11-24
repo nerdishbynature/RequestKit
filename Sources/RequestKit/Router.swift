@@ -51,6 +51,8 @@ public extension Configuration {
 
 public let RequestKitErrorKey = "RequestKitErrorKey"
 
+public typealias JSONCompletionBlock<T> = (_ json: T?, _ error: Error?) -> Void
+
 public protocol Router {
     var method: HTTPMethod { get }
     var path: String { get }
@@ -61,9 +63,9 @@ public protocol Router {
 
     func urlQuery(_ parameters: [String: Any]) -> [URLQueryItem]?
     func request(_ urlComponents: URLComponents, parameters: [String: Any]) -> URLRequest?
-    func loadJSON<T: Codable>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
-    func load<T: Codable>(_ session: RequestKitURLSession, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
-    func load<T: Codable>(_ session: RequestKitURLSession, decoder: JSONDecoder, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    func loadJSON<T: Codable>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping JSONCompletionBlock<T>) -> URLSessionDataTaskProtocol?
+    func load<T: Codable>(_ session: RequestKitURLSession, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type, completion: @escaping JSONCompletionBlock<T>) -> URLSessionDataTaskProtocol?
+    func load<T: Codable>(_ session: RequestKitURLSession, decoder: JSONDecoder, expectedResultType: T.Type, completion: @escaping JSONCompletionBlock<T>) -> URLSessionDataTaskProtocol?
     func request() -> URLRequest?
 }
 
@@ -147,11 +149,11 @@ public extension Router {
     }
 
     @available(*, deprecated, message: "Plase use `load` method instead")
-    public func loadJSON<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    public func loadJSON<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: @escaping JSONCompletionBlock<T>) -> URLSessionDataTaskProtocol? {
         return load(session, expectedResultType: expectedResultType, completion: completion)
     }
 
-    public func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    public func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type, completion: @escaping JSONCompletionBlock<T>) -> URLSessionDataTaskProtocol? {
         let decoder = JSONDecoder()
         if let dateDecodingStrategy = dateDecodingStrategy {
             decoder.dateDecodingStrategy = dateDecodingStrategy
@@ -159,7 +161,7 @@ public extension Router {
         return load(session, decoder:decoder, expectedResultType:expectedResultType, completion:completion)
     }
 
-    public func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    public func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType: T.Type, completion: @escaping JSONCompletionBlock<T>) -> URLSessionDataTaskProtocol? {
         guard let request = request() else {
             return nil
         }
@@ -238,7 +240,7 @@ public extension Router {
         return dispatchGroup
     }
     
-    func jsonDispatchGroupCompletion<T>(dispatchGroup: DispatchGroup?, completion: @escaping (T?, Error?) -> Void) -> (T?, Error?) -> Void {
+    func jsonDispatchGroupCompletion<T>(dispatchGroup: DispatchGroup?, completion: @escaping JSONCompletionBlock<T>) -> JSONCompletionBlock<T> {
         return {
             completion($0, $1)
             dispatchGroup?.leave()

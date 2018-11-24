@@ -1,12 +1,12 @@
 import Foundation
 
 public protocol JSONPostRouter: Router {
-    func postJSON<T>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
-    func post<T: Codable>(_ session: RequestKitURLSession, decoder:JSONDecoder, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    func postJSON<T>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping JSONCompletionBlock<T>) -> URLSessionDataTaskProtocol?
+    func post<T: Codable>(_ session: RequestKitURLSession, decoder:JSONDecoder, expectedResultType: T.Type, completion: @escaping JSONCompletionBlock<T>) -> URLSessionDataTaskProtocol?
 }
 
 public extension JSONPostRouter {
-    public func postJSON<T>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    public func postJSON<T>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: @escaping JSONCompletionBlock<T>) -> URLSessionDataTaskProtocol? {
         guard let request = request() else {
             return nil
         }
@@ -55,7 +55,7 @@ public extension JSONPostRouter {
         return task
     }
 
-    public func post<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder:JSONDecoder = JSONDecoder(), expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    public func post<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder:JSONDecoder = JSONDecoder(), expectedResultType: T.Type, completion: @escaping JSONCompletionBlock<T>) -> URLSessionDataTaskProtocol? {
         guard let request = request() else {
             return nil
         }
