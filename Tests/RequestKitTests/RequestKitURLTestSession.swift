@@ -74,13 +74,11 @@ final class DelayedRequestKitURLTestSession: RequestKitURLSession {
         self.statusCode = statusCode
     }
     
-    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Swift.Void) -> URLSessionDataTaskProtocol {
+    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol {
         let response = generateResponse(forRequest: request, statusCode: statusCode)
         let data = responseString?.data(using: String.Encoding.utf8)
         
-        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + 0.1) {
-            completionHandler(data, response, nil)
-        }
+        dispatchCompletion(data: data, response: response, completionHandler: completionHandler)
         
         return MockURLSessionDataTask()
     }
@@ -89,11 +87,15 @@ final class DelayedRequestKitURLTestSession: RequestKitURLSession {
         let data = responseString?.data(using: String.Encoding.utf8)
         let response = HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: "http/1.1", headerFields: ["Content-Type": "application/json"])
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            completionHandler(data, response, nil)
-        }
+        dispatchCompletion(data: data, response: response, completionHandler: completionHandler)
         
         return MockURLSessionDataTask()
+    }
+    
+    private func dispatchCompletion(data: Data?, response: HTTPURLResponse?, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + 0.1) {
+            completionHandler(data, response, nil)
+        }
     }
 }
 
