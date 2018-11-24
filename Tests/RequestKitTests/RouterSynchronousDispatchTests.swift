@@ -9,6 +9,25 @@
 import XCTest
 
 final class RouterSynchronousDispatchTests: XCTestCase {
+    static var allTests = [
+        ("testErrorWithJSONWaitsForTheResponseIfDispatchSynchronousIsTrue", testErrorWithJSONWaitsForTheResponseIfDispatchSynchronousIsTrue),
+        ("testErrorWithJSONDoesntWaitsForTheResponseIfDispatchSynchronousIsFalse", testErrorWithJSONDoesntWaitsForTheResponseIfDispatchSynchronousIsFalse),
+        ("testSuccessWithJSONWaitsForTheResponseIfDispatchSynchronousIsTrue", testSuccessWithJSONWaitsForTheResponseIfDispatchSynchronousIsTrue),
+        ("testSuccessWithJSONDoesntWaitsForTheResponseIfDispatchSynchronousIsFalse", testSuccessWithJSONDoesntWaitsForTheResponseIfDispatchSynchronousIsFalse),
+        ("testSuccessWithLoadAndIgnoreResponseWaitsForTheResponseIfDispatchSynchronousIsTrue",testSuccessWithLoadAndIgnoreResponseWaitsForTheResponseIfDispatchSynchronousIsTrue),
+        ("testSuccessWithLoadAndIgnoreResponseDoesntWaitsForTheResponseIfDispatchSynchronousIsFalse", testSuccessWithLoadAndIgnoreResponseDoesntWaitsForTheResponseIfDispatchSynchronousIsFalse),
+        ("testLinuxTestSuiteIncludesAllTests", testLinuxTestSuiteIncludesAllTests)
+    ]
+    
+    func testLinuxTestSuiteIncludesAllTests() {
+        #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
+        let thisClass = type(of: self)
+        let linuxCount = thisClass.allTests.count
+        let darwinCount = thisClass.defaultTestSuite.tests.count
+        XCTAssertEqual(linuxCount, darwinCount, "\(darwinCount - linuxCount) tests are missing from allTests")
+        #endif
+    }
+    
     func testErrorWithJSONWaitsForTheResponseIfDispatchSynchronousIsTrue() {
         let response = jsonString(withJsonDict: failureDict)
         let session = DelayedRequestKitURLTestSession(response: response, statusCode: 401)
