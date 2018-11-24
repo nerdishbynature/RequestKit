@@ -165,12 +165,7 @@ public extension Router {
         }
         
         let dispatchGroup = dispatchGroupIfNeeded()
-        dispatchGroup?.enter()
-        
-        let dispatchGroupCompletion: (_ json: T?, _ error: Error?) -> Void = {
-            dispatchGroup?.leave()
-            completion($0, $1)
-        }
+        let dispatchGroupCompletion = jsonDispatchGroupCompletion(dispatchGroup: dispatchGroup, completion: completion)
         
         let task = session.dataTask(with: request) { data, response, err in
             if let response = response as? HTTPURLResponse {
@@ -210,11 +205,10 @@ public extension Router {
         }
         
         let dispatchGroup = dispatchGroupIfNeeded()
-        dispatchGroup?.enter()
         
         let dispatchGroupCompletion: (_ error: Error?) -> Void = {
-            dispatchGroup?.leave()
             completion($0)
+            dispatchGroup?.leave()
         }
         
         let task = session.dataTask(with: request) { data, response, err in
@@ -238,7 +232,17 @@ public extension Router {
     }
     
     func dispatchGroupIfNeeded() -> DispatchGroup? {
-        return synchronousDispatch ? DispatchGroup() : nil
+        let dispatchGroup = synchronousDispatch ? DispatchGroup() : nil
+        dispatchGroup?.enter()
+        
+        return dispatchGroup
+    }
+    
+    func jsonDispatchGroupCompletion<T>(dispatchGroup: DispatchGroup?, completion: @escaping (T?, Error?) -> Void) -> (T?, Error?) -> Void {
+        return {
+            completion($0, $1)
+            dispatchGroup?.leave()
+        }
     }
 }
 

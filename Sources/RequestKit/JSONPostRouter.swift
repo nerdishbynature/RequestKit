@@ -18,6 +18,9 @@ public extension JSONPostRouter {
             completion(nil, error)
             return nil
         }
+        
+        let dispatchGroup = dispatchGroupIfNeeded()
+        let dispatchGroupCompletion = jsonDispatchGroupCompletion(dispatchGroup: dispatchGroup, completion: completion)
 
         let task = session.uploadTask(with: request, fromData: data) { data, response, error in
             if let response = response as? HTTPURLResponse {
@@ -29,25 +32,26 @@ public extension JSONPostRouter {
                         userInfo[RequestKitErrorKey] = string as Any?
                     }
                     let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
-                    completion(nil, error)
+                    dispatchGroupCompletion(nil, error)
                     return
                 }
             }
 
             if let error = error {
-                completion(nil, error)
+                dispatchGroupCompletion(nil, error)
             } else {
                 if let data = data {
                     do {
                         let JSON = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? T
-                        completion(JSON, nil)
+                        dispatchGroupCompletion(JSON, nil)
                     } catch {
-                        completion(nil, error)
+                        dispatchGroupCompletion(nil, error)
                     }
                 }
             }
         }
         task.resume()
+        dispatchGroup?.wait()
         return task
     }
 
@@ -63,6 +67,9 @@ public extension JSONPostRouter {
             completion(nil, error)
             return nil
         }
+        
+        let dispatchGroup = dispatchGroupIfNeeded()
+        let dispatchGroupCompletion = jsonDispatchGroupCompletion(dispatchGroup: dispatchGroup, completion: completion)
 
         let task = session.uploadTask(with: request, fromData: data) { data, response, error in
             if let response = response as? HTTPURLResponse {
@@ -74,25 +81,26 @@ public extension JSONPostRouter {
                         userInfo[RequestKitErrorKey] = string as Any?
                     }
                     let error = NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
-                    completion(nil, error)
+                    dispatchGroupCompletion(nil, error)
                     return
                 }
             }
 
             if let error = error {
-                completion(nil, error)
+                dispatchGroupCompletion(nil, error)
             } else {
                 if let data = data {
                     do {
                         let decoded = try decoder.decode(T.self, from: data)
-                        completion(decoded, nil)
+                        dispatchGroupCompletion(decoded, nil)
                     } catch {
-                        completion(nil, error)
+                        dispatchGroupCompletion(nil, error)
                     }
                 }
             }
         }
         task.resume()
+        dispatchGroup?.wait()
         return task
     }
 }

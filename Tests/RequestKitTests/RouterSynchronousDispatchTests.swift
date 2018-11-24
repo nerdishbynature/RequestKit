@@ -129,10 +129,10 @@ final class RouterSynchronousDispatchTests: XCTestCase {
         XCTAssertTrue(wasCalled)
     }
     
-    fileprivate var failureDict = ["message": "Bad credentials", "documentation_url": "https://developer.github.com/v3"]
-    fileprivate var successDict = ["message": "Data", "documentation_url": "https://developer.github.com/v3"]
+    private var failureDict = ["message": "Bad credentials", "documentation_url": "https://developer.github.com/v3"]
+    private var successDict = ["message": "Data", "documentation_url": "https://developer.github.com/v3"]
     
-    fileprivate func jsonString(withJsonDict jsonDict: [String : String]) -> String? {
+    private func jsonString(withJsonDict jsonDict: [String : String]) -> String? {
         return String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
     }
 }

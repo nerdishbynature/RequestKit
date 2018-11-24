@@ -47,6 +47,7 @@
 		7679C02320AB08290052BBDC /* TestInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7679C00C20AB08290052BBDC /* TestInterface.swift */; };
 		7679C02420AB08290052BBDC /* TestInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7679C00C20AB08290052BBDC /* TestInterface.swift */; };
 		7679C02520AB08290052BBDC /* TestInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7679C00C20AB08290052BBDC /* TestInterface.swift */; };
+		9D12C43721A9E4AB00D2AD50 /* JSONPostRouterSynchronousDispatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D12C43621A9E4AB00D2AD50 /* JSONPostRouterSynchronousDispatchTests.swift */; };
 		9D1CFBDA21A96378001EEA08 /* RouterSynchronousDispatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D1CFBD921A96378001EEA08 /* RouterSynchronousDispatchTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -96,6 +97,7 @@
 		7679C00B20AB08290052BBDC /* JSONPostRouterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONPostRouterTests.swift; sourceTree = "<group>"; };
 		7679C00C20AB08290052BBDC /* TestInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestInterface.swift; sourceTree = "<group>"; };
 		7679C00D20AB08290052BBDC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9D12C43621A9E4AB00D2AD50 /* JSONPostRouterSynchronousDispatchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONPostRouterSynchronousDispatchTests.swift; sourceTree = "<group>"; };
 		9D1CFBD921A96378001EEA08 /* RouterSynchronousDispatchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterSynchronousDispatchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -219,6 +221,7 @@
 				7679C00820AB08290052BBDC /* XCTestManifests.swift */,
 				7679C00D20AB08290052BBDC /* Info.plist */,
 				9D1CFBD921A96378001EEA08 /* RouterSynchronousDispatchTests.swift */,
+				9D12C43621A9E4AB00D2AD50 /* JSONPostRouterSynchronousDispatchTests.swift */,
 			);
 			path = RequestKitTests;
 			sourceTree = "<group>";
@@ -528,6 +531,7 @@
 				7679C02320AB08290052BBDC /* TestInterface.swift in Sources */,
 				7679C01D20AB08290052BBDC /* TestHelper.swift in Sources */,
 				7679C01720AB08290052BBDC /* XCTestManifests.swift in Sources */,
+				9D12C43721A9E4AB00D2AD50 /* JSONPostRouterSynchronousDispatchTests.swift in Sources */,
 				7679C02020AB08290052BBDC /* JSONPostRouterTests.swift in Sources */,
 				9D1CFBDA21A96378001EEA08 /* RouterSynchronousDispatchTests.swift in Sources */,
 				7679C01420AB08290052BBDC /* RouterTests.swift in Sources */,
