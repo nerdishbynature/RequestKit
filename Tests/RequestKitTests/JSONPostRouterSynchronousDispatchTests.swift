@@ -9,6 +9,24 @@
 import XCTest
 
 final class JSONPostRouterSynchronousDispatchTests: XCTestCase {
+    static var allTests = [
+        ("testPostJSONErrorWaitsForTheResponseIfDispatchSynchronousIsTrue", testPostJSONErrorWaitsForTheResponseIfDispatchSynchronousIsTrue),
+        ("testPostJSONErrorDoesntWaitsForTheResponseIfDispatchSynchronousIsFalse", testPostJSONErrorDoesntWaitsForTheResponseIfDispatchSynchronousIsFalse),
+        ("testPostJSONSuccessWaitsForTheResponseIfDispatchSynchronousIsTrue", testPostJSONSuccessWaitsForTheResponseIfDispatchSynchronousIsTrue),
+        ("testPostJSONSuccessDoesntWaitsForTheResponseIfDispatchSynchronousIsFalse", testPostJSONSuccessDoesntWaitsForTheResponseIfDispatchSynchronousIsFalse),
+        ("testLinuxTestSuiteIncludesAllTests", testLinuxTestSuiteIncludesAllTests)
+    ]
+    
+    func testLinuxTestSuiteIncludesAllTests() {
+        #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
+        let thisClass = type(of: self)
+        let linuxCount = thisClass.allTests.count
+        let darwinCount = thisClass.defaultTestSuite.tests.count
+        XCTAssertEqual(linuxCount, darwinCount, "\(darwinCount - linuxCount) tests are missing from allTests")
+        #endif
+    }
+
+    
     func testPostJSONErrorWaitsForTheResponseIfDispatchSynchronousIsTrue() {
         let response = jsonString(withJsonDict: failureDict)
         let session = DelayedRequestKitURLTestSession(response: response, statusCode: 401)
