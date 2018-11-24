@@ -9,6 +9,7 @@
 import XCTest
 
 final class JSONPostRouterSynchronousDispatchTests: XCTestCase {
+#if !os(Linux)
     static var allTests = [
         ("testPostJSONErrorWaitsForTheResponseIfDispatchSynchronousIsTrue", testPostJSONErrorWaitsForTheResponseIfDispatchSynchronousIsTrue),
         ("testPostJSONErrorDoesntWaitsForTheResponseIfDispatchSynchronousIsFalse", testPostJSONErrorDoesntWaitsForTheResponseIfDispatchSynchronousIsFalse),
@@ -104,4 +105,5 @@ final class JSONPostRouterSynchronousDispatchTests: XCTestCase {
     private func jsonString(withJsonDict jsonDict: [String : String]) -> String? {
         return String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
     }
+#endif
 }
