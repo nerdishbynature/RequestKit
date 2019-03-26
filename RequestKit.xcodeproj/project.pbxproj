@@ -199,11 +199,6 @@
 		7679C00320AB08290052BBDC /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				234F4C2D1BDDF64300A58EF7 /* Info.plist */,
-				2301BEE11C1BEA3E001F3E54 /* ConfigurationTests.swift */,
-				2301BEE31C1BF95E001F3E54 /* RouterTests.swift */,
-				2352906C1D03B68A004FD7FB /* JSONPostRouterTests.swift */,
-				235290741D03B9FE004FD7FB /* TestInterface.swift */,
 				7679C00420AB08290052BBDC /* LinuxMain.swift */,
 				7679C00520AB08290052BBDC /* RequestKitTests */,
 			);
@@ -389,7 +384,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = nerdishbynature;
 				TargetAttributes = {
 					233742FF1C7981A800013492 = {
@@ -404,11 +399,11 @@
 					};
 					233743191C7981E700013492 = {
 						CreatedOnToolsVersion = 7.2.1;
-						LastSwiftMigration = 0930;
+						LastSwiftMigration = 1020;
 					};
 					2337433D1C79832700013492 = {
 						CreatedOnToolsVersion = 7.2.1;
-						LastSwiftMigration = 0930;
+						LastSwiftMigration = 1020;
 					};
 					2337434C1C79833A00013492 = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -431,10 +426,11 @@
 			};
 			buildConfigurationList = 234F4C161BDDF64300A58EF7 /* Build configuration list for PBXProject "RequestKit" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 234F4C121BDDF64300A58EF7;
 			productRefGroup = 234F4C1D1BDDF64300A58EF7 /* Products */;
@@ -650,6 +646,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -670,6 +667,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -684,6 +682,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nerdishbynature.RequestKit-MacTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -699,6 +698,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -731,6 +731,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -793,6 +794,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
