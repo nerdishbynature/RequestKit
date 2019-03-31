@@ -1,5 +1,5 @@
 language: generic
-osx_image: xcode10
+osx_image: xcode10.2
 sudo: false
 env:
   global:
@@ -19,7 +19,7 @@ matrix:
     - os: linux
       sudo: required
       dist: trusty
-      env: SWIFT_VERSION=4.2
+      env: SWIFT_VERSION=5
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./script/travis-install-linux; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./script/travis-install-macos; fi
