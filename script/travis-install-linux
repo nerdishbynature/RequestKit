@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-set -e
-
-# See: https://github.com/kylef/swiftenv/wiki/Travis-CI
-curl -sL https://swiftenv.fuller.li/install.sh | bash
-
