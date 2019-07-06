@@ -1,6 +1,9 @@
 import XCTest
 import RequestKit
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 class RouterTests: XCTestCase {
     static var allTests = [
