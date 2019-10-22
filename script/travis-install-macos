@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 
-sudo gem install bundler
+#sudo gem install bundler
 bundle install
 

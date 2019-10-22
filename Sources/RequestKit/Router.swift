@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public enum Response<T> {
     case success(T)
@@ -67,7 +70,7 @@ public protocol Router {
 }
 
 public extension Router {
-    public func request() -> URLRequest? {
+    func request() -> URLRequest? {
         let url = URL(string: path, relativeTo: URL(string: configuration.apiEndpoint)!)
         var parameters = encoding == .json ? [:] : params
 
@@ -91,7 +94,7 @@ public extension Router {
         return urlRequest
     }
 
-    public func urlQuery(_ parameters: [String: Any]) -> [URLQueryItem]? {
+    func urlQuery(_ parameters: [String: Any]) -> [URLQueryItem]? {
         guard parameters.count > 0 else { return nil }
         var components: [URLQueryItem] = []
         for key in parameters.keys.sorted(by: <) {
@@ -121,7 +124,7 @@ public extension Router {
         return components
     }
 
-    public func request(_ urlComponents: URLComponents, parameters: [String: Any]) -> URLRequest? {
+    func request(_ urlComponents: URLComponents, parameters: [String: Any]) -> URLRequest? {
         var urlComponents = urlComponents
         urlComponents.percentEncodedQuery = urlQuery(parameters)?.map({ [$0.name, $0.value ?? ""].joined(separator: "=") }).joined(separator: "&")
         guard let url = urlComponents.url else { return nil }
@@ -142,11 +145,11 @@ public extension Router {
     }
 
     @available(*, deprecated, message: "Plase use `load` method instead")
-    public func loadJSON<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    func loadJSON<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
         return load(session, expectedResultType: expectedResultType, completion: completion)
     }
 
-    public func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
         let decoder = JSONDecoder()
         if let dateDecodingStrategy = dateDecodingStrategy {
             decoder.dateDecodingStrategy = dateDecodingStrategy
@@ -154,7 +157,7 @@ public extension Router {
         return load(session, decoder:decoder, expectedResultType:expectedResultType, completion:completion)
     }
 
-    public func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
         guard let request = request() else {
             return nil
         }
@@ -189,7 +192,7 @@ public extension Router {
         return task
     }
     
-    public func load(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    func load(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
         guard let request = request() else {
             return nil
         }
@@ -216,8 +219,8 @@ public extension Router {
 
 fileprivate extension CharacterSet {
 
-    // https://github.com/Alamofire/Alamofire/blob/3.5.1/Source/ParameterEncoding.swift#L220-L225
-    fileprivate static func requestKit_URLQueryAllowedCharacterSet() -> CharacterSet {
+    // https://github.com/Alamofire/Alamofire/blob/3.5rameterEncoding.swift#L220-L225
+    static func requestKit_URLQueryAllowedCharacterSet() -> CharacterSet {
         let generalDelimitersToEncode = ":#[]@" // does not include "?" or "/" due to RFC 3986 - Section 3.4
         let subDelimitersToEncode = "!$&'()*+,;="
 
@@ -228,7 +231,7 @@ fileprivate extension CharacterSet {
 }
 
 public extension HTTPURLResponse {
-    public var wasSuccessful: Bool {
+    var wasSuccessful: Bool {
         let successRange = 200..<300
         return successRange.contains(statusCode)
     }
