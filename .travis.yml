@@ -1,5 +1,5 @@
 language: generic
-osx_image: xcode10.2
+osx_image: xcode11.1
 sudo: false
 env:
   global:
@@ -19,7 +19,7 @@ matrix:
     - os: linux
       sudo: required
       dist: trusty
-      env: SWIFT_VERSION=5.0
+      env: SWIFT_VERSION=5.1
     - os: linux
       sudo: required
       dist: trusty

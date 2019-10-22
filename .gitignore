@@ -17,6 +17,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
 
 # AppCode
 .idea
