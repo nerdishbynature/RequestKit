@@ -5,7 +5,7 @@ import FoundationNetworking
 
 public protocol JSONPostRouter: Router {
     func postJSON<T>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
-    func post<T: Codable>(_ session: RequestKitURLSession, decoder:JSONDecoder, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    func post<T: Codable>(_ session: RequestKitURLSession, decoder: JSONDecoder, expectedResultType: T.Type, bodyData: Data?, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
 }
 
 public extension JSONPostRouter {
@@ -53,15 +53,30 @@ public extension JSONPostRouter {
         task.resume()
         return task
     }
+    
+    func post<T: Codable>(
+        _ session: RequestKitURLSession,
+        decoder: JSONDecoder,
+        expectedResultType: T.Type,
+        completion: @escaping (_ json: T?, _ error: Error?) -> Void
+    ) -> URLSessionDataTaskProtocol? {
+        post(
+            session,
+            decoder: decoder,
+            expectedResultType: expectedResultType,
+            bodyData: nil,
+            completion: completion
+        )
+    }
 
-    func post<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder:JSONDecoder = JSONDecoder(), expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    func post<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType: T.Type, bodyData: Data?, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
         guard let request = request() else {
             return nil
         }
 
         let data: Data
         do {
-            data = try JSONSerialization.data(withJSONObject: params, options: JSONSerialization.WritingOptions())
+            data = try bodyData ?? JSONSerialization.data(withJSONObject: params, options: JSONSerialization.WritingOptions())
         } catch {
             completion(nil, error)
             return nil
