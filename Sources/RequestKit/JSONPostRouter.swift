@@ -56,7 +56,7 @@ public extension JSONPostRouter {
     
     func post<T: Codable>(
         _ session: RequestKitURLSession,
-        decoder: JSONDecoder,
+        decoder: JSONDecoder = JSONDecoder(),
         expectedResultType: T.Type,
         completion: @escaping (_ json: T?, _ error: Error?) -> Void
     ) -> URLSessionDataTaskProtocol? {
