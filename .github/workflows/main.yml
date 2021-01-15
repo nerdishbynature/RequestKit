@@ -1,0 +1,37 @@
+name: "RequestKit CI"
+
+on: 
+  push:
+    branches: 
+      - master
+  pull_request:
+    branches: 
+      - '*'
+
+jobs:
+  macOS:
+    name: Test macOS
+    runs-on: macOS-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.3.app/Contents/Developer
+    strategy:
+      matrix:
+        destination: ["FASTLANE_LANE=ci_commit,FASTLANE_ENV=osx", "FASTLANE_LANE=ci_commit,FASTLANE_ENV=ios", "FASTLANE_LANE=ci_commit,FASTLANE_ENV=tvos", "FASTLANE_LANE=ci_commit,FASTLANE_ENV=default", "FASTLANE_LANE=code_coverage,FASTLANE_ENV=default"]
+    steps:
+      - uses: actions/checkout@v2
+      - name: install
+        run: bundle install
+      - name: test
+        run: |
+          set -o pipefail
+          bundle exec fastlane $FASTLANE_LANE --env $FASTLANE_ENV
+  spm:
+    name: Test with SPM
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: sersoft-gmbh/SwiftyActions@v1
+        with:
+          release-version: 5.3.2
+      - name: SPM Test
+        run: swift test
