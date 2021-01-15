@@ -9,7 +9,7 @@ public enum Response<T> {
 }
 
 public enum HTTPMethod: String {
-    case GET, POST, PUT, DELETE
+    case GET, POST, PUT, PATCH, DELETE
 }
 
 public enum HTTPEncoding: Int {

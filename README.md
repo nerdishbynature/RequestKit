@@ -1,6 +1,5 @@
 # RequestKit
 
-[![Build Status](https://travis-ci.org/nerdishbynature/RequestKit.svg?branch=master)](https://travis-ci.org/nerdishbynature/RequestKit)
 [![codecov.io](https://codecov.io/github/nerdishbynature/RequestKit/coverage.svg?branch=master)](https://codecov.io/github/nerdishbynature/RequestKit?branch=master)
 
 The base of [octokit.swift](https://github.com/nerdishbynature/Octokit.swift), [TanukiKit](https://github.com/nerdishbynature/TanukiKit), [TrashCanKit](https://github.com/nerdishbynature/TrashCanKit) and [VloggerKit](https://github.com/nerdishbynature/VloggerKit).
