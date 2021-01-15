@@ -7,6 +7,6 @@ lane :test do |options|
     configuration = "Release"
   end
 
-  scan(configuration: configuration, xcargs: "OBJROOT=build GCC_GENERATE_TEST_COVERAGE_FILES=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES")
+  scan(configuration: configuration, code_coverage: true)
 end
 
