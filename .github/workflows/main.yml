@@ -41,6 +41,7 @@ jobs:
         run: |
           set -o pipefail
           bundle exec fastlane ${{ matrix.lane }} --env ${{ matrix.env }}
+      - uses: codecov/codecov-action@v1
   spm:
     name: Test with SPM
     runs-on: ubuntu-latest
