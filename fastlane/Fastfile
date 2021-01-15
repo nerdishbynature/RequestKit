@@ -8,6 +8,5 @@ lane :test do |options|
   end
 
   scan(configuration: configuration, xcargs: "OBJROOT=build GCC_GENERATE_TEST_COVERAGE_FILES=YES GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES")
-  pod_lib_lint(quick: true)
 end
 
