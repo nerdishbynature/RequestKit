@@ -23,8 +23,6 @@ jobs:
             env: ios
           - lane: ci_commit
             env: tvos
-          - lane: code_coverage
-            env: default
     steps:
       - uses: actions/checkout@v2
       - name: install
