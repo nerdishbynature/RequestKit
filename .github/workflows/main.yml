@@ -17,11 +17,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - lane: ci_commit
+          - lane: test
             env: osx
-          - lane: ci_commit
+          - lane: test
             env: ios
-          - lane: ci_commit
+          - lane: test
             env: tvos
     steps:
       - uses: actions/checkout@v2
