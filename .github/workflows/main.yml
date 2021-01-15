@@ -20,7 +20,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: install
-        run: bundle install
+        run: |
+          gem install bundler
+          bundle install
       - name: test
         run: |
           set -o pipefail
