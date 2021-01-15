@@ -31,6 +31,14 @@ jobs:
         run: |
           gem install bundler
           bundle install
+      - name: Restore cached CocoaPod Spec Repos
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-cocoapods-spec-repos
+        with:
+          path: ~/.cocoapods/repos
+          key: ${{ env.cache-name }}-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: ${{ env.cache-name }}-
       - name: test
         run: |
           set -o pipefail
