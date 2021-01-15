@@ -1,5 +1,5 @@
 language: generic
-osx_image: xcode11.1
+osx_image: xcode12.2
 sudo: false
 env:
   global:
@@ -20,10 +20,6 @@ matrix:
       sudo: required
       dist: trusty
       env: SWIFT_VERSION=5.1
-    - os: linux
-      sudo: required
-      dist: trusty
-      env: SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2019-07-02-a
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./script/travis-install-macos; fi
