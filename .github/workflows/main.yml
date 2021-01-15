@@ -16,7 +16,15 @@ jobs:
       DEVELOPER_DIR: /Applications/Xcode_12.3.app/Contents/Developer
     strategy:
       matrix:
-        destination: ["FASTLANE_LANE=ci_commit,FASTLANE_ENV=osx", "FASTLANE_LANE=ci_commit,FASTLANE_ENV=ios", "FASTLANE_LANE=ci_commit,FASTLANE_ENV=tvos", "FASTLANE_LANE=ci_commit,FASTLANE_ENV=default", "FASTLANE_LANE=code_coverage,FASTLANE_ENV=default"]
+        include:
+          - lane: ci_commit
+            env: osx
+          - lane: ci_commit
+            env: ios
+          - lane: ci_commit
+            env: tvos
+          - lane: code_coverage
+            env: default
     steps:
       - uses: actions/checkout@v2
       - name: install
@@ -26,7 +34,7 @@ jobs:
       - name: test
         run: |
           set -o pipefail
-          bundle exec fastlane $FASTLANE_LANE --env $FASTLANE_ENV
+          bundle exec fastlane ${{ matrix.lane }} --env ${{ matrix.env }}
   spm:
     name: Test with SPM
     runs-on: ubuntu-latest
