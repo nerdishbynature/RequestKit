@@ -32,9 +32,6 @@
 		7679C01420AB08290052BBDC /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7679C00720AB08290052BBDC /* RouterTests.swift */; };
 		7679C01520AB08290052BBDC /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7679C00720AB08290052BBDC /* RouterTests.swift */; };
 		7679C01620AB08290052BBDC /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7679C00720AB08290052BBDC /* RouterTests.swift */; };
-		7679C01720AB08290052BBDC /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7679C00820AB08290052BBDC /* XCTestManifests.swift */; };
-		7679C01820AB08290052BBDC /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7679C00820AB08290052BBDC /* XCTestManifests.swift */; };
-		7679C01920AB08290052BBDC /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7679C00820AB08290052BBDC /* XCTestManifests.swift */; };
 		7679C01A20AB08290052BBDC /* ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7679C00920AB08290052BBDC /* ConfigurationTests.swift */; };
 		7679C01B20AB08290052BBDC /* ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7679C00920AB08290052BBDC /* ConfigurationTests.swift */; };
 		7679C01C20AB08290052BBDC /* ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7679C00920AB08290052BBDC /* ConfigurationTests.swift */; };
@@ -86,10 +83,8 @@
 		7679BFEC20AB081C0052BBDC /* RequestKitSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestKitSession.swift; sourceTree = "<group>"; };
 		7679BFED20AB081C0052BBDC /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		7679BFEE20AB081C0052BBDC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7679C00420AB08290052BBDC /* LinuxMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
 		7679C00620AB08290052BBDC /* RequestKitURLTestSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestKitURLTestSession.swift; sourceTree = "<group>"; };
 		7679C00720AB08290052BBDC /* RouterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouterTests.swift; sourceTree = "<group>"; };
-		7679C00820AB08290052BBDC /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
 		7679C00920AB08290052BBDC /* ConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationTests.swift; sourceTree = "<group>"; };
 		7679C00A20AB08290052BBDC /* TestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
 		7679C00B20AB08290052BBDC /* JSONPostRouterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONPostRouterTests.swift; sourceTree = "<group>"; };
@@ -199,7 +194,6 @@
 		7679C00320AB08290052BBDC /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				7679C00420AB08290052BBDC /* LinuxMain.swift */,
 				7679C00520AB08290052BBDC /* RequestKitTests */,
 			);
 			path = Tests;
@@ -214,7 +208,6 @@
 				7679C00920AB08290052BBDC /* ConfigurationTests.swift */,
 				7679C00B20AB08290052BBDC /* JSONPostRouterTests.swift */,
 				7679C00A20AB08290052BBDC /* TestHelper.swift */,
-				7679C00820AB08290052BBDC /* XCTestManifests.swift */,
 				7679C00D20AB08290052BBDC /* Info.plist */,
 			);
 			path = RequestKitTests;
@@ -487,7 +480,6 @@
 				7679C01320AB08290052BBDC /* RequestKitURLTestSession.swift in Sources */,
 				7679C02520AB08290052BBDC /* TestInterface.swift in Sources */,
 				7679C01F20AB08290052BBDC /* TestHelper.swift in Sources */,
-				7679C01920AB08290052BBDC /* XCTestManifests.swift in Sources */,
 				7679C02220AB08290052BBDC /* JSONPostRouterTests.swift in Sources */,
 				7679C01620AB08290052BBDC /* RouterTests.swift in Sources */,
 			);
@@ -501,7 +493,6 @@
 				7679C01220AB08290052BBDC /* RequestKitURLTestSession.swift in Sources */,
 				7679C02420AB08290052BBDC /* TestInterface.swift in Sources */,
 				7679C01E20AB08290052BBDC /* TestHelper.swift in Sources */,
-				7679C01820AB08290052BBDC /* XCTestManifests.swift in Sources */,
 				7679C02120AB08290052BBDC /* JSONPostRouterTests.swift in Sources */,
 				7679C01520AB08290052BBDC /* RouterTests.swift in Sources */,
 			);
@@ -525,7 +516,6 @@
 				7679C01120AB08290052BBDC /* RequestKitURLTestSession.swift in Sources */,
 				7679C02320AB08290052BBDC /* TestInterface.swift in Sources */,
 				7679C01D20AB08290052BBDC /* TestHelper.swift in Sources */,
-				7679C01720AB08290052BBDC /* XCTestManifests.swift in Sources */,
 				7679C02020AB08290052BBDC /* JSONPostRouterTests.swift in Sources */,
 				7679C01420AB08290052BBDC /* RouterTests.swift in Sources */,
 			);
