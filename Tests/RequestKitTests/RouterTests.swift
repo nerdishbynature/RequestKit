@@ -6,28 +6,6 @@ import FoundationNetworking
 #endif
 
 class RouterTests: XCTestCase {
-    static var allTests = [
-        ("testRequest", testRequest),
-        ("testRequestWithAuthorizationHeader", testRequestWithAuthorizationHeader),
-        ("testRequestWithCustomHeaders", testRequestWithCustomHeaders),
-        ("testWasSuccessful", testWasSuccessful),
-        ("testURLComponents", testURLComponents),
-        ("testFormEncodedRouteRequest", testFormEncodedRouteRequest),
-        ("testErrorWithJSON", testErrorWithJSON),
-        ("testLoadAndIgnoreResponseBody", testLoadAndIgnoreResponseBody),
-        ("testErrorWithLoadAndIgnoreResponseBody", testErrorWithLoadAndIgnoreResponseBody),
-        ("testLinuxTestSuiteIncludesAllTests", testLinuxTestSuiteIncludesAllTests)
-    ]
-
-    func testLinuxTestSuiteIncludesAllTests() {
-        #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
-            let thisClass = type(of: self)
-            let linuxCount = thisClass.allTests.count
-            let darwinCount = thisClass.defaultTestSuite.tests.count
-            XCTAssertEqual(linuxCount, darwinCount, "\(darwinCount - linuxCount) tests are missing from allTests")
-        #endif
-    }
-
     lazy var router: TestRouter = {
         let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
         let router = TestRouter.testRoute(config)

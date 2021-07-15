@@ -3,21 +3,6 @@ import XCTest
 import Foundation
 
 class JSONPostRouterTests: XCTestCase {
-    static var allTests = [
-        ("testJSONPostJSONError", testJSONPostJSONError),
-        ("testJSONPostStringError", testJSONPostStringError),
-        ("testLinuxTestSuiteIncludesAllTests", testLinuxTestSuiteIncludesAllTests)
-    ]
-
-    func testLinuxTestSuiteIncludesAllTests() {
-        #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
-            let thisClass = type(of: self)
-            let linuxCount = thisClass.allTests.count
-            let darwinCount = thisClass.defaultTestSuite.tests.count
-            XCTAssertEqual(linuxCount, darwinCount, "\(darwinCount - linuxCount) tests are missing from allTests")
-        #endif
-    }
-
     func testJSONPostJSONError() {
         let jsonDict = ["message": "Bad credentials", "documentation_url": "https://developer.github.com/v3"]
         let jsonString = String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
