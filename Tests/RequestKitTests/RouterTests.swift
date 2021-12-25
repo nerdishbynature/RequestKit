@@ -6,28 +6,6 @@ import FoundationNetworking
 #endif
 
 class RouterTests: XCTestCase {
-    static var allTests = [
-        ("testRequest", testRequest),
-        ("testRequestWithAuthorizationHeader", testRequestWithAuthorizationHeader),
-        ("testRequestWithCustomHeaders", testRequestWithCustomHeaders),
-        ("testWasSuccessful", testWasSuccessful),
-        ("testURLComponents", testURLComponents),
-        ("testFormEncodedRouteRequest", testFormEncodedRouteRequest),
-        ("testErrorWithJSON", testErrorWithJSON),
-        ("testLoadAndIgnoreResponseBody", testLoadAndIgnoreResponseBody),
-        ("testErrorWithLoadAndIgnoreResponseBody", testErrorWithLoadAndIgnoreResponseBody),
-        ("testLinuxTestSuiteIncludesAllTests", testLinuxTestSuiteIncludesAllTests)
-    ]
-
-    func testLinuxTestSuiteIncludesAllTests() {
-        #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
-            let thisClass = type(of: self)
-            let linuxCount = thisClass.allTests.count
-            let darwinCount = thisClass.defaultTestSuite.tests.count
-            XCTAssertEqual(linuxCount, darwinCount, "\(darwinCount - linuxCount) tests are missing from allTests")
-        #endif
-    }
-
     lazy var router: TestRouter = {
         let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
         let router = TestRouter.testRoute(config)
@@ -105,6 +83,24 @@ class RouterTests: XCTestCase {
         XCTAssertNotNil(task)
         XCTAssertTrue(session.wasCalled)
     }
+
+    #if !canImport(FoundationNetworking) && !os(macOS)
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func testErrorWithJSONAsync() async throws {
+        let jsonDict = ["message": "Bad credentials", "documentation_url": "https://developer.github.com/v3"]
+        let jsonString = String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
+        let session = RequestKitURLTestSession(expectedURL: "https://example.com/some_route", expectedHTTPMethod: "GET", response: jsonString, statusCode: 401)
+        do {
+            let _ = try await TestInterface().getJSON(session)
+            XCTFail("should not retrieve a succesful response")
+        } catch {
+            XCTAssertEqual(Helper.getNSError(from: error)?.code, 401)
+            XCTAssertEqual(Helper.getNSError(from: error)?.domain, "com.nerdishbynature.RequestKitTests")
+            XCTAssertEqual((Helper.getNSError(from: error)?.userInfo[RequestKitErrorKey] as? [String: String]) ?? [:], jsonDict)
+            XCTAssertTrue(session.wasCalled)
+        }
+    }
+    #endif
     
     func testLoadAndIgnoreResponseBody() {
         let session = RequestKitURLTestSession(expectedURL: "https://example.com/some_route", expectedHTTPMethod: "POST", response: nil, statusCode: 204)
