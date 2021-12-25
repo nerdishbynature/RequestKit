@@ -15,45 +15,61 @@ class TestInterface {
         return TestInterfaceConfiguration(url: "https://example.com")
     }
 
-    func postJSON(_ session: RequestKitURLSession, completion: @escaping (_ response: Response<[String: AnyObject]>) -> Void) -> URLSessionDataTaskProtocol? {
+    func postJSON(_ session: RequestKitURLSession, completion: @escaping (_ response: Result<[String: AnyObject], Error>) -> Void) -> URLSessionDataTaskProtocol? {
         let router = JSONTestRouter.testPOST(configuration)
         return router.postJSON(session, expectedResultType: [String: AnyObject].self) { json, error in
             if let error = error {
-                completion(Response.failure(error))
+                completion(.failure(error))
             } else {
                 if let json = json {
-                    completion(Response.success(json))
+                    completion(.success(json))
                 }
             }
         }
     }
 
-    func getJSON(_ session: RequestKitURLSession, completion: @escaping (_ response: Response<[String: String]>) -> Void) -> URLSessionDataTaskProtocol? {
+    #if !canImport(FoundationNetworking) && !os(macOS)
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func postJSON(_ session: RequestKitURLSession) async throws -> [String: AnyObject]? {
+        let router = JSONTestRouter.testPOST(configuration)
+        return try await router.postJSON(session, expectedResultType: [String: AnyObject].self)
+    }
+    #endif
+
+    func getJSON(_ session: RequestKitURLSession, completion: @escaping (_ response: Result<[String: String], Error>) -> Void) -> URLSessionDataTaskProtocol? {
         let router = JSONTestRouter.testGET(configuration)
         return router.load(session, expectedResultType: [String: String].self) { json, error in
             if let error = error {
-                completion(Response.failure(error))
+                completion(.failure(error))
             } else {
                 if let json = json {
-                    completion(Response.success(json))
+                    completion(.success(json))
                 }
             }
         }
     }
+
+    #if !canImport(FoundationNetworking) && !os(macOS)
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func getJSON(_ session: RequestKitURLSession) async throws -> [String: String] {
+        let router = JSONTestRouter.testGET(configuration)
+        return try await router.load(session, expectedResultType: [String: String].self)
+    }
+    #endif
     
-    func loadAndIgnoreResponseBody(_ session: RequestKitURLSession, completion: @escaping (_ response: Response<Void>) -> Void) -> URLSessionDataTaskProtocol? {
+    func loadAndIgnoreResponseBody(_ session: RequestKitURLSession, completion: @escaping (_ response: Result<Void, Error>) -> Void) -> URLSessionDataTaskProtocol? {
         let router = JSONTestRouter.testPOST(configuration)
         return router.load(session) { error in
             if let error = error {
-                completion(Response.failure(error))
+                completion(.failure(error))
             } else {
-                completion(Response.success(()))
+                completion(.success(()))
             }
         }
     }
 }
 
-enum JSONTestRouter: JSONPostRouter {
+enum JSONTestRouter: JSONPostRouter {    
     case testPOST(Configuration)
     case testGET(Configuration)
 
