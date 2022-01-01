@@ -57,7 +57,7 @@ class RequestKitURLTestSession: RequestKitURLSession {
         return MockURLSessionDataTask()
     }
 
-    #if !canImport(FoundationNetworking) && !os(macOS)
+    #if !canImport(FoundationNetworking)
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func upload(for request: URLRequest, from data: Data, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
         XCTAssertEqual(request.url?.absoluteString, expectedURL)
