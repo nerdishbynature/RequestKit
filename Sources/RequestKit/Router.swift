@@ -1,6 +1,6 @@
 import Foundation
 #if canImport(FoundationNetworking)
-    import FoundationNetworking
+import FoundationNetworking
 #endif
 
 public enum HTTPMethod: String {
@@ -59,7 +59,8 @@ public protocol Router {
     func urlQuery(_ parameters: [String: Any]) -> [URLQueryItem]?
     func request(_ urlComponents: URLComponents, parameters: [String: Any]) -> URLRequest?
     func loadJSON<T: Codable>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
-    func load<T: Codable>(_ session: RequestKitURLSession, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    func load<T: Codable>(_ session: RequestKitURLSession, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type,
+                          completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
     func load<T: Codable>(_ session: RequestKitURLSession, decoder: JSONDecoder, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
     func request() -> URLRequest?
 }
@@ -140,11 +141,15 @@ public extension Router {
     }
 
     @available(*, deprecated, message: "Plase use `load` method instead")
-    func loadJSON<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    func loadJSON<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type,
+                              completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    {
         return load(session, expectedResultType: expectedResultType, completion: completion)
     }
 
-    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type,
+                          completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    {
         let decoder = JSONDecoder()
         if let dateDecodingStrategy = dateDecodingStrategy {
             decoder.dateDecodingStrategy = dateDecodingStrategy
@@ -152,7 +157,9 @@ public extension Router {
         return load(session, decoder: decoder, expectedResultType: expectedResultType, completion: completion)
     }
 
-    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type,
+                          completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    {
         guard let request = request() else {
             return nil
         }
@@ -188,35 +195,35 @@ public extension Router {
     }
 
     #if !canImport(FoundationNetworking)
-        @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
-        func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type) async throws -> T {
-            guard let request = request() else {
-                throw NSError(domain: configuration.errorDomain, code: -876, userInfo: nil)
-            }
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type) async throws -> T {
+        guard let request = request() else {
+            throw NSError(domain: configuration.errorDomain, code: -876, userInfo: nil)
+        }
 
-            let responseTuple = try await session.data(for: request, delegate: nil)
+        let responseTuple = try await session.data(for: request, delegate: nil)
 
-            if let response = responseTuple.1 as? HTTPURLResponse {
-                if response.wasSuccessful == false {
-                    var userInfo = [String: Any]()
-                    if let json = try? JSONSerialization.jsonObject(with: responseTuple.0, options: .mutableContainers) as? [String: Any] {
-                        userInfo[RequestKitErrorKey] = json as Any?
-                    }
-                    throw NSError(domain: configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
+        if let response = responseTuple.1 as? HTTPURLResponse {
+            if response.wasSuccessful == false {
+                var userInfo = [String: Any]()
+                if let json = try? JSONSerialization.jsonObject(with: responseTuple.0, options: .mutableContainers) as? [String: Any] {
+                    userInfo[RequestKitErrorKey] = json as Any?
                 }
+                throw NSError(domain: configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
             }
-
-            return try decoder.decode(T.self, from: responseTuple.0)
         }
 
-        @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
-        func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type) async throws -> T {
-            let decoder = JSONDecoder()
-            if let dateDecodingStrategy = dateDecodingStrategy {
-                decoder.dateDecodingStrategy = dateDecodingStrategy
-            }
-            return try await load(session, decoder: decoder, expectedResultType: expectedResultType)
+        return try decoder.decode(T.self, from: responseTuple.0)
+    }
+
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type) async throws -> T {
+        let decoder = JSONDecoder()
+        if let dateDecodingStrategy = dateDecodingStrategy {
+            decoder.dateDecodingStrategy = dateDecodingStrategy
         }
+        return try await load(session, decoder: decoder, expectedResultType: expectedResultType)
+    }
     #endif
 
     func load(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
