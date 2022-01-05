@@ -42,3 +42,14 @@ jobs:
       - uses: actions/checkout@v2
       - name: SPM Test
         run: swift test --enable-test-discovery
+  swiftformat:
+    name: Lint
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install
+        run: |
+          brew install swiftformat
+      - name: Lint
+        run: |
+          swiftformat --lint .
