@@ -16,11 +16,11 @@ internal class Helper {
         let path = bundle.path(forResource: name, ofType: "json")!
         let data = try! Data(contentsOf: URL(fileURLWithPath: path))
         let dict: Any? = try? JSONSerialization.jsonObject(with: data,
-        options: JSONSerialization.ReadingOptions.mutableContainers)
+                                                           options: JSONSerialization.ReadingOptions.mutableContainers)
         return dict!
     }
 
-    internal class func codableFromFile<T: Codable>(_ name: String, type: T.Type) -> Any {
+    internal class func codableFromFile<T: Codable>(_ name: String, type _: T.Type) -> Any {
         let bundle = Bundle(for: self)
         let path = bundle.path(forResource: name, ofType: "json")!
         let data = try! Data(contentsOf: URL(fileURLWithPath: path))

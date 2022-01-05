@@ -1,11 +1,11 @@
 import RequestKit
 import XCTest
 #if canImport(FoundationNetworking)
-import FoundationNetworking
+    import FoundationNetworking
 #endif
 
 class MockURLSessionDataTask: URLSessionDataTaskProtocol {
-    fileprivate (set) var resumeWasCalled = false
+    fileprivate(set) var resumeWasCalled = false
 
     func resume() {
         resumeWasCalled = true
@@ -22,7 +22,7 @@ class RequestKitURLTestSession: RequestKitURLSession {
     init(expectedURL: String, expectedHTTPMethod: String, response: String?, statusCode: Int) {
         self.expectedURL = expectedURL
         self.expectedHTTPMethod = expectedHTTPMethod
-        self.responseString = response
+        responseString = response
         self.statusCode = statusCode
     }
 
@@ -30,9 +30,9 @@ class RequestKitURLTestSession: RequestKitURLSession {
         self.expectedURL = expectedURL
         self.expectedHTTPMethod = expectedHTTPMethod
         if let jsonFile = jsonFile {
-            self.responseString = Helper.stringFromFile(jsonFile)
+            responseString = Helper.stringFromFile(jsonFile)
         } else {
-            self.responseString = nil
+            responseString = nil
         }
         self.statusCode = statusCode
     }
@@ -47,7 +47,7 @@ class RequestKitURLTestSession: RequestKitURLSession {
         return MockURLSessionDataTask()
     }
 
-    func uploadTask(with request: URLRequest, fromData bodyData: Data?, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol {
+    func uploadTask(with request: URLRequest, fromData _: Data?, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol {
         XCTAssertEqual(request.url?.absoluteString, expectedURL)
         XCTAssertEqual(request.httpMethod, expectedHTTPMethod)
         let data = responseString?.data(using: String.Encoding.utf8)
@@ -58,24 +58,24 @@ class RequestKitURLTestSession: RequestKitURLSession {
     }
 
     #if !canImport(FoundationNetworking)
-    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
-    func upload(for request: URLRequest, from data: Data, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
-        XCTAssertEqual(request.url?.absoluteString, expectedURL)
-        XCTAssertEqual(request.httpMethod, expectedHTTPMethod)
-        let data = responseString?.data(using: String.Encoding.utf8)
-        let response = HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: "http/1.1", headerFields: ["Content-Type": "application/json"])
-        wasCalled = true
-        return (data!, response!)
-    }
+        @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+        func upload(for request: URLRequest, from _: Data, delegate _: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
+            XCTAssertEqual(request.url?.absoluteString, expectedURL)
+            XCTAssertEqual(request.httpMethod, expectedHTTPMethod)
+            let data = responseString?.data(using: String.Encoding.utf8)
+            let response = HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: "http/1.1", headerFields: ["Content-Type": "application/json"])
+            wasCalled = true
+            return (data!, response!)
+        }
 
-    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
-    func data(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
-        XCTAssertEqual(request.url?.absoluteString, expectedURL)
-        XCTAssertEqual(request.httpMethod, expectedHTTPMethod)
-        let data = responseString?.data(using: String.Encoding.utf8)
-        let response = HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: "http/1.1", headerFields: ["Content-Type": "application/json"])
-        wasCalled = true
-        return (data!, response!)
-    }
+        @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+        func data(for request: URLRequest, delegate _: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
+            XCTAssertEqual(request.url?.absoluteString, expectedURL)
+            XCTAssertEqual(request.httpMethod, expectedHTTPMethod)
+            let data = responseString?.data(using: String.Encoding.utf8)
+            let response = HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: "http/1.1", headerFields: ["Content-Type": "application/json"])
+            wasCalled = true
+            return (data!, response!)
+        }
     #endif
 }

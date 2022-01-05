@@ -1,6 +1,6 @@
 import Foundation
 #if canImport(FoundationNetworking)
-import FoundationNetworking
+    import FoundationNetworking
 #endif
 
 public enum HTTPMethod: String {
@@ -12,12 +12,12 @@ public enum HTTPEncoding: Int {
 }
 
 public struct HTTPHeader {
-  public var headerField: String
-  public var value: String
-  public init(headerField: String, value: String) {
-    self.headerField = headerField
-    self.value = value
-  }
+    public var headerField: String
+    public var value: String
+    public init(headerField: String, value: String) {
+        self.headerField = headerField
+        self.value = value
+    }
 }
 
 public protocol Configuration {
@@ -26,7 +26,7 @@ public protocol Configuration {
     var accessTokenFieldName: String { get }
     var authorizationHeader: String? { get }
     var errorDomain: String { get }
-    var customHeaders: Array<HTTPHeader>? { get }
+    var customHeaders: [HTTPHeader]? { get }
 }
 
 public extension Configuration {
@@ -37,13 +37,13 @@ public extension Configuration {
     var authorizationHeader: String? {
         return nil
     }
-    
+
     var errorDomain: String {
         return "com.nerdishbynature.RequestKit"
     }
-  
-    var customHeaders: Array<HTTPHeader>? {
-      return nil
+
+    var customHeaders: [HTTPHeader]? {
+        return nil
     }
 }
 
@@ -73,19 +73,19 @@ public extension Router {
             parameters[configuration.accessTokenFieldName] = accessToken as Any?
         }
         let components = URLComponents(url: url!, resolvingAgainstBaseURL: true)
-        
+
         var urlRequest = request(components!, parameters: parameters)
-        
+
         if let accessToken = configuration.accessToken, let tokenType = configuration.authorizationHeader {
             urlRequest?.addValue("\(tokenType) \(accessToken)", forHTTPHeaderField: "Authorization")
         }
-      
+
         if let customHeaders = configuration.customHeaders {
             customHeaders.forEach { httpHeader in
-              urlRequest?.addValue(httpHeader.value, forHTTPHeaderField: httpHeader.headerField)
+                urlRequest?.addValue(httpHeader.value, forHTTPHeaderField: httpHeader.headerField)
             }
         }
-        
+
         return urlRequest
     }
 
@@ -121,7 +121,7 @@ public extension Router {
 
     func request(_ urlComponents: URLComponents, parameters: [String: Any]) -> URLRequest? {
         var urlComponents = urlComponents
-        urlComponents.percentEncodedQuery = urlQuery(parameters)?.map({ [$0.name, $0.value ?? ""].joined(separator: "=") }).joined(separator: "&")
+        urlComponents.percentEncodedQuery = urlQuery(parameters)?.map { [$0.name, $0.value ?? ""].joined(separator: "=") }.joined(separator: "&")
         guard let url = urlComponents.url else { return nil }
         switch encoding {
         case .url, .json:
@@ -149,10 +149,10 @@ public extension Router {
         if let dateDecodingStrategy = dateDecodingStrategy {
             decoder.dateDecodingStrategy = dateDecodingStrategy
         }
-        return load(session, decoder:decoder, expectedResultType:expectedResultType, completion:completion)
+        return load(session, decoder: decoder, expectedResultType: expectedResultType, completion: completion)
     }
 
-    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
         guard let request = request() else {
             return nil
         }
@@ -188,42 +188,42 @@ public extension Router {
     }
 
     #if !canImport(FoundationNetworking)
-    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
-    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType: T.Type) async throws -> T {
-        guard let request = request() else {
-            throw NSError(domain: configuration.errorDomain, code: -876, userInfo: nil)
-        }
-        
-        let responseTuple = try await session.data(for: request, delegate: nil)
-        
-        if let response = responseTuple.1 as? HTTPURLResponse {
-            if response.wasSuccessful == false {
-                var userInfo = [String: Any]()
-                if let json = try? JSONSerialization.jsonObject(with: responseTuple.0, options: .mutableContainers) as? [String: Any] {
-                    userInfo[RequestKitErrorKey] = json as Any?
-                }
-                throw NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
+        @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+        func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type) async throws -> T {
+            guard let request = request() else {
+                throw NSError(domain: configuration.errorDomain, code: -876, userInfo: nil)
             }
+
+            let responseTuple = try await session.data(for: request, delegate: nil)
+
+            if let response = responseTuple.1 as? HTTPURLResponse {
+                if response.wasSuccessful == false {
+                    var userInfo = [String: Any]()
+                    if let json = try? JSONSerialization.jsonObject(with: responseTuple.0, options: .mutableContainers) as? [String: Any] {
+                        userInfo[RequestKitErrorKey] = json as Any?
+                    }
+                    throw NSError(domain: configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
+                }
+            }
+
+            return try decoder.decode(T.self, from: responseTuple.0)
         }
 
-        return try decoder.decode(T.self, from: responseTuple.0)
-    }
-    
-    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
-    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type) async throws -> T {
-        let decoder = JSONDecoder()
-        if let dateDecodingStrategy = dateDecodingStrategy {
-            decoder.dateDecodingStrategy = dateDecodingStrategy
+        @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+        func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type) async throws -> T {
+            let decoder = JSONDecoder()
+            if let dateDecodingStrategy = dateDecodingStrategy {
+                decoder.dateDecodingStrategy = dateDecodingStrategy
+            }
+            return try await load(session, decoder: decoder, expectedResultType: expectedResultType)
         }
-        return try await load(session, decoder:decoder, expectedResultType:expectedResultType)
-    }
     #endif
-    
+
     func load(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
         guard let request = request() else {
             return nil
         }
-        
+
         let task = session.dataTask(with: request) { data, response, err in
             if let response = response as? HTTPURLResponse {
                 if response.wasSuccessful == false {
@@ -236,7 +236,7 @@ public extension Router {
                     return
                 }
             }
-            
+
             completion(err)
         }
         task.resume()
@@ -244,8 +244,7 @@ public extension Router {
     }
 }
 
-fileprivate extension CharacterSet {
-
+private extension CharacterSet {
     // https://github.com/Alamofire/Alamofire/blob/3.5rameterEncoding.swift#L220-L225
     static func requestKit_URLQueryAllowedCharacterSet() -> CharacterSet {
         let generalDelimitersToEncode = ":#[]@" // does not include "?" or "/" due to RFC 3986 - Section 3.4
@@ -259,7 +258,7 @@ fileprivate extension CharacterSet {
 
 public extension HTTPURLResponse {
     var wasSuccessful: Bool {
-        let successRange = 200..<300
+        let successRange = 200 ..< 300
         return successRange.contains(statusCode)
     }
 }
