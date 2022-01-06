@@ -1,6 +1,6 @@
-import XCTest
-import RequestKit
 import Foundation
+import RequestKit
+import XCTest
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
@@ -16,8 +16,8 @@ class RouterTests: XCTestCase {
         let subject = router.request()
         XCTAssertEqual(subject?.url?.absoluteString, "https://example.com/api/v1/some_route?access_token=1234&key1=value1%3A456&key2=value2")
         XCTAssertEqual(subject?.httpMethod, "GET")
-    }    
-    
+    }
+
     func testRequestWithAuthorizationHeader() {
         let config = TestAuthorizationHeaderConfiguration("1234", url: "https://example.com/api/v1/")
         let router = TestRouter.testRoute(config)
@@ -26,7 +26,7 @@ class RouterTests: XCTestCase {
         XCTAssertEqual(subject?.httpMethod, "GET")
         XCTAssertEqual(subject?.value(forHTTPHeaderField: "Authorization"), "BEARER 1234")
     }
-  
+
     func testRequestWithCustomHeaders() {
         let config = TestCustomConfiguration("1234", url: "https://github.com", customHeader: HTTPHeader(headerField: "x-custom-header", value: "custom_value"))
         let router = TestRouter.testRoute(config)
@@ -65,7 +65,7 @@ class RouterTests: XCTestCase {
         XCTAssertEqual(String(data: subject?.httpBody ?? Data(), encoding: .utf8), "access_token=1234&key1=value1%3A456&key2=value2")
         XCTAssertEqual(subject?.httpMethod, "POST")
     }
-    
+
     func testErrorWithJSON() {
         let jsonDict = ["message": "Bad credentials", "documentation_url": "https://developer.github.com/v3"]
         let jsonString = String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
@@ -74,7 +74,7 @@ class RouterTests: XCTestCase {
             switch response {
             case .success:
                 XCTAssert(false, "should not retrieve a succesful response")
-            case .failure(let error):
+            case let .failure(error):
                 XCTAssertEqual(Helper.getNSError(from: error)?.code, 401)
                 XCTAssertEqual(Helper.getNSError(from: error)?.domain, "com.nerdishbynature.RequestKitTests")
                 XCTAssertEqual((Helper.getNSError(from: error)?.userInfo[RequestKitErrorKey] as? [String: String]) ?? [:], jsonDict)
@@ -91,7 +91,7 @@ class RouterTests: XCTestCase {
         let jsonString = String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
         let session = RequestKitURLTestSession(expectedURL: "https://example.com/some_route", expectedHTTPMethod: "GET", response: jsonString, statusCode: 401)
         do {
-            let _ = try await TestInterface().getJSON(session)
+            _ = try await TestInterface().getJSON(session)
             XCTFail("should not retrieve a succesful response")
         } catch {
             XCTAssertEqual(Helper.getNSError(from: error)?.code, 401)
@@ -101,38 +101,38 @@ class RouterTests: XCTestCase {
         }
     }
     #endif
-    
+
     func testLoadAndIgnoreResponseBody() {
         let session = RequestKitURLTestSession(expectedURL: "https://example.com/some_route", expectedHTTPMethod: "POST", response: nil, statusCode: 204)
 
         var receivedSuccessResponse = false
-        
-        let task = TestInterface().loadAndIgnoreResponseBody(session) { (response) in
+
+        let task = TestInterface().loadAndIgnoreResponseBody(session) { response in
             switch response {
             case .success:
                 receivedSuccessResponse = true
-            case .failure(_):
+            case .failure:
                 XCTAssert(false, "should not retrieve a failure response")
             }
         }
-        
+
         XCTAssertNotNil(task)
         XCTAssertTrue(session.wasCalled)
         XCTAssertTrue(receivedSuccessResponse)
     }
-    
+
     func testErrorWithLoadAndIgnoreResponseBody() {
         let jsonDict = ["message": "Bad credentials", "documentation_url": "https://developer.github.com/v3"]
         let jsonString = String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
         let session = RequestKitURLTestSession(expectedURL: "https://example.com/some_route", expectedHTTPMethod: "POST", response: jsonString, statusCode: 401)
-        
+
         var receivedFailureResponse = false
-        
+
         let task = TestInterface().loadAndIgnoreResponseBody(session) { response in
             switch response {
             case .success:
                 XCTAssert(false, "should not retrieve a successful response")
-            case .failure(let error):
+            case let .failure(error):
                 receivedFailureResponse = true
                 XCTAssertEqual(Helper.getNSError(from: error)?.code, 401)
                 XCTAssertEqual(Helper.getNSError(from: error)?.domain, "com.nerdishbynature.RequestKitTests")
@@ -151,8 +151,8 @@ enum TestRouter: Router {
 
     var configuration: Configuration {
         switch self {
-        case .testRoute(let config): return config
-        case .formEncodedRoute(let config): return config
+        case let .testRoute(config): return config
+        case let .formEncodedRoute(config): return config
         }
     }
 
@@ -187,4 +187,3 @@ enum TestRouter: Router {
         return ["key1": "value1:456", "key2": "value2"]
     }
 }
-

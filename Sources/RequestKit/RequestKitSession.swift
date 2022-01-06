@@ -10,7 +10,7 @@ public protocol RequestKitURLSession {
     #if !canImport(FoundationNetworking)
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func data(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse)
-    
+
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func upload(for request: URLRequest, from bodyData: Data, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse)
     #endif
@@ -20,7 +20,7 @@ public protocol URLSessionDataTaskProtocol {
     func resume()
 }
 
-extension URLSessionDataTask: URLSessionDataTaskProtocol { }
+extension URLSessionDataTask: URLSessionDataTaskProtocol {}
 
 extension URLSession: RequestKitURLSession {
     public func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Swift.Void) -> URLSessionDataTaskProtocol {

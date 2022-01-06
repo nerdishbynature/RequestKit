@@ -1,5 +1,5 @@
-import XCTest
 import RequestKit
+import XCTest
 
 class ConfigurationTests: XCTestCase {
     func testDefaultImplementation() {
@@ -19,7 +19,7 @@ class ConfigurationTests: XCTestCase {
         XCTAssertEqual(config.authorizationHeader, nil)
         XCTAssertEqual(config.customHeaders?.count, 1)
     }
-    
+
     func testAuthorizationHeaderConfiguration() {
         let config = TestAuthorizationHeaderConfiguration("1234", url: "https://github.com")
         XCTAssertEqual(config.apiEndpoint, "https://github.com")
@@ -42,7 +42,7 @@ class TestConfiguration: Configuration {
 class TestCustomConfiguration: Configuration {
     var apiEndpoint: String
     var accessToken: String?
-    var customHeaders: Array<HTTPHeader>?
+    var customHeaders: [HTTPHeader]?
 
     init(_ token: String, url: String, customHeader: HTTPHeader) {
         apiEndpoint = url
@@ -58,7 +58,7 @@ class TestCustomConfiguration: Configuration {
 class TestAuthorizationHeaderConfiguration: Configuration {
     var apiEndpoint: String
     var accessToken: String?
-    
+
     init(_ token: String, url: String) {
         apiEndpoint = url
         accessToken = token

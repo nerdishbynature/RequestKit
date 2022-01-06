@@ -3,7 +3,7 @@ import RequestKit
 class TestInterfaceConfiguration: Configuration {
     var apiEndpoint: String
     var errorDomain = "com.nerdishbynature.RequestKitTests"
-    var accessToken: String? = nil
+    var accessToken: String?
 
     init(url: String) {
         apiEndpoint = url
@@ -56,7 +56,7 @@ class TestInterface {
         return try await router.load(session, expectedResultType: [String: String].self)
     }
     #endif
-    
+
     func loadAndIgnoreResponseBody(_ session: RequestKitURLSession, completion: @escaping (_ response: Result<Void, Error>) -> Void) -> URLSessionDataTaskProtocol? {
         let router = JSONTestRouter.testPOST(configuration)
         return router.load(session) { error in
@@ -69,14 +69,14 @@ class TestInterface {
     }
 }
 
-enum JSONTestRouter: JSONPostRouter {    
+enum JSONTestRouter: JSONPostRouter {
     case testPOST(Configuration)
     case testGET(Configuration)
 
     var configuration: Configuration {
         switch self {
-        case .testPOST(let config): return config
-        case .testGET(let config): return config
+        case let .testPOST(config): return config
+        case let .testGET(config): return config
         }
     }
 
