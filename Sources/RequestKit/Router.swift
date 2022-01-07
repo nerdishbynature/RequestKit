@@ -27,6 +27,7 @@ public protocol Configuration {
     var authorizationHeader: String? { get }
     var errorDomain: String { get }
     var customHeaders: [HTTPHeader]? { get }
+    var tracerConfiguration: TracerConfiguration? { get }
 }
 
 public extension Configuration {
@@ -43,6 +44,10 @@ public extension Configuration {
     }
 
     var customHeaders: [HTTPHeader]? {
+        return nil
+    }
+
+    var tracerConfiguration: TracerConfiguration? {
         return nil
     }
 }
@@ -164,7 +169,10 @@ public extension Router {
             return nil
         }
 
+        let tracer = Tracer(configuration.tracerConfiguration)
+        tracer.before(request)
         let task = session.dataTask(with: request) { data, response, err in
+            tracer.after(request, data, response, err)
             if let response = response as? HTTPURLResponse {
                 if response.wasSuccessful == false {
                     var userInfo = [String: Any]()
@@ -231,7 +239,10 @@ public extension Router {
             return nil
         }
 
+        let tracer = Tracer(configuration.tracerConfiguration)
+        tracer.before(request)
         let task = session.dataTask(with: request) { data, response, err in
+            tracer.after(request, data, response, err)
             if let response = response as? HTTPURLResponse {
                 if response.wasSuccessful == false {
                     var userInfo = [String: Any]()
