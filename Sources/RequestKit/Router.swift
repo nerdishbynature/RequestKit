@@ -22,6 +22,7 @@ public struct HTTPHeader {
 
 public protocol Configuration {
     var apiEndpoint: String { get }
+    var cachePolicy: NSURLRequest.CachePolicy { get }
     var accessToken: String? { get }
     var accessTokenFieldName: String { get }
     var authorizationHeader: String? { get }
@@ -30,6 +31,10 @@ public protocol Configuration {
 }
 
 public extension Configuration {
+    var cachePolicy: NSURLRequest.CachePolicy {
+        return .useProtocolCachePolicy
+    }
+
     var accessTokenFieldName: String {
         return "access_token"
     }
@@ -126,13 +131,13 @@ public extension Router {
         guard let url = urlComponents.url else { return nil }
         switch encoding {
         case .url, .json:
-            var mutableURLRequest = URLRequest(url: url)
+            var mutableURLRequest = URLRequest(url: url, cachePolicy: configuration.cachePolicy)
             mutableURLRequest.httpMethod = method.rawValue
             return mutableURLRequest
         case .form:
             let queryData = urlComponents.percentEncodedQuery?.data(using: String.Encoding.utf8)
             urlComponents.queryItems = nil // clear the query items as they go into the body
-            var mutableURLRequest = URLRequest(url: urlComponents.url!)
+            var mutableURLRequest = URLRequest(url: urlComponents.url!, cachePolicy: configuration.cachePolicy)
             mutableURLRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "content-type")
             mutableURLRequest.httpBody = queryData
             mutableURLRequest.httpMethod = method.rawValue
