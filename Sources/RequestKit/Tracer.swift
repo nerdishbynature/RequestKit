@@ -24,7 +24,9 @@ public class Tracer {
         let preambule = preambule(request)
         print(preambule, "URL \(request.url ?? URL(fileURLWithPath: "?"))")
         if configuration.contains(.RequestHeaders), let headers = request.allHTTPHeaderFields {
-            for (k, v) in headers {
+            for (k, v) in headers.sorted(by: {
+                $0.key.caseInsensitiveCompare($1.key) == .orderedAscending
+            }) {
                 print(preambule, "Request header: \(k) -> \(v)")
             }
         }
@@ -38,7 +40,11 @@ public class Tracer {
         }
         if let response = response as? HTTPURLResponse {
             if configuration.contains(.ResponseHeaders) {
-                for (k, v) in response.allHeaderFields {
+                for (k, v) in response.allHeaderFields.sorted(by: {
+                    let a = $0.key as? String ?? ""
+                    let b = $1.key as? String ?? ""
+                    return a.caseInsensitiveCompare(b) == .orderedAscending
+                }) {
                     print(preambule, "Response header: \(k) -> \(v)")
                 }
             }
