@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public enum TracerOption: Int {
     case RequestHeaders, RequestBody, ResponseHeaders, ResponseBody
