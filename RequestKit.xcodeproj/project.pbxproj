@@ -44,6 +44,13 @@
 		7679C02320AB08290052BBDC /* TestInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7679C00C20AB08290052BBDC /* TestInterface.swift */; };
 		7679C02420AB08290052BBDC /* TestInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7679C00C20AB08290052BBDC /* TestInterface.swift */; };
 		7679C02520AB08290052BBDC /* TestInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7679C00C20AB08290052BBDC /* TestInterface.swift */; };
+		A8ABFA372788F94E00B3FA7A /* Tracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8ABFA362788F94E00B3FA7A /* Tracer.swift */; };
+		A8ABFA382788F94E00B3FA7A /* Tracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8ABFA362788F94E00B3FA7A /* Tracer.swift */; };
+		A8ABFA392788F94E00B3FA7A /* Tracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8ABFA362788F94E00B3FA7A /* Tracer.swift */; };
+		A8ABFA3A2788F94E00B3FA7A /* Tracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8ABFA362788F94E00B3FA7A /* Tracer.swift */; };
+		A8ABFA3B2788F94E00B3FA7A /* Tracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8ABFA362788F94E00B3FA7A /* Tracer.swift */; };
+		A8ABFA3C2788F94E00B3FA7A /* Tracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8ABFA362788F94E00B3FA7A /* Tracer.swift */; };
+		A8ABFA3D2788F94E00B3FA7A /* Tracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8ABFA362788F94E00B3FA7A /* Tracer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +97,7 @@
 		7679C00B20AB08290052BBDC /* JSONPostRouterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONPostRouterTests.swift; sourceTree = "<group>"; };
 		7679C00C20AB08290052BBDC /* TestInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestInterface.swift; sourceTree = "<group>"; };
 		7679C00D20AB08290052BBDC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A8ABFA362788F94E00B3FA7A /* Tracer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +195,7 @@
 				7679BFEA20AB081C0052BBDC /* JSONPostRouter.swift */,
 				7679BFEC20AB081C0052BBDC /* RequestKitSession.swift */,
 				7679BFEE20AB081C0052BBDC /* Info.plist */,
+				A8ABFA362788F94E00B3FA7A /* Tracer.swift */,
 			);
 			path = RequestKit;
 			sourceTree = "<group>";
@@ -377,7 +386,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1320;
 				ORGANIZATIONNAME = nerdishbynature;
 				TargetAttributes = {
 					233742FF1C7981A800013492 = {
@@ -446,6 +455,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8ABFA392788F94E00B3FA7A /* Tracer.swift in Sources */,
 				7679BFF820AB081C0052BBDC /* RequestKitSession.swift in Sources */,
 				7679BFF020AB081C0052BBDC /* JSONPostRouter.swift in Sources */,
 				7679BFFC20AB081C0052BBDC /* Router.swift in Sources */,
@@ -456,6 +466,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8ABFA3B2788F94E00B3FA7A /* Tracer.swift in Sources */,
 				7679BFF920AB081C0052BBDC /* RequestKitSession.swift in Sources */,
 				7679BFF120AB081C0052BBDC /* JSONPostRouter.swift in Sources */,
 				7679BFFD20AB081C0052BBDC /* Router.swift in Sources */,
@@ -466,6 +477,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8ABFA3C2788F94E00B3FA7A /* Tracer.swift in Sources */,
 				7679BFFA20AB081C0052BBDC /* RequestKitSession.swift in Sources */,
 				7679BFF220AB081C0052BBDC /* JSONPostRouter.swift in Sources */,
 				7679BFFE20AB081C0052BBDC /* Router.swift in Sources */,
@@ -478,6 +490,7 @@
 			files = (
 				7679C01C20AB08290052BBDC /* ConfigurationTests.swift in Sources */,
 				7679C01320AB08290052BBDC /* RequestKitURLTestSession.swift in Sources */,
+				A8ABFA3D2788F94E00B3FA7A /* Tracer.swift in Sources */,
 				7679C02520AB08290052BBDC /* TestInterface.swift in Sources */,
 				7679C01F20AB08290052BBDC /* TestHelper.swift in Sources */,
 				7679C02220AB08290052BBDC /* JSONPostRouterTests.swift in Sources */,
@@ -491,6 +504,7 @@
 			files = (
 				7679C01B20AB08290052BBDC /* ConfigurationTests.swift in Sources */,
 				7679C01220AB08290052BBDC /* RequestKitURLTestSession.swift in Sources */,
+				A8ABFA3A2788F94E00B3FA7A /* Tracer.swift in Sources */,
 				7679C02420AB08290052BBDC /* TestInterface.swift in Sources */,
 				7679C01E20AB08290052BBDC /* TestHelper.swift in Sources */,
 				7679C02120AB08290052BBDC /* JSONPostRouterTests.swift in Sources */,
@@ -502,6 +516,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8ABFA372788F94E00B3FA7A /* Tracer.swift in Sources */,
 				7679BFF720AB081C0052BBDC /* RequestKitSession.swift in Sources */,
 				7679BFEF20AB081C0052BBDC /* JSONPostRouter.swift in Sources */,
 				7679BFFB20AB081C0052BBDC /* Router.swift in Sources */,
@@ -514,6 +529,7 @@
 			files = (
 				7679C01A20AB08290052BBDC /* ConfigurationTests.swift in Sources */,
 				7679C01120AB08290052BBDC /* RequestKitURLTestSession.swift in Sources */,
+				A8ABFA382788F94E00B3FA7A /* Tracer.swift in Sources */,
 				7679C02320AB08290052BBDC /* TestInterface.swift in Sources */,
 				7679C01D20AB08290052BBDC /* TestHelper.swift in Sources */,
 				7679C02020AB08290052BBDC /* JSONPostRouterTests.swift in Sources */,
@@ -557,7 +573,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -576,7 +592,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -765,7 +781,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Sources/RequestKit/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nerdishbynature.RequestKit;
@@ -823,7 +839,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Sources/RequestKit/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nerdishbynature.RequestKit;
 				PRODUCT_NAME = RequestKit;
