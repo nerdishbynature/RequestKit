@@ -28,7 +28,7 @@ class TestInterface {
         }
     }
 
-    #if !canImport(FoundationNetworking)
+    #if swift(>=5.5.2)
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func postJSON(_ session: RequestKitURLSession) async throws -> [String: AnyObject]? {
         let router = JSONTestRouter.testPOST(configuration)
@@ -49,7 +49,7 @@ class TestInterface {
         }
     }
 
-    #if !canImport(FoundationNetworking)
+    #if swift(>=5.5.2)
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func getJSON(_ session: RequestKitURLSession) async throws -> [String: String] {
         let router = JSONTestRouter.testGET(configuration)

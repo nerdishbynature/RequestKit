@@ -21,7 +21,7 @@ class JSONPostRouterTests: XCTestCase {
         XCTAssertTrue(session.wasCalled)
     }
 
-    #if !canImport(FoundationNetworking)
+    #if swift(>=5.5.2)
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func testJSONPostJSONErrorAsync() async throws {
         let jsonDict = ["message": "Bad credentials", "documentation_url": "https://developer.github.com/v3"]
@@ -56,7 +56,7 @@ class JSONPostRouterTests: XCTestCase {
         XCTAssertTrue(session.wasCalled)
     }
 
-    #if !canImport(FoundationNetworking)
+    #if swift(>=5.5.2)
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func testJSONPostStringErrorAsync() async throws {
         let errorString = "Just nope"

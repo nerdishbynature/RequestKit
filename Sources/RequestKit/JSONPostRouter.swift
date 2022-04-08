@@ -7,7 +7,7 @@ public protocol JSONPostRouter: Router {
     func postJSON<T>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
     func post<T: Codable>(_ session: RequestKitURLSession, decoder: JSONDecoder, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
 
-    #if !canImport(FoundationNetworking)
+    #if swift(>=5.5.2)
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func postJSON<T>(_ session: RequestKitURLSession, expectedResultType: T.Type) async throws -> T?
 
@@ -62,7 +62,7 @@ public extension JSONPostRouter {
         return task
     }
 
-    #if !canImport(FoundationNetworking)
+    #if swift(>=5.5.2)
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func postJSON<T>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType _: T.Type) async throws -> T? {
         guard let request = request() else {
@@ -132,7 +132,7 @@ public extension JSONPostRouter {
         return task
     }
 
-    #if !canImport(FoundationNetworking)
+    #if swift(>=5.5.2)
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func post<T: Codable>(_ session: RequestKitURLSession, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type) async throws -> T {
         guard let request = request() else {
