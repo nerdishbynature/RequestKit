@@ -37,7 +37,14 @@ jobs:
   spm:
     name: Test with SPM
     runs-on: ubuntu-latest
-    container: swift:5.5-focal
+    strategy:
+      matrix:
+        swift_version:
+          - 5.5.1
+          - 5.5.2
+          - 5.5.3
+      fail-fast: false
+    container: swift:${{ matrix.swift_version }}-focal
     steps:
       - uses: actions/checkout@v2
       - name: SPM Test
