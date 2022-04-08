@@ -84,7 +84,7 @@ class RouterTests: XCTestCase {
         XCTAssertTrue(session.wasCalled)
     }
 
-    #if !canImport(FoundationNetworking)
+    #if compiler(>=5.5.2) && canImport(_Concurrency)
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func testErrorWithJSONAsync() async throws {
         let jsonDict = ["message": "Bad credentials", "documentation_url": "https://developer.github.com/v3"]
