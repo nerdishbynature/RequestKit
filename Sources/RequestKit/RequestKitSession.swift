@@ -33,7 +33,7 @@ extension URLSession: RequestKitURLSession {
 
     #if compiler(>=5.5.2) && canImport(_Concurrency) && canImport(FoundationNetworking)
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
-    public func data(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
+    public func data(for request: URLRequest, delegate _: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
         return try await withCheckedThrowingContinuation { continuation in
             let task = dataTask(with: request) { data, response, error in
                 if let error = error {
@@ -48,7 +48,7 @@ extension URLSession: RequestKitURLSession {
     }
 
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
-    public func upload(for request: URLRequest, from bodyData: Data, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
+    public func upload(for request: URLRequest, from bodyData: Data, delegate _: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
         return try await withCheckedThrowingContinuation { continuation in
             let task = uploadTask(with: request, from: bodyData) { data, response, error in
                 if let error = error {
