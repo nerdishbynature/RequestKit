@@ -143,6 +143,23 @@ class RouterTests: XCTestCase {
         XCTAssertTrue(session.wasCalled)
         XCTAssertTrue(receivedFailureResponse)
     }
+
+    #if compiler(>=5.5.2) && canImport(_Concurrency)
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func testEmptyResponseWithLoadAndIgnoreResponseBodyAsync() async throws {
+        let session = RequestKitURLTestSession(expectedURL: "https://example.com/some_route", expectedHTTPMethod: "POST", response: "", statusCode: 204)
+
+        var receivedSuccessResponse = false
+        do {
+            _ = try await TestInterface().loadAndIgnoreResponseBody(session)
+            receivedSuccessResponse = true
+        } catch {
+            XCTFail("should not catch any error")
+        }
+        XCTAssertTrue(session.wasCalled)
+        XCTAssertTrue(receivedSuccessResponse)
+    }
+    #endif
 }
 
 enum TestRouter: Router {
