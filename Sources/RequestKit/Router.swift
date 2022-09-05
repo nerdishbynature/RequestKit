@@ -249,6 +249,23 @@ public extension Router {
         }
         return try await load(session, decoder: decoder, expectedResultType: expectedResultType)
     }
+
+    func load(_ session: RequestKitURLSession = URLSession.shared) async throws {
+        guard let request = request() else {
+            throw NSError(domain: configuration.errorDomain, code: -876, userInfo: nil)
+        }
+
+        let responseTuple = try await session.data(for: request, delegate: nil)
+        if let response = responseTuple.1 as? HTTPURLResponse {
+            if response.wasSuccessful == false {
+                var userInfo = [String: Any]()
+                if let json = try? JSONSerialization.jsonObject(with: responseTuple.0, options: .mutableContainers) as? [String: Any] {
+                    userInfo[RequestKitErrorKey] = json as Any?
+                }
+                throw NSError(domain: configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
+            }
+        }
+    }
 }
 #endif
 
