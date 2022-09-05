@@ -63,6 +63,15 @@ public protocol Router {
                           completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
     func load<T: Codable>(_ session: RequestKitURLSession, decoder: JSONDecoder, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
     func request() -> URLRequest?
+
+    #if compiler(>=5.5.2) && canImport(_Concurrency)
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func load<T: Codable>(_ session: RequestKitURLSession, decoder: JSONDecoder, expectedResultType _: T.Type) async throws -> T
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func load<T: Codable>(_ session: RequestKitURLSession, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type) async throws -> T
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func load(_ session: RequestKitURLSession) async throws
+    #endif
 }
 
 public extension Router {
