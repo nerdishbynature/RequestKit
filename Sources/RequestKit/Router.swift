@@ -194,38 +194,6 @@ public extension Router {
         return task
     }
 
-    #if compiler(>=5.5.2) && canImport(_Concurrency)
-    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
-    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type) async throws -> T {
-        guard let request = request() else {
-            throw NSError(domain: configuration.errorDomain, code: -876, userInfo: nil)
-        }
-
-        let responseTuple = try await session.data(for: request, delegate: nil)
-
-        if let response = responseTuple.1 as? HTTPURLResponse {
-            if response.wasSuccessful == false {
-                var userInfo = [String: Any]()
-                if let json = try? JSONSerialization.jsonObject(with: responseTuple.0, options: .mutableContainers) as? [String: Any] {
-                    userInfo[RequestKitErrorKey] = json as Any?
-                }
-                throw NSError(domain: configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
-            }
-        }
-
-        return try decoder.decode(T.self, from: responseTuple.0)
-    }
-
-    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
-    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type) async throws -> T {
-        let decoder = JSONDecoder()
-        if let dateDecodingStrategy = dateDecodingStrategy {
-            decoder.dateDecodingStrategy = dateDecodingStrategy
-        }
-        return try await load(session, decoder: decoder, expectedResultType: expectedResultType)
-    }
-    #endif
-
     func load(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
         guard let request = request() else {
             return nil
@@ -250,6 +218,39 @@ public extension Router {
         return task
     }
 }
+
+#if compiler(>=5.5.2) && canImport(_Concurrency)
+@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+public extension Router {
+    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type) async throws -> T {
+        guard let request = request() else {
+            throw NSError(domain: configuration.errorDomain, code: -876, userInfo: nil)
+        }
+
+        let responseTuple = try await session.data(for: request, delegate: nil)
+
+        if let response = responseTuple.1 as? HTTPURLResponse {
+            if response.wasSuccessful == false {
+                var userInfo = [String: Any]()
+                if let json = try? JSONSerialization.jsonObject(with: responseTuple.0, options: .mutableContainers) as? [String: Any] {
+                    userInfo[RequestKitErrorKey] = json as Any?
+                }
+                throw NSError(domain: configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
+            }
+        }
+
+        return try decoder.decode(T.self, from: responseTuple.0)
+    }
+
+    func load<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type) async throws -> T {
+        let decoder = JSONDecoder()
+        if let dateDecodingStrategy = dateDecodingStrategy {
+            decoder.dateDecodingStrategy = dateDecodingStrategy
+        }
+        return try await load(session, decoder: decoder, expectedResultType: expectedResultType)
+    }
+}
+#endif
 
 private extension CharacterSet {
     // https://github.com/Alamofire/Alamofire/blob/3.5rameterEncoding.swift#L220-L225
