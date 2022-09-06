@@ -67,6 +67,14 @@ class TestInterface {
             }
         }
     }
+
+    #if compiler(>=5.5.2) && canImport(_Concurrency)
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func loadAndIgnoreResponseBody(_ session: RequestKitURLSession) async throws {
+        let router = JSONTestRouter.testPOST(configuration)
+        return try await router.load(session)
+    }
+    #endif
 }
 
 enum JSONTestRouter: JSONPostRouter {
