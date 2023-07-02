@@ -5,12 +5,15 @@ import FoundationNetworking
 
 public protocol JSONPostRouter: Router {
     func postJSON<T>(_ session: RequestKitURLSession, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    func post<T: Codable>(_ session: RequestKitURLSession, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
     func post<T: Codable>(_ session: RequestKitURLSession, decoder: JSONDecoder, expectedResultType: T.Type, completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
 
     #if compiler(>=5.5.2) && canImport(_Concurrency)
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func postJSON<T>(_ session: RequestKitURLSession, expectedResultType: T.Type) async throws -> T?
 
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func post<T: Codable>(_ session: RequestKitURLSession, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type) async throws -> T
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func post<T: Codable>(_ session: RequestKitURLSession, decoder: JSONDecoder, expectedResultType: T.Type) async throws -> T
     #endif
@@ -87,6 +90,16 @@ public extension JSONPostRouter {
     }
     #endif
 
+    func post<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type,
+                          completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    {
+        let decoder = JSONDecoder()
+        if let dateDecodingStrategy = dateDecodingStrategy {
+            decoder.dateDecodingStrategy = dateDecodingStrategy
+        }
+        return post(session, decoder: decoder, expectedResultType: expectedResultType, completion: completion)
+    }
+
     func post<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type,
                           completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
     {
@@ -133,6 +146,15 @@ public extension JSONPostRouter {
     }
 
     #if compiler(>=5.5.2) && canImport(_Concurrency)
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func post<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type) async throws -> T {
+        let decoder = JSONDecoder()
+        if let dateDecodingStrategy = dateDecodingStrategy {
+            decoder.dateDecodingStrategy = dateDecodingStrategy
+        }
+        return try await post(session, decoder: decoder, expectedResultType: expectedResultType)
+    }
+
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func post<T: Codable>(_ session: RequestKitURLSession, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type) async throws -> T {
         guard let request = request() else {
