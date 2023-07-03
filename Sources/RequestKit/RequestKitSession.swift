@@ -24,7 +24,7 @@ extension URLSessionDataTask: URLSessionDataTaskProtocol {}
 
 extension URLSession: RequestKitURLSession {
     public func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Swift.Void) -> URLSessionDataTaskProtocol {
-        return (dataTask(with: request, completionHandler: completionHandler) as URLSessionDataTask)
+        return dataTask(with: request, completionHandler: completionHandler) as URLSessionDataTask
     }
 
     public func uploadTask(with request: URLRequest, fromData bodyData: Data?, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol {
