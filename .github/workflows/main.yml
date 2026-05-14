@@ -59,7 +59,7 @@ jobs:
   swiftformat:
     name: Linting
     runs-on: ubuntu-latest
-    container: swift:5.3-focal
+    container: swift:5.7-focal
     steps:
       - uses: actions/checkout@v2
       - name: Install SwiftFormat
@@ -70,4 +70,4 @@ jobs:
       - name: Lint
         run: |
           cd SwiftFormat
-          swift run -c release swiftformat ../ --lint --exclude .
+          swift run -c release swiftformat ../ --lint --exclude . --reporter github-actions-log
