@@ -248,7 +248,8 @@ public extension Router {
 
     @discardableResult
     func put<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type,
-                         completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+                         completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    {
         guard let request = request() else { return nil }
         let data: Data
         do {
@@ -270,7 +271,7 @@ public extension Router {
             }
             if let error = error { completion(nil, error); return }
             if let data = data {
-                do { completion(try decoder.decode(T.self, from: data), nil) }
+                do { try completion(decoder.decode(T.self, from: data), nil) }
                 catch { completion(nil, error) }
             }
         }
@@ -280,7 +281,8 @@ public extension Router {
 
     @discardableResult
     func patch<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type,
-                           completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+                           completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    {
         guard let request = request() else { return nil }
         let data: Data
         do {
@@ -302,7 +304,7 @@ public extension Router {
             }
             if let error = error { completion(nil, error); return }
             if let data = data {
-                do { completion(try decoder.decode(T.self, from: data), nil) }
+                do { try completion(decoder.decode(T.self, from: data), nil) }
                 catch { completion(nil, error) }
             }
         }

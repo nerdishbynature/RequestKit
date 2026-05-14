@@ -161,7 +161,12 @@ class RouterTests: XCTestCase {
     #endif
 
     func testDeleteRequest() {
-        let session = RequestKitURLTestSession(expectedURL: "https://example.com/api/v1/some_route?access_token=1234&key1=value1%3A456&key2=value2", expectedHTTPMethod: "DELETE", response: "", statusCode: 204)
+        let session = RequestKitURLTestSession(
+            expectedURL: "https://example.com/api/v1/some_route?access_token=1234&key1=value1%3A456&key2=value2",
+            expectedHTTPMethod: "DELETE",
+            response: "",
+            statusCode: 204
+        )
         let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
         let router = TestRouter.deleteRoute(config)
         var receivedError: Error?
@@ -173,10 +178,15 @@ class RouterTests: XCTestCase {
         XCTAssertNil(receivedError)
     }
 
-    func testDeleteRequestError() {
+    func testDeleteRequestError() throws {
         let jsonDict = ["message": "Not Found"]
-        let jsonString = String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: .utf8)
-        let session = RequestKitURLTestSession(expectedURL: "https://example.com/api/v1/some_route?access_token=1234&key1=value1%3A456&key2=value2", expectedHTTPMethod: "DELETE", response: jsonString, statusCode: 404)
+        let jsonString = try String(data: JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: .utf8)
+        let session = RequestKitURLTestSession(
+            expectedURL: "https://example.com/api/v1/some_route?access_token=1234&key1=value1%3A456&key2=value2",
+            expectedHTTPMethod: "DELETE",
+            response: jsonString,
+            statusCode: 404
+        )
         let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
         let router = TestRouter.deleteRoute(config)
         var receivedError: Error?
@@ -219,7 +229,12 @@ class RouterTests: XCTestCase {
     #if compiler(>=5.5.2) && canImport(_Concurrency)
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func testDeleteRequestAsync() async throws {
-        let session = RequestKitURLTestSession(expectedURL: "https://example.com/api/v1/some_route?access_token=1234&key1=value1%3A456&key2=value2", expectedHTTPMethod: "DELETE", response: "", statusCode: 204)
+        let session = RequestKitURLTestSession(
+            expectedURL: "https://example.com/api/v1/some_route?access_token=1234&key1=value1%3A456&key2=value2",
+            expectedHTTPMethod: "DELETE",
+            response: "",
+            statusCode: 204
+        )
         let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
         let router = TestRouter.deleteRoute(config)
         try await router.delete(session)
