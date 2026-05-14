@@ -3,9 +3,9 @@ import RequestKit
 import XCTest
 
 class JSONPostRouterTests: XCTestCase {
-    func testJSONPostJSONError() {
+    func testJSONPostJSONError() throws {
         let jsonDict = ["message": "Bad credentials", "documentation_url": "https://developer.github.com/v3"]
-        let jsonString = String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
+        let jsonString = try String(data: JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
         let session = RequestKitURLTestSession(expectedURL: "https://example.com/some_route", expectedHTTPMethod: "POST", response: jsonString, statusCode: 401)
         let task = TestInterface().postJSON(session) { response in
             switch response {
@@ -25,7 +25,7 @@ class JSONPostRouterTests: XCTestCase {
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func testJSONPostJSONErrorAsync() async throws {
         let jsonDict = ["message": "Bad credentials", "documentation_url": "https://developer.github.com/v3"]
-        let jsonString = String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
+        let jsonString = try String(data: JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
         let session = RequestKitURLTestSession(expectedURL: "https://example.com/some_route", expectedHTTPMethod: "POST", response: jsonString, statusCode: 401)
         do {
             _ = try await TestInterface().postJSON(session)
