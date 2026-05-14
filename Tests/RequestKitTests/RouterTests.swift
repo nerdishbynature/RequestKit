@@ -159,16 +159,111 @@ class RouterTests: XCTestCase {
         XCTAssertTrue(receivedSuccessResponse)
     }
     #endif
+
+    func testDeleteRequest() {
+        let session = RequestKitURLTestSession(expectedURL: "https://example.com/api/v1/some_route?access_token=1234&key1=value1%3A456&key2=value2", expectedHTTPMethod: "DELETE", response: "", statusCode: 204)
+        let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
+        let router = TestRouter.deleteRoute(config)
+        var receivedError: Error?
+        let task = router.delete(session) { error in
+            receivedError = error
+        }
+        XCTAssertNotNil(task)
+        XCTAssertTrue(session.wasCalled)
+        XCTAssertNil(receivedError)
+    }
+
+    func testDeleteRequestError() {
+        let jsonDict = ["message": "Not Found"]
+        let jsonString = String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: .utf8)
+        let session = RequestKitURLTestSession(expectedURL: "https://example.com/api/v1/some_route?access_token=1234&key1=value1%3A456&key2=value2", expectedHTTPMethod: "DELETE", response: jsonString, statusCode: 404)
+        let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
+        let router = TestRouter.deleteRoute(config)
+        var receivedError: Error?
+        let task = router.delete(session) { error in
+            receivedError = error
+        }
+        XCTAssertNotNil(task)
+        XCTAssertTrue(session.wasCalled)
+        XCTAssertEqual(Helper.getNSError(from: receivedError)?.code, 404)
+    }
+
+    func testPutRequest() {
+        let jsonResponse = "{\"key\": \"value\"}"
+        let session = RequestKitURLTestSession(expectedURL: "https://example.com/api/v1/some_route?access_token=1234", expectedHTTPMethod: "PUT", response: jsonResponse, statusCode: 200)
+        let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
+        let router = TestRouter.putRoute(config)
+        var result: [String: String]?
+        let task = router.put(session, expectedResultType: [String: String].self) { json, _ in
+            result = json
+        }
+        XCTAssertNotNil(task)
+        XCTAssertTrue(session.wasCalled)
+        XCTAssertEqual(result?["key"], "value")
+    }
+
+    func testPatchRequest() {
+        let jsonResponse = "{\"key\": \"patched\"}"
+        let session = RequestKitURLTestSession(expectedURL: "https://example.com/api/v1/some_route?access_token=1234", expectedHTTPMethod: "PATCH", response: jsonResponse, statusCode: 200)
+        let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
+        let router = TestRouter.patchRoute(config)
+        var result: [String: String]?
+        let task = router.patch(session, expectedResultType: [String: String].self) { json, _ in
+            result = json
+        }
+        XCTAssertNotNil(task)
+        XCTAssertTrue(session.wasCalled)
+        XCTAssertEqual(result?["key"], "patched")
+    }
+
+    #if compiler(>=5.5.2) && canImport(_Concurrency)
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func testDeleteRequestAsync() async throws {
+        let session = RequestKitURLTestSession(expectedURL: "https://example.com/api/v1/some_route?access_token=1234&key1=value1%3A456&key2=value2", expectedHTTPMethod: "DELETE", response: "", statusCode: 204)
+        let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
+        let router = TestRouter.deleteRoute(config)
+        try await router.delete(session)
+        XCTAssertTrue(session.wasCalled)
+    }
+
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func testPutRequestAsync() async throws {
+        let jsonResponse = "{\"key\": \"value\"}"
+        let session = RequestKitURLTestSession(expectedURL: "https://example.com/api/v1/some_route?access_token=1234", expectedHTTPMethod: "PUT", response: jsonResponse, statusCode: 200)
+        let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
+        let router = TestRouter.putRoute(config)
+        let result: [String: String] = try await router.put(session, expectedResultType: [String: String].self)
+        XCTAssertTrue(session.wasCalled)
+        XCTAssertEqual(result["key"], "value")
+    }
+
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func testPatchRequestAsync() async throws {
+        let jsonResponse = "{\"key\": \"patched\"}"
+        let session = RequestKitURLTestSession(expectedURL: "https://example.com/api/v1/some_route?access_token=1234", expectedHTTPMethod: "PATCH", response: jsonResponse, statusCode: 200)
+        let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
+        let router = TestRouter.patchRoute(config)
+        let result: [String: String] = try await router.patch(session, expectedResultType: [String: String].self)
+        XCTAssertTrue(session.wasCalled)
+        XCTAssertEqual(result["key"], "patched")
+    }
+    #endif
 }
 
 enum TestRouter: Router {
     case testRoute(Configuration)
     case formEncodedRoute(Configuration)
+    case deleteRoute(Configuration)
+    case putRoute(Configuration)
+    case patchRoute(Configuration)
 
     var configuration: Configuration {
         switch self {
         case let .testRoute(config): return config
         case let .formEncodedRoute(config): return config
+        case let .deleteRoute(config): return config
+        case let .putRoute(config): return config
+        case let .patchRoute(config): return config
         }
     }
 
@@ -178,6 +273,12 @@ enum TestRouter: Router {
             return .GET
         case .formEncodedRoute:
             return .POST
+        case .deleteRoute:
+            return .DELETE
+        case .putRoute:
+            return .PUT
+        case .patchRoute:
+            return .PATCH
         }
     }
 
@@ -187,19 +288,30 @@ enum TestRouter: Router {
             return .url
         case .formEncodedRoute:
             return .form
+        case .deleteRoute:
+            return .url
+        case .putRoute, .patchRoute:
+            return .json
         }
     }
 
     var path: String {
         switch self {
-        case .testRoute:
-            return "some_route"
         case .formEncodedRoute:
             return "route"
+        default:
+            return "some_route"
         }
     }
 
     var params: [String: Any] {
-        return ["key1": "value1:456", "key2": "value2"]
+        switch self {
+        case .deleteRoute:
+            return ["key1": "value1:456", "key2": "value2"]
+        case .putRoute, .patchRoute:
+            return ["key": "value"]
+        default:
+            return ["key1": "value1:456", "key2": "value2"]
+        }
     }
 }

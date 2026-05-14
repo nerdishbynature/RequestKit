@@ -227,6 +227,88 @@ public extension Router {
         task.resume()
         return task
     }
+
+    @discardableResult
+    func delete(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+        guard let request = request() else { return nil }
+        let task = session.dataTask(with: request) { data, response, err in
+            if let response = response as? HTTPURLResponse, !response.wasSuccessful {
+                var userInfo = [String: Any]()
+                if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                    userInfo[RequestKitErrorKey] = json as Any?
+                }
+                completion(NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo))
+                return
+            }
+            completion(err)
+        }
+        task.resume()
+        return task
+    }
+
+    @discardableResult
+    func put<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type,
+                         completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+        guard let request = request() else { return nil }
+        let data: Data
+        do {
+            data = try JSONSerialization.data(withJSONObject: params, options: JSONSerialization.WritingOptions())
+        } catch {
+            completion(nil, error)
+            return nil
+        }
+        let task = session.uploadTask(with: request, fromData: data) { data, response, error in
+            if let response = response as? HTTPURLResponse, !response.wasSuccessful {
+                var userInfo = [String: Any]()
+                if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                    userInfo[RequestKitErrorKey] = json as Any?
+                } else if let data = data, let string = String(data: data, encoding: .utf8) {
+                    userInfo[RequestKitErrorKey] = string as Any?
+                }
+                completion(nil, NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo))
+                return
+            }
+            if let error = error { completion(nil, error); return }
+            if let data = data {
+                do { completion(try decoder.decode(T.self, from: data), nil) }
+                catch { completion(nil, error) }
+            }
+        }
+        task.resume()
+        return task
+    }
+
+    @discardableResult
+    func patch<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type,
+                           completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+        guard let request = request() else { return nil }
+        let data: Data
+        do {
+            data = try JSONSerialization.data(withJSONObject: params, options: JSONSerialization.WritingOptions())
+        } catch {
+            completion(nil, error)
+            return nil
+        }
+        let task = session.uploadTask(with: request, fromData: data) { data, response, error in
+            if let response = response as? HTTPURLResponse, !response.wasSuccessful {
+                var userInfo = [String: Any]()
+                if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                    userInfo[RequestKitErrorKey] = json as Any?
+                } else if let data = data, let string = String(data: data, encoding: .utf8) {
+                    userInfo[RequestKitErrorKey] = string as Any?
+                }
+                completion(nil, NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo))
+                return
+            }
+            if let error = error { completion(nil, error); return }
+            if let data = data {
+                do { completion(try decoder.decode(T.self, from: data), nil) }
+                catch { completion(nil, error) }
+            }
+        }
+        task.resume()
+        return task
+    }
 }
 
 #if compiler(>=5.5.2) && canImport(_Concurrency)
@@ -275,6 +357,56 @@ public extension Router {
                 throw NSError(domain: configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
             }
         }
+    }
+
+    func delete(_ session: RequestKitURLSession = URLSession.shared) async throws {
+        guard let request = request() else {
+            throw NSError(domain: configuration.errorDomain, code: -876, userInfo: nil)
+        }
+        let (data, response) = try await session.data(for: request, delegate: nil)
+        if let response = response as? HTTPURLResponse, !response.wasSuccessful {
+            var userInfo = [String: Any]()
+            if let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                userInfo[RequestKitErrorKey] = json as Any?
+            }
+            throw NSError(domain: configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
+        }
+    }
+
+    func put<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type) async throws -> T {
+        guard let request = request() else {
+            throw NSError(domain: configuration.errorDomain, code: -876, userInfo: nil)
+        }
+        let body = try JSONSerialization.data(withJSONObject: params, options: JSONSerialization.WritingOptions())
+        let (responseData, response) = try await session.upload(for: request, from: body, delegate: nil)
+        if let response = response as? HTTPURLResponse, !response.wasSuccessful {
+            var userInfo = [String: Any]()
+            if let json = try? JSONSerialization.jsonObject(with: responseData, options: .mutableContainers) as? [String: Any] {
+                userInfo[RequestKitErrorKey] = json as Any?
+            } else if let string = String(data: responseData, encoding: .utf8) {
+                userInfo[RequestKitErrorKey] = string as Any?
+            }
+            throw NSError(domain: configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
+        }
+        return try decoder.decode(T.self, from: responseData)
+    }
+
+    func patch<T: Codable>(_ session: RequestKitURLSession = URLSession.shared, decoder: JSONDecoder = JSONDecoder(), expectedResultType _: T.Type) async throws -> T {
+        guard let request = request() else {
+            throw NSError(domain: configuration.errorDomain, code: -876, userInfo: nil)
+        }
+        let body = try JSONSerialization.data(withJSONObject: params, options: JSONSerialization.WritingOptions())
+        let (responseData, response) = try await session.upload(for: request, from: body, delegate: nil)
+        if let response = response as? HTTPURLResponse, !response.wasSuccessful {
+            var userInfo = [String: Any]()
+            if let json = try? JSONSerialization.jsonObject(with: responseData, options: .mutableContainers) as? [String: Any] {
+                userInfo[RequestKitErrorKey] = json as Any?
+            } else if let string = String(data: responseData, encoding: .utf8) {
+                userInfo[RequestKitErrorKey] = string as Any?
+            }
+            throw NSError(domain: configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
+        }
+        return try decoder.decode(T.self, from: responseData)
     }
 }
 #endif
