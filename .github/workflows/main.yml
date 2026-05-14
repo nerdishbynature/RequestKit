@@ -37,7 +37,7 @@ jobs:
   spm:
     name: Test with SPM
     runs-on: ubuntu-latest
-    container: swift:5.10-focal
+    container: swift:5.10-noble
     steps:
       - uses: actions/checkout@v2
       - name: SPM Test
@@ -48,9 +48,9 @@ jobs:
     strategy:
       matrix:
         swift_version:
-          - 5.10
+          - '5.10'
       fail-fast: false
-    container: swift:${{ matrix.swift_version }}-focal
+    container: swift:${{ matrix.swift_version }}-noble
     steps:
       - uses: actions/checkout@v2
       - name: SPM Test
@@ -58,7 +58,7 @@ jobs:
   swiftformat:
     name: Linting
     runs-on: ubuntu-latest
-    container: swift:5.10-focal
+    container: swift:5.10-noble
     steps:
       - uses: actions/checkout@v2
       - name: Install SwiftFormat
