@@ -322,6 +322,36 @@ public extension Router {
         task.resume()
         return task
     }
+
+    @discardableResult
+    func loadPaginated<T: Codable>(_ session: RequestKitURLSession = URLSession.shared,
+                                   decoder: JSONDecoder = JSONDecoder(),
+                                   expectedResultType _: T.Type,
+                                   completion: @escaping (_ response: PaginatedResponse<T>?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+        guard let request = request() else { return nil }
+        let task = session.dataTask(with: request) { data, response, err in
+            if let response = response as? HTTPURLResponse, !response.wasSuccessful {
+                var userInfo = [String: Any]()
+                if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                    userInfo[RequestKitErrorKey] = json as Any?
+                }
+                completion(nil, NSError(domain: self.configuration.errorDomain, code: response.statusCode, userInfo: userInfo))
+                return
+            }
+            if let err = err { completion(nil, err); return }
+            guard let data = data else { return }
+            do {
+                let decoded = try decoder.decode(T.self, from: data)
+                let linkHeader = (response as? HTTPURLResponse)?.allHeaderFields["Link"] as? String
+                let pageInfo = PageInfo(linkHeader: linkHeader)
+                completion(PaginatedResponse(values: decoded, pageInfo: pageInfo), nil)
+            } catch {
+                completion(nil, error)
+            }
+        }
+        task.resume()
+        return task
+    }
 }
 
 #if compiler(>=5.5.2) && canImport(_Concurrency)
@@ -424,6 +454,25 @@ public extension Router {
             throw NSError(domain: configuration.errorDomain, code: response.statusCode, userInfo: userInfo)
         }
         return try decoder.decode(T.self, from: responseData)
+    }
+
+    func loadPaginated<T: Codable>(_ session: RequestKitURLSession = URLSession.shared,
+                                   decoder: JSONDecoder = JSONDecoder(),
+                                   expectedResultType _: T.Type) async throws -> PaginatedResponse<T> {
+        guard let request = request() else {
+            throw NSError(domain: configuration.errorDomain, code: -876, userInfo: nil)
+        }
+        let (data, response) = try await session.data(for: request, delegate: nil)
+        if let httpResponse = response as? HTTPURLResponse, !httpResponse.wasSuccessful {
+            var userInfo = [String: Any]()
+            if let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                userInfo[RequestKitErrorKey] = json as Any?
+            }
+            throw NSError(domain: configuration.errorDomain, code: httpResponse.statusCode, userInfo: userInfo)
+        }
+        let decoded = try decoder.decode(T.self, from: data)
+        let linkHeader = (response as? HTTPURLResponse)?.allHeaderFields["Link"] as? String
+        return PaginatedResponse(values: decoded, pageInfo: PageInfo(linkHeader: linkHeader))
     }
 }
 #endif
