@@ -93,7 +93,8 @@ public extension JSONPostRouter {
     #endif
 
     func post<T: Decodable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type,
-                            completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+                            completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    {
         return post(session, decoder: configuration.decoder, expectedResultType: expectedResultType, completion: completion)
     }
 

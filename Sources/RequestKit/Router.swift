@@ -210,7 +210,8 @@ public extension Router {
     }
 
     func load<T: Decodable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type,
-                            completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+                            completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    {
         return load(session, decoder: configuration.decoder, expectedResultType: expectedResultType, completion: completion)
     }
 

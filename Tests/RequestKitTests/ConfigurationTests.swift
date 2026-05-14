@@ -78,7 +78,9 @@ class TestConfigurationWithDecoder: Configuration {
         customDecoder = decoder
     }
 
-    var decoder: JSONDecoder { customDecoder }
+    var decoder: JSONDecoder {
+        customDecoder
+    }
 }
 
 class TestAuthorizationHeaderConfiguration: Configuration {
