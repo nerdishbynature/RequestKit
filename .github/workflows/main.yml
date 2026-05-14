@@ -10,7 +10,7 @@ on:
 
 jobs:
   macOS:
-    name: Test macOS
+    name: Test using Xcode
     runs-on: macOS-latest
     env:
       DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
@@ -33,7 +33,6 @@ jobs:
         run: |
           set -o pipefail
           bundle exec fastlane ${{ matrix.lane }} --env ${{ matrix.env }}
-      - uses: codecov/codecov-action@v1
   spm:
     name: Test with SPM
     runs-on: ubuntu-latest
