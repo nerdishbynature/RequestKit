@@ -92,6 +92,12 @@ public extension JSONPostRouter {
     }
     #endif
 
+    func post<T: Decodable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type,
+                            completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    {
+        return post(session, decoder: configuration.decoder, expectedResultType: expectedResultType, completion: completion)
+    }
+
     func post<T: Decodable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type,
                             completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
     {
@@ -148,6 +154,11 @@ public extension JSONPostRouter {
     }
 
     #if compiler(>=5.5.2) && canImport(_Concurrency)
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func post<T: Decodable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type) async throws -> T {
+        return try await post(session, decoder: configuration.decoder, expectedResultType: expectedResultType)
+    }
+
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func post<T: Decodable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type) async throws -> T {
         let decoder = JSONDecoder()

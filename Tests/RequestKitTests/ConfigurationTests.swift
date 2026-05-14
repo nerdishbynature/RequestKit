@@ -27,6 +27,18 @@ class ConfigurationTests: XCTestCase {
         XCTAssertEqual(config.accessTokenFieldName, "access_token")
         XCTAssertEqual(config.authorizationHeader, "BEARER")
     }
+
+    func testDefaultDecoderIsJSONDecoder() {
+        let config = TestConfiguration("1234", url: "https://github.com")
+        XCTAssertNotNil(config.decoder)
+    }
+
+    func testCustomDecoderIsReturned() {
+        let customDecoder = JSONDecoder()
+        customDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        let config = TestConfigurationWithDecoder("1234", url: "https://github.com", decoder: customDecoder)
+        XCTAssertTrue(config.decoder === customDecoder)
+    }
 }
 
 class TestConfiguration: Configuration {
@@ -52,6 +64,22 @@ class TestCustomConfiguration: Configuration {
 
     var accessTokenFieldName: String {
         return "custom_field"
+    }
+}
+
+class TestConfigurationWithDecoder: Configuration {
+    var apiEndpoint: String
+    var accessToken: String?
+    let customDecoder: JSONDecoder
+
+    init(_ token: String, url: String, decoder: JSONDecoder) {
+        apiEndpoint = url
+        accessToken = token
+        customDecoder = decoder
+    }
+
+    var decoder: JSONDecoder {
+        customDecoder
     }
 }
 
