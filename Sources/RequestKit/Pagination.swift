@@ -10,7 +10,9 @@ public struct PageInfo {
     public let first: URL?
     public let last: URL?
 
-    public var hasNextPage: Bool { next != nil }
+    public var hasNextPage: Bool {
+        next != nil
+    }
 
     /// Parse a Link header value, e.g.:
     /// `<https://api.github.com/repos?page=2>; rel="next", <https://api.github.com/repos?page=5>; rel="last"`

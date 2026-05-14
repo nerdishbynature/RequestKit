@@ -6,7 +6,6 @@ import FoundationNetworking
 #endif
 
 class PaginationTests: XCTestCase {
-
     func testPageInfoParsingWithAllRels() {
         let header = "<https://api.github.com/repos?page=2>; rel=\"next\", <https://api.github.com/repos?page=5>; rel=\"last\", <https://api.github.com/repos?page=1>; rel=\"first\", <https://api.github.com/repos?page=1>; rel=\"prev\""
         let pageInfo = PageInfo(linkHeader: header)
@@ -108,7 +107,7 @@ class PaginatedTestSession: RequestKitURLSession {
         XCTAssertEqual(request.url?.absoluteString, expectedURL)
         XCTAssertEqual(request.httpMethod, expectedHTTPMethod)
         let data = responseString?.data(using: .utf8)
-        var headers: [String: String] = ["Content-Type": "application/json"]
+        var headers = ["Content-Type": "application/json"]
         if let link = linkHeader { headers["Link"] = link }
         let response = HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: "http/1.1", headerFields: headers)
         completionHandler(data, response, nil)
@@ -116,7 +115,7 @@ class PaginatedTestSession: RequestKitURLSession {
         return MockURLSessionDataTask()
     }
 
-    func uploadTask(with request: URLRequest, fromData _: Data?, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol {
+    func uploadTask(with _: URLRequest, fromData _: Data?, completionHandler _: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol {
         fatalError("uploadTask not expected in PaginatedTestSession")
     }
 
@@ -126,7 +125,7 @@ class PaginatedTestSession: RequestKitURLSession {
         XCTAssertEqual(request.url?.absoluteString, expectedURL)
         XCTAssertEqual(request.httpMethod, expectedHTTPMethod)
         let data = responseString?.data(using: .utf8) ?? Data()
-        var headers: [String: String] = ["Content-Type": "application/json"]
+        var headers = ["Content-Type": "application/json"]
         if let link = linkHeader { headers["Link"] = link }
         let response = HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: "http/1.1", headerFields: headers)!
         wasCalled = true
@@ -134,7 +133,7 @@ class PaginatedTestSession: RequestKitURLSession {
     }
 
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
-    func upload(for request: URLRequest, from _: Data, delegate _: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
+    func upload(for _: URLRequest, from _: Data, delegate _: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
         fatalError("upload not expected in PaginatedTestSession")
     }
     #endif

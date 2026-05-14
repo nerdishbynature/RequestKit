@@ -327,7 +327,8 @@ public extension Router {
     func loadPaginated<T: Codable>(_ session: RequestKitURLSession = URLSession.shared,
                                    decoder: JSONDecoder = JSONDecoder(),
                                    expectedResultType _: T.Type,
-                                   completion: @escaping (_ response: PaginatedResponse<T>?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+                                   completion: @escaping (_ response: PaginatedResponse<T>?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol?
+    {
         guard let request = request() else { return nil }
         let task = session.dataTask(with: request) { data, response, err in
             if let response = response as? HTTPURLResponse, !response.wasSuccessful {
@@ -458,7 +459,8 @@ public extension Router {
 
     func loadPaginated<T: Codable>(_ session: RequestKitURLSession = URLSession.shared,
                                    decoder: JSONDecoder = JSONDecoder(),
-                                   expectedResultType _: T.Type) async throws -> PaginatedResponse<T> {
+                                   expectedResultType _: T.Type) async throws -> PaginatedResponse<T>
+    {
         guard let request = request() else {
             throw NSError(domain: configuration.errorDomain, code: -876, userInfo: nil)
         }
