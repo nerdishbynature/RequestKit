@@ -92,7 +92,7 @@ public extension Router {
         }
 
         if let customHeaders = configuration.customHeaders {
-            customHeaders.forEach { httpHeader in
+            for httpHeader in customHeaders {
                 urlRequest?.addValue(httpHeader.value, forHTTPHeaderField: httpHeader.headerField)
             }
         }
@@ -280,7 +280,7 @@ public extension Router {
 #endif
 
 private extension CharacterSet {
-    // https://github.com/Alamofire/Alamofire/blob/3.5rameterEncoding.swift#L220-L225
+    /// https://github.com/Alamofire/Alamofire/blob/3.5rameterEncoding.swift#L220-L225
     static func requestKit_URLQueryAllowedCharacterSet() -> CharacterSet {
         let generalDelimitersToEncode = ":#[]@" // does not include "?" or "/" due to RFC 3986 - Section 3.4
         let subDelimitersToEncode = "!$&'()*+,;="

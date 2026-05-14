@@ -8,8 +8,7 @@ import FoundationNetworking
 class RouterTests: XCTestCase {
     lazy var router: TestRouter = {
         let config = TestConfiguration("1234", url: "https://example.com/api/v1/")
-        let router = TestRouter.testRoute(config)
-        return router
+        return TestRouter.testRoute(config)
     }()
 
     func testRequest() {
@@ -34,27 +33,27 @@ class RouterTests: XCTestCase {
         XCTAssertEqual(subject?.value(forHTTPHeaderField: "x-custom-header"), "custom_value")
     }
 
-    func testWasSuccessful() {
-        let url = URL(string: "https://example.com/api/v1")!
-        let response200 = HTTPURLResponse(url: url, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: [:])!
+    func testWasSuccessful() throws {
+        let url = try XCTUnwrap(URL(string: "https://example.com/api/v1"))
+        let response200 = try XCTUnwrap(HTTPURLResponse(url: url, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: [:]))
         XCTAssertTrue(response200.wasSuccessful)
-        let response201 = HTTPURLResponse(url: url, statusCode: 201, httpVersion: "HTTP/1.1", headerFields: [:])!
+        let response201 = try XCTUnwrap(HTTPURLResponse(url: url, statusCode: 201, httpVersion: "HTTP/1.1", headerFields: [:]))
         XCTAssertTrue(response201.wasSuccessful)
-        let response400 = HTTPURLResponse(url: url, statusCode: 400, httpVersion: "HTTP/1.1", headerFields: [:])!
+        let response400 = try XCTUnwrap(HTTPURLResponse(url: url, statusCode: 400, httpVersion: "HTTP/1.1", headerFields: [:]))
         XCTAssertFalse(response400.wasSuccessful)
-        let response300 = HTTPURLResponse(url: url, statusCode: 300, httpVersion: "HTTP/1.1", headerFields: [:])!
+        let response300 = try XCTUnwrap(HTTPURLResponse(url: url, statusCode: 300, httpVersion: "HTTP/1.1", headerFields: [:]))
         XCTAssertFalse(response300.wasSuccessful)
-        let response301 = HTTPURLResponse(url: url, statusCode: 301, httpVersion: "HTTP/1.1", headerFields: [:])!
+        let response301 = try XCTUnwrap(HTTPURLResponse(url: url, statusCode: 301, httpVersion: "HTTP/1.1", headerFields: [:]))
         XCTAssertFalse(response301.wasSuccessful)
     }
 
     func testURLComponents() {
         let test1: [String: Any] = ["key1": "value1", "key2": "value2"]
-        XCTAssertEqual(router.urlQuery(test1)!, [URLQueryItem(name: "key1", value: "value1"), URLQueryItem(name: "key2", value: "value2")])
+        XCTAssertEqual(router.urlQuery(test1), [URLQueryItem(name: "key1", value: "value1"), URLQueryItem(name: "key2", value: "value2")])
         let test2: [String: Any] = ["key1": ["value1", "value2"]]
-        XCTAssertEqual(router.urlQuery(test2)!, [URLQueryItem(name: "key1[0]", value: "value1"), URLQueryItem(name: "key1[1]", value: "value2")])
+        XCTAssertEqual(router.urlQuery(test2), [URLQueryItem(name: "key1[0]", value: "value1"), URLQueryItem(name: "key1[1]", value: "value2")])
         let test3: [String: Any] = ["key1": ["key2": "value1", "key3": "value2"]]
-        XCTAssertEqual(router.urlQuery(test3)!, [URLQueryItem(name: "key1[key2]", value: "value1"), URLQueryItem(name: "key1[key3]", value: "value2")])
+        XCTAssertEqual(router.urlQuery(test3), [URLQueryItem(name: "key1[key2]", value: "value1"), URLQueryItem(name: "key1[key3]", value: "value2")])
     }
 
     func testFormEncodedRouteRequest() {
@@ -66,9 +65,9 @@ class RouterTests: XCTestCase {
         XCTAssertEqual(subject?.httpMethod, "POST")
     }
 
-    func testErrorWithJSON() {
+    func testErrorWithJSON() throws {
         let jsonDict = ["message": "Bad credentials", "documentation_url": "https://developer.github.com/v3"]
-        let jsonString = String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
+        let jsonString = try String(data: JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
         let session = RequestKitURLTestSession(expectedURL: "https://example.com/some_route", expectedHTTPMethod: "GET", response: jsonString, statusCode: 401)
         let task = TestInterface().getJSON(session) { response in
             switch response {
@@ -88,7 +87,7 @@ class RouterTests: XCTestCase {
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func testErrorWithJSONAsync() async throws {
         let jsonDict = ["message": "Bad credentials", "documentation_url": "https://developer.github.com/v3"]
-        let jsonString = String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
+        let jsonString = try String(data: JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
         let session = RequestKitURLTestSession(expectedURL: "https://example.com/some_route", expectedHTTPMethod: "GET", response: jsonString, statusCode: 401)
         do {
             _ = try await TestInterface().getJSON(session)
@@ -121,9 +120,9 @@ class RouterTests: XCTestCase {
         XCTAssertTrue(receivedSuccessResponse)
     }
 
-    func testErrorWithLoadAndIgnoreResponseBody() {
+    func testErrorWithLoadAndIgnoreResponseBody() throws {
         let jsonDict = ["message": "Bad credentials", "documentation_url": "https://developer.github.com/v3"]
-        let jsonString = String(data: try! JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
+        let jsonString = try String(data: JSONSerialization.data(withJSONObject: jsonDict, options: JSONSerialization.WritingOptions()), encoding: String.Encoding.utf8)
         let session = RequestKitURLTestSession(expectedURL: "https://example.com/some_route", expectedHTTPMethod: "POST", response: jsonString, statusCode: 401)
 
         var receivedFailureResponse = false
