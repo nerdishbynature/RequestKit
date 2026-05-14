@@ -27,6 +27,7 @@ public protocol Configuration {
     var authorizationHeader: String? { get }
     var errorDomain: String { get }
     var customHeaders: [HTTPHeader]? { get }
+    var decoder: JSONDecoder { get }
 }
 
 public extension Configuration {
@@ -44,6 +45,10 @@ public extension Configuration {
 
     var customHeaders: [HTTPHeader]? {
         return nil
+    }
+
+    var decoder: JSONDecoder {
+        return JSONDecoder()
     }
 }
 
@@ -204,6 +209,11 @@ public extension Router {
         return task
     }
 
+    func load<T: Decodable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type,
+                            completion: @escaping (_ json: T?, _ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
+        return load(session, decoder: configuration.decoder, expectedResultType: expectedResultType, completion: completion)
+    }
+
     func load(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTaskProtocol? {
         guard let request = request() else {
             return nil
@@ -250,6 +260,10 @@ public extension Router {
         }
 
         return try decoder.decode(T.self, from: responseTuple.0)
+    }
+
+    func load<T: Decodable>(_ session: RequestKitURLSession = URLSession.shared, expectedResultType: T.Type) async throws -> T {
+        return try await load(session, decoder: configuration.decoder, expectedResultType: expectedResultType)
     }
 
     func load<T: Decodable>(_ session: RequestKitURLSession = URLSession.shared, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?, expectedResultType: T.Type) async throws -> T {
